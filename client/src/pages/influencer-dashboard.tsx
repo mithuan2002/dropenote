@@ -2,19 +2,37 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle } from "lucide-react";
+import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import type { Campaign } from "@shared/schema";
 import CreateCampaignDialog from "@/components/create-campaign-dialog";
 import CampaignAnalytics from "@/components/campaign-analytics";
+import { useToast } from "@/hooks/use-toast";
 
 export default function InfluencerDashboard() {
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [copiedCampaignId, setCopiedCampaignId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
   });
+
+  const getCampaignUrl = (campaignId: string) => {
+    return `${window.location.origin}/campaigns/${campaignId}`;
+  };
+
+  const handleCopyUrl = async (campaignId: string) => {
+    const url = getCampaignUrl(campaignId);
+    await navigator.clipboard.writeText(url);
+    setCopiedCampaignId(campaignId);
+    toast({
+      title: "URL Copied!",
+      description: "Share this link with your followers to generate coupons",
+    });
+    setTimeout(() => setCopiedCampaignId(null), 2000);
+  };
 
   const selectedCampaign = campaigns?.find(c => c.id === selectedCampaignId);
 
@@ -109,34 +127,74 @@ export default function InfluencerDashboard() {
                   return (
                     <Card
                       key={campaign.id}
-                      className={`p-4 cursor-pointer hover-elevate active-elevate-2 ${isSelected ? 'ring-2 ring-primary' : ''}`}
-                      onClick={() => setSelectedCampaignId(campaign.id)}
+                      className={`p-4 ${isSelected ? 'ring-2 ring-primary' : ''}`}
                       data-testid={`card-campaign-${campaign.id}`}
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-lg" data-testid={`text-campaign-name-${campaign.id}`}>
-                          {campaign.name}
-                        </h3>
-                        <span
-                          className={`text-xs px-3 py-1 rounded-full ${
-                            isExpired
-                              ? 'bg-muted text-muted-foreground'
-                              : 'bg-primary/10 text-primary'
-                          }`}
-                          data-testid={`badge-status-${campaign.id}`}
-                        >
-                          {isExpired ? 'Expired' : 'Active'}
-                        </span>
+                      <div 
+                        className="cursor-pointer hover-elevate active-elevate-2 -m-4 p-4 mb-0"
+                        onClick={() => setSelectedCampaignId(campaign.id)}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-semibold text-lg" data-testid={`text-campaign-name-${campaign.id}`}>
+                            {campaign.name}
+                          </h3>
+                          <span
+                            className={`text-xs px-3 py-1 rounded-full ${
+                              isExpired
+                                ? 'bg-muted text-muted-foreground'
+                                : 'bg-primary/10 text-primary'
+                            }`}
+                            data-testid={`badge-status-${campaign.id}`}
+                          >
+                            {isExpired ? 'Expired' : 'Active'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                          <span data-testid={`text-discount-${campaign.id}`}>
+                            {campaign.discountPercentage}% off
+                          </span>
+                          <span>•</span>
+                          <span data-testid={`text-expiry-${campaign.id}`}>
+                            Expires {new Date(campaign.expirationDate).toLocaleDateString()}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span data-testid={`text-discount-${campaign.id}`}>
-                          {campaign.discountPercentage}% off
-                        </span>
-                        <span>•</span>
-                        <span data-testid={`text-expiry-${campaign.id}`}>
-                          Expires {new Date(campaign.expirationDate).toLocaleDateString()}
-                        </span>
-                      </div>
+                      
+                      {!isExpired && (
+                        <div className="border-t pt-3 mt-3">
+                          <p className="text-xs text-muted-foreground mb-2">Share this link with your followers:</p>
+                          <div className="flex gap-2">
+                            <div className="flex-1 bg-muted rounded px-3 py-2 text-xs font-mono truncate">
+                              {getCampaignUrl(campaign.id)}
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyUrl(campaign.id);
+                              }}
+                              data-testid={`button-copy-url-${campaign.id}`}
+                            >
+                              {copiedCampaignId === campaign.id ? (
+                                <CheckCircle2 className="w-4 h-4" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </Button>
+                            <Link href={`/campaigns/${campaign.id}`}>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => e.stopPropagation()}
+                                data-testid={`button-view-${campaign.id}`}
+                              >
+                                <ExternalLink className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                      )}
                     </Card>
                   );
                 })}
