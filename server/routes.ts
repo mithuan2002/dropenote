@@ -85,6 +85,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Influencer profile endpoints
+  app.get("/api/influencer/profile", async (req, res) => {
+    try {
+      // For now, return a mock profile. In production, use authentication
+      const profile = await storage.getInfluencerProfile("default");
+      res.json(profile || {});
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  app.post("/api/influencer/profile", async (req, res) => {
+    try {
+      const profile = await storage.saveInfluencerProfile("default", req.body);
+      res.json(profile);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to save profile" });
+    }
+  });
+
+  // Staff profile endpoints
+  app.get("/api/staff/profile", async (req, res) => {
+    try {
+      // For now, return a mock profile. In production, use authentication
+      const profile = await storage.getStaffProfile("default");
+      res.json(profile || {});
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  app.post("/api/staff/profile", async (req, res) => {
+    try {
+      const profile = await storage.saveStaffProfile("default", req.body);
+      res.json(profile);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to save profile" });
+    }
+  });
+
   // Generate coupon
   app.post("/api/coupons", async (req, res) => {
     try {

@@ -24,6 +24,12 @@ export interface IStorage {
   getRedemption(couponId: string): Promise<Redemption | undefined>;
   createRedemption(redemption: InsertRedemption): Promise<Redemption>;
   getAllRedemptions(): Promise<Redemption[]>;
+
+  // Profile methods
+  getInfluencerProfile(userId: string): Promise<any>;
+  saveInfluencerProfile(userId: string, profile: any): Promise<any>;
+  getStaffProfile(userId: string): Promise<any>;
+  saveStaffProfile(userId: string, profile: any): Promise<any>;
 }
 
 export class MemStorage implements IStorage {
@@ -31,10 +37,16 @@ export class MemStorage implements IStorage {
   private coupons: Map<string, Coupon>;
   private redemptions: Map<string, Redemption>;
 
+  // Placeholder for profile data
+  private influencerProfiles: Map<string, any>;
+  private staffProfiles: Map<string, any>;
+
   constructor() {
     this.campaigns = new Map();
     this.coupons = new Map();
     this.redemptions = new Map();
+    this.influencerProfiles = new Map();
+    this.staffProfiles = new Map();
   }
 
   // Campaign methods
@@ -109,6 +121,25 @@ export class MemStorage implements IStorage {
 
   async getAllRedemptions(): Promise<Redemption[]> {
     return Array.from(this.redemptions.values());
+  }
+
+  // Profile methods
+  async getInfluencerProfile(userId: string): Promise<any> {
+    return this.influencerProfiles.get(userId);
+  }
+
+  async saveInfluencerProfile(userId: string, profile: any): Promise<any> {
+    this.influencerProfiles.set(userId, profile);
+    return profile;
+  }
+
+  async getStaffProfile(userId: string): Promise<any> {
+    return this.staffProfiles.get(userId);
+  }
+
+  async saveStaffProfile(userId: string, profile: any): Promise<any> {
+    this.staffProfiles.set(userId, profile);
+    return profile;
   }
 }
 

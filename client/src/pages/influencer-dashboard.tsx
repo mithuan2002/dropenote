@@ -50,10 +50,18 @@ export default function InfluencerDashboard() {
               </p>
             </div>
           </div>
-          <Button onClick={() => setShowCreateDialog(true)} data-testid="button-create-campaign">
-            <Plus className="w-4 h-4 mr-2" />
-            New Campaign
-          </Button>
+          <div className="flex gap-2">
+            <Link href="/influencer/profile">
+              <Button variant="outline" data-testid="button-profile">
+                <UserCircle className="w-4 h-4 mr-2" />
+                Profile
+              </Button>
+            </Link>
+            <Button onClick={() => setShowCreateDialog(true)} data-testid="button-create-campaign">
+              <Plus className="w-4 h-4 mr-2" />
+              New Campaign
+            </Button>
+          </div>
         </div>
       </header>
 
