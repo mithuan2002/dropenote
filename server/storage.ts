@@ -1,3 +1,4 @@
+
 import {
   type Campaign,
   type InsertCampaign,
@@ -5,8 +6,13 @@ import {
   type InsertCoupon,
   type Redemption,
   type InsertRedemption,
+  campaigns,
+  coupons,
+  redemptions,
 } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import { Pool } from "@neondatabase/serverless";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Campaign methods
@@ -32,98 +38,105 @@ export interface IStorage {
   saveStaffProfile(userId: string, profile: any): Promise<any>;
 }
 
-export class MemStorage implements IStorage {
-  private campaigns: Map<string, Campaign>;
-  private coupons: Map<string, Coupon>;
-  private redemptions: Map<string, Redemption>;
-
-  // Placeholder for profile data
+export class DatabaseStorage implements IStorage {
+  private db: ReturnType<typeof drizzle>;
   private influencerProfiles: Map<string, any>;
   private staffProfiles: Map<string, any>;
 
   constructor() {
-    this.campaigns = new Map();
-    this.coupons = new Map();
-    this.redemptions = new Map();
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is not set");
+    }
+
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    this.db = drizzle(pool);
     this.influencerProfiles = new Map();
     this.staffProfiles = new Map();
   }
 
   // Campaign methods
   async getCampaigns(): Promise<Campaign[]> {
-    return Array.from(this.campaigns.values());
+    return await this.db.select().from(campaigns);
   }
 
   async getCampaign(id: string): Promise<Campaign | undefined> {
-    return this.campaigns.get(id);
+    const results = await this.db
+      .select()
+      .from(campaigns)
+      .where(eq(campaigns.id, id))
+      .limit(1);
+    return results[0];
   }
 
   async createCampaign(insertCampaign: InsertCampaign): Promise<Campaign> {
-    const id = randomUUID();
-    const campaign: Campaign = {
-      ...insertCampaign,
-      id,
-      createdAt: new Date(),
-    };
-    this.campaigns.set(id, campaign);
-    return campaign;
+    const results = await this.db
+      .insert(campaigns)
+      .values(insertCampaign)
+      .returning();
+    return results[0];
   }
 
   // Coupon methods
   async getCoupon(id: string): Promise<Coupon | undefined> {
-    return this.coupons.get(id);
+    const results = await this.db
+      .select()
+      .from(coupons)
+      .where(eq(coupons.id, id))
+      .limit(1);
+    return results[0];
   }
 
   async getCouponsByWCampaign(campaignId: string): Promise<Coupon[]> {
-    return Array.from(this.coupons.values()).filter(
-      (coupon) => coupon.campaignId === campaignId
-    );
+    return await this.db
+      .select()
+      .from(coupons)
+      .where(eq(coupons.campaignId, campaignId));
   }
 
   async getCouponByCode(code: string): Promise<Coupon | undefined> {
-    return Array.from(this.coupons.values()).find(
-      (coupon) => coupon.code === code
-    );
+    const results = await this.db
+      .select()
+      .from(coupons)
+      .where(eq(coupons.code, code))
+      .limit(1);
+    return results[0];
   }
 
   async createCoupon(
     insertCoupon: InsertCoupon & { code: string }
   ): Promise<Coupon> {
-    const id = randomUUID();
-    const coupon: Coupon = {
-      ...insertCoupon,
-      id,
-      createdAt: new Date(),
-    };
-    this.coupons.set(id, coupon);
-    return coupon;
+    const results = await this.db
+      .insert(coupons)
+      .values(insertCoupon)
+      .returning();
+    return results[0];
   }
 
   // Redemption methods
   async getRedemption(couponId: string): Promise<Redemption | undefined> {
-    return Array.from(this.redemptions.values()).find(
-      (redemption) => redemption.couponId === couponId
-    );
+    const results = await this.db
+      .select()
+      .from(redemptions)
+      .where(eq(redemptions.couponId, couponId))
+      .limit(1);
+    return results[0];
   }
 
   async createRedemption(
     insertRedemption: InsertRedemption
   ): Promise<Redemption> {
-    const id = randomUUID();
-    const redemption: Redemption = {
-      ...insertRedemption,
-      id,
-      redeemedAt: new Date(),
-    };
-    this.redemptions.set(id, redemption);
-    return redemption;
+    const results = await this.db
+      .insert(redemptions)
+      .values(insertRedemption)
+      .returning();
+    return results[0];
   }
 
   async getAllRedemptions(): Promise<Redemption[]> {
-    return Array.from(this.redemptions.values());
+    return await this.db.select().from(redemptions);
   }
 
-  // Profile methods
+  // Profile methods (keeping in-memory for now as they're not in the schema)
   async getInfluencerProfile(userId: string): Promise<any> {
     return this.influencerProfiles.get(userId);
   }
@@ -143,4 +156,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
