@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, CheckCircle2, XCircle, Search } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, Search, Store } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -21,6 +21,10 @@ export default function StaffPortal() {
   const [verificationResult, setVerificationResult] = useState<VerificationResult | null>(null);
   const [purchaseAmount, setPurchaseAmount] = useState("");
   const { toast } = useToast();
+
+  const { data: profile } = useQuery({
+    queryKey: ["/api/staff/profile"],
+  });
 
   const verifyMutation = useMutation({
     mutationFn: async (code: string) => {
@@ -93,26 +97,60 @@ export default function StaffPortal() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon" data-testid="button-back">
-              <ArrowLeft className="w-5 h-5" />
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Button variant="ghost" size="icon" data-testid="button-back">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-2xl font-semibold" data-testid="text-portal-title">
+                Store Staff Portal
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                {profile?.storeName || "Verify and redeem coupon codes"}
+              </p>
+            </div>
+          </div>
+          <Link href="/staff/profile">
+            <Button variant="outline" data-testid="button-profile">
+              <Store className="w-4 h-4 mr-2" />
+              Profile
             </Button>
           </Link>
-          <div>
-            <h1 className="text-2xl font-semibold" data-testid="text-staff-title">
-              Store Staff Portal
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Verify and redeem coupons
-            </p>
-          </div>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-4 py-8">
-        <Card className="p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">Enter Coupon Code</h2>
+      <main className="max-w-2xl mx-auto px-4 py-8">
+        {(!profile || !profile.storeName) && (
+          <Card className="p-6 mb-6 border-primary/50 bg-primary/5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Store className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold mb-1">Complete Your Store Profile</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Set up your store information to start verifying coupons
+                </p>
+                <Link href="/staff/profile">
+                  <Button>
+                    Set Up Profile
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        <Card className="p-6">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-2">Verify Coupon Code</h2>
+            <p className="text-sm text-muted-foreground">
+              Enter the customer's coupon code to verify and redeem
+            </p>
+          </div>
           <div className="space-y-4">
             <Input
               type="text"
@@ -144,7 +182,7 @@ export default function StaffPortal() {
         </Card>
 
         {verificationResult && (
-          <Card className="p-6">
+          <Card className="p-6 mt-6">
             {verificationResult.valid && verificationResult.coupon && verificationResult.campaign ? (
               <div className="space-y-6">
                 <div className="text-center">

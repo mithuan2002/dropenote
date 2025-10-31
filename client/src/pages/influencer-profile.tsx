@@ -39,13 +39,18 @@ export default function InfluencerProfile() {
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: profile?.name || "",
-      businessName: profile?.businessName || "",
-      phone: profile?.phone || "",
-      description: profile?.description || "",
+    defaultValues: profile || {
+      name: "",
+      businessName: "",
+      phone: "",
+      description: "",
     },
   });
+
+  // Update form when profile data loads
+  if (profile && !form.formState.isDirty) {
+    form.reset(profile);
+  }
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {

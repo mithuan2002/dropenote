@@ -66,27 +66,46 @@ export default function InfluencerDashboard() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {!campaigns || campaigns.length === 0 ? (
-          <Card className="p-12 text-center">
-            <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-xl font-semibold mb-2">No campaigns yet</h2>
-            <p className="text-muted-foreground mb-6">
-              Create your first campaign to start tracking coupon redemptions
-            </p>
-            <Button onClick={() => setShowCreateDialog(true)} data-testid="button-create-first-campaign">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Campaign
-            </Button>
-          </Card>
+        {selectedCampaign ? (
+          <CampaignAnalytics
+            campaignId={selectedCampaign.id}
+            campaignName={selectedCampaign.name}
+          />
         ) : (
           <div className="space-y-6">
+            {(!campaigns || campaigns.length === 0) && (
+              <Card className="p-6 border-primary/50 bg-primary/5">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <UserCircle className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">Welcome to Your Dashboard</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Set up your profile and create your first campaign to get started
+                    </p>
+                    <div className="flex gap-2">
+                      <Link href="/influencer/profile">
+                        <Button variant="outline">
+                          Set Up Profile
+                        </Button>
+                      </Link>
+                      <Button onClick={() => setShowCreateDialog(true)}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Campaign
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            )}
             <div>
               <h2 className="text-lg font-semibold mb-4">Your Campaigns</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {campaigns.map((campaign) => {
                   const isExpired = new Date(campaign.expirationDate) < new Date();
                   const isSelected = selectedCampaignId === campaign.id;
-                  
+
                   return (
                     <Card
                       key={campaign.id}

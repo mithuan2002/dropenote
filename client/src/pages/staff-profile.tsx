@@ -38,13 +38,18 @@ export default function StaffProfile() {
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: profile?.name || "",
-      storeName: profile?.storeName || "",
-      storeAddress: profile?.storeAddress || "",
-      phone: profile?.phone || "",
+    defaultValues: profile || {
+      name: "",
+      storeName: "",
+      storeAddress: "",
+      phone: "",
     },
   });
+
+  // Update form when profile data loads
+  if (profile && !form.formState.isDirty) {
+    form.reset(profile);
+  }
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {
