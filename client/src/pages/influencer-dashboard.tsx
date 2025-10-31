@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowLeft, TrendingUp, Users, DollarSign } from "lucide-react";
+import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle } from "lucide-react";
 import { Link } from "wouter";
 import type { Campaign } from "@shared/schema";
 import CreateCampaignDialog from "@/components/create-campaign-dialog";
