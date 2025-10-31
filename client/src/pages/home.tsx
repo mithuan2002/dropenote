@@ -25,7 +25,7 @@ export default function Home() {
       <div className="w-full max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2" data-testid="text-app-title">
-            Coupon Campaign Tracker
+            Dropnote
           </h1>
           <p className="text-muted-foreground">
             Choose your role to get started

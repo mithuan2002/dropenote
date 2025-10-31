@@ -1,6 +1,6 @@
 {
-  "name": "Coupon Campaign Tracker",
-  "short_name": "Coupon Tracker",
+  "name": "Dropnote",
+  "short_name": "Dropnote",
   "description": "Create coupon campaigns, distribute unique codes, and track redemptions",
   "start_url": "/",
   "display": "standalone",
