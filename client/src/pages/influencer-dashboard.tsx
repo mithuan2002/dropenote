@@ -120,7 +120,7 @@ export default function InfluencerDashboard() {
             <div>
               <h2 className="text-lg font-semibold mb-4">Your Campaigns</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {campaigns.map((campaign) => {
+                {campaigns?.map((campaign) => {
                   const isExpired = new Date(campaign.expirationDate) < new Date();
                   const isSelected = selectedCampaignId === campaign.id;
 
