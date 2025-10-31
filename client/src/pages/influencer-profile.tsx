@@ -1,4 +1,5 @@
 
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -39,7 +40,7 @@ export default function InfluencerProfile() {
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: profile || {
+    defaultValues: {
       name: "",
       businessName: "",
       phone: "",
@@ -48,9 +49,11 @@ export default function InfluencerProfile() {
   });
 
   // Update form when profile data loads
-  if (profile && !form.formState.isDirty) {
-    form.reset(profile);
-  }
+  React.useEffect(() => {
+    if (profile) {
+      form.reset(profile);
+    }
+  }, [profile]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {
