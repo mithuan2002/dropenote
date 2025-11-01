@@ -48,13 +48,19 @@ export default function StaffProfile() {
       storeAddress: "",
       phone: "",
     },
-    values: profile ? {
-      name: profile.name || "",
-      storeName: profile.storeName || "",
-      storeAddress: profile.storeAddress || "",
-      phone: profile.phone || "",
-    } : undefined,
   });
+
+  // Update form values when profile loads
+  React.useEffect(() => {
+    if (profile) {
+      form.reset({
+        name: profile.name || "",
+        storeName: profile.storeName || "",
+        storeAddress: profile.storeAddress || "",
+        phone: profile.phone || "",
+      });
+    }
+  }, [profile, form]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {
@@ -109,7 +115,12 @@ export default function StaffProfile() {
             </div>
           </div>
 
-          <Form {...form}>
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <p className="text-muted-foreground">Loading profile...</p>
+            </div>
+          ) : (
+            <Form {...form}>
             <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-6">
               <FormField
                 control={form.control}
@@ -204,6 +215,7 @@ export default function StaffProfile() {
               </div>
             </form>
           </Form>
+          )}
         </Card>
       </main>
     </div>
