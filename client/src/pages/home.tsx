@@ -59,10 +59,10 @@ export default function Home() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Dropnote</h1>
           <p className="text-xl text-muted-foreground mb-2">
-            Create coupon campaigns, distribute unique codes, and track redemptions
+            Coupon management system for influencers
           </p>
           <p className="text-muted-foreground mb-6">
-            Identify your most loyal followers
+            Identify and reward your loyal followers
           </p>
 
           {showInstallButton && (
@@ -97,7 +97,7 @@ export default function Home() {
                   <UserCircle className="w-5 h-5 text-primary" />
                   Influencer Portal
                 </CardTitle>
-                <CardDescription>Scan to access influencer dashboard</CardDescription>
+                <CardDescription>To install the application, scan QR code</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center gap-3">
                 <img
@@ -117,7 +117,7 @@ export default function Home() {
                   <Store className="w-5 h-5 text-primary" />
                   Store Staff Portal
                 </CardTitle>
-                <CardDescription>Scan to access store verification</CardDescription>
+                <CardDescription>To install the application, scan QR code</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center gap-3">
                 <img
