@@ -152,7 +152,15 @@ class DatabaseStorage implements IStorage {
 
   async getStaffProfile(userId: string): Promise<any> {
     const [profile] = await db.select().from(staffProfiles).where(eq(staffProfiles.userId, userId));
-    return profile;
+    if (!profile) return null;
+    
+    // Map database columns to camelCase for API
+    return {
+      name: profile.name || '',
+      storeName: profile.storeName || '',
+      storeAddress: profile.storeAddress || '',
+      phone: profile.phone || '',
+    };
   }
 
   async saveStaffProfile(userId: string, profileData: any): Promise<any> {
