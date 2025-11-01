@@ -172,15 +172,24 @@ export default function StaffPortal() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              await fetch('/api/auth/logout', { method: 'POST' });
-              window.location.href = '/';
-            }}
-          >
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link href="/staff/profile">
+              <Button variant="outline" data-testid="button-edit-profile">
+                <Store className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                window.location.href = '/';
+              }}
+              data-testid="button-logout"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
