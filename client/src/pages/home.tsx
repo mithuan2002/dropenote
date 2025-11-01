@@ -78,6 +78,16 @@ export default function Home() {
             </Card>
           )}
 
+          <div className="mb-6 p-4 bg-muted rounded-lg text-sm">
+            <h3 className="font-semibold mb-2">How to install on mobile:</h3>
+            <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+              <li>Scan the QR code for your portal (Influencer or Store Staff)</li>
+              <li>Open the page in your browser</li>
+              <li><strong>iPhone:</strong> Tap the Share button, then "Add to Home Screen"</li>
+              <li><strong>Android:</strong> Tap the menu (⋮), then "Add to Home screen" or "Install app"</li>
+            </ol>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
             <Card>
               <CardHeader>
