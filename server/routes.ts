@@ -249,6 +249,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get top redeemers for influencer campaigns
+  app.get("/api/influencer/top-redeemers", async (req, res) => {
+    try {
+      const allCampaigns = await storage.getCampaigns();
+      const allRedemptions = await storage.getAllRedemptions();
+      
+      // Get all coupons for all campaigns
+      const allCoupons: any[] = [];
+      for (const campaign of allCampaigns) {
+        const coupons = await storage.getCouponsByWCampaign(campaign.id);
+        allCoupons.push(...coupons);
+      }
+      
+      // Map coupon IDs to follower info
+      const couponMap = new Map();
+      allCoupons.forEach(coupon => {
+        couponMap.set(coupon.id, {
+          followerName: coupon.followerName,
+          followerWhatsApp: coupon.followerWhatsApp,
+        });
+      });
+      
+      // Count redemptions per follower
+      const followerRedemptions = new Map<string, { 
+        name: string; 
+        whatsapp: string; 
+        redemptionCount: number;
+        totalSpent: number;
+      }>();
+      
+      allRedemptions.forEach(redemption => {
+        const follower = couponMap.get(redemption.couponId);
+        if (follower) {
+          const key = follower.followerWhatsApp;
+          if (followerRedemptions.has(key)) {
+            const existing = followerRedemptions.get(key)!;
+            existing.redemptionCount++;
+            existing.totalSpent += redemption.purchaseAmount;
+          } else {
+            followerRedemptions.set(key, {
+              name: follower.followerName,
+              whatsapp: follower.followerWhatsApp,
+              redemptionCount: 1,
+              totalSpent: redemption.purchaseAmount,
+            });
+          }
+        }
+      });
+      
+      // Convert to array and sort by redemption count
+      const topRedeemers = Array.from(followerRedemptions.values())
+        .sort((a, b) => b.redemptionCount - a.redemptionCount)
+        .slice(0, 20); // Top 20 redeemers
+      
+      res.json(topRedeemers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch top redeemers" });
+    }
+  });
+
   // Get staff analytics
   app.get("/api/staff/analytics", async (req, res) => {
     try {

@@ -2,12 +2,19 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink } from "lucide-react";
+import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Campaign } from "@shared/schema";
 import CreateCampaignDialog from "@/components/create-campaign-dialog";
 import CampaignAnalytics from "@/components/campaign-analytics";
 import { useToast } from "@/hooks/use-toast";
+
+interface TopRedeemer {
+  name: string;
+  whatsapp: string;
+  redemptionCount: number;
+  totalSpent: number;
+}
 
 export default function InfluencerDashboard() {
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
@@ -17,6 +24,10 @@ export default function InfluencerDashboard() {
 
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
+  });
+
+  const { data: topRedeemers } = useQuery<TopRedeemer[]>({
+    queryKey: ["/api/influencer/top-redeemers"],
   });
 
   const getCampaignUrl = (campaignId: string) => {
@@ -203,6 +214,70 @@ export default function InfluencerDashboard() {
 
             {selectedCampaign && (
               <CampaignAnalytics campaignId={selectedCampaign.id} campaignName={selectedCampaign.name} />
+            )}
+
+            {topRedeemers && topRedeemers.length > 0 && (
+              <div className="mt-8">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className="text-lg font-semibold">Top Redeemers</h2>
+                    <p className="text-sm text-muted-foreground">
+                      Your most loyal followers - add them to your WhatsApp/Telegram community
+                    </p>
+                  </div>
+                </div>
+                <Card className="overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="text-left px-4 py-3 text-sm font-medium">Follower</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium">WhatsApp</th>
+                          <th className="text-right px-4 py-3 text-sm font-medium">Redemptions</th>
+                          <th className="text-right px-4 py-3 text-sm font-medium">Total Spent</th>
+                          <th className="text-right px-4 py-3 text-sm font-medium">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {topRedeemers.map((redeemer, index) => (
+                          <tr key={redeemer.whatsapp} className="border-t">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                {index < 3 && <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />}
+                                <span className="font-medium">{redeemer.name}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-sm">{redeemer.whatsapp}</td>
+                            <td className="px-4 py-3 text-right">
+                              <span className="inline-flex items-center justify-center px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                                {redeemer.redemptionCount}x
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold">
+                              ₹{redeemer.totalSpent.toLocaleString()}
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  window.open(`https://wa.me/${redeemer.whatsapp.replace(/\D/g, '')}`, '_blank');
+                                }}
+                                data-testid={`button-whatsapp-${index}`}
+                              >
+                                WhatsApp
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+                <p className="text-xs text-muted-foreground mt-2 text-center">
+                  💡 Tip: Add these loyal followers to your WhatsApp/Telegram community to boost repeat purchases
+                </p>
+              </div>
             )}
           </div>
         )}
