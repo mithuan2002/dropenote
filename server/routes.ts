@@ -1,16 +1,139 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import {
   insertCampaignSchema,
   insertCouponSchema,
   insertRedemptionSchema,
+  insertUserSchema,
 } from "@shared/schema";
 import { nanoid } from "nanoid";
+import bcrypt from "bcryptjs";
+
+// Authentication middleware
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+  next();
+};
+
+const requireRole = (role: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (req.session.role !== role) {
+      return res.status(403).json({ message: "Insufficient permissions" });
+    }
+    next();
+  };
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Auth endpoints
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { username, password, role } = insertUserSchema.parse(req.body);
+      
+      // Check if username exists
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      // Hash password
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      // Create user
+      const user = await storage.createUser({
+        username,
+        passwordHash,
+        role,
+      });
+
+      // Create profile based on role
+      if (role === "influencer") {
+        await storage.saveInfluencerProfile(user.id, { name: username });
+      } else if (role === "staff") {
+        await storage.saveStaffProfile(user.id, { name: username });
+      }
+
+      // Set session
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      req.session.role = user.role;
+
+      res.status(201).json({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: "Failed to register" });
+      }
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password required" });
+      }
+
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const validPassword = await bcrypt.compare(password, user.passwordHash);
+      if (!validPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      req.session.role = user.role;
+
+      res.json({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to login" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Failed to logout" });
+      }
+      res.json({ message: "Logged out successfully" });
+    });
+  });
+
+  app.get("/api/auth/me", requireAuth, async (req, res) => {
+    try {
+      const user = await storage.getUserById(req.session.userId!);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
   // Get all campaigns
-  app.get("/api/campaigns", async (_req, res) => {
+  app.get("/api/campaigns", requireAuth, async (_req, res) => {
     try {
       const campaigns = await storage.getCampaigns();
       res.json(campaigns);
@@ -87,21 +210,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Influencer profile endpoints
-  app.get("/api/influencer/profile", async (req, res) => {
+  app.get("/api/influencer/profile", requireAuth, requireRole("influencer"), async (req, res) => {
     try {
-      // For now, return a mock profile. In production, use authentication
-      const profile = await storage.getInfluencerProfile("default");
+      const profile = await storage.getInfluencerProfile(req.session.userId!);
       res.json(profile || {});
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch profile" });
     }
   });
 
-  app.post("/api/influencer/profile", async (req, res) => {
+  app.post("/api/influencer/profile", requireAuth, requireRole("influencer"), async (req, res) => {
     try {
       const { name, bio, whatsappNumber, whatsappGroupLink } = req.body;
 
-      await storage.updateInfluencerProfile("default", {
+      await storage.updateInfluencerProfile(req.session.userId!, {
         name,
         bio,
         whatsappNumber,
@@ -114,19 +236,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Staff profile endpoints
-  app.get("/api/staff/profile", async (req, res) => {
+  app.get("/api/staff/profile", requireAuth, requireRole("staff"), async (req, res) => {
     try {
-      // For now, return a mock profile. In production, use authentication
-      const profile = await storage.getStaffProfile("default");
+      const profile = await storage.getStaffProfile(req.session.userId!);
       res.json(profile || {});
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch profile" });
     }
   });
 
-  app.post("/api/staff/profile", async (req, res) => {
+  app.post("/api/staff/profile", requireAuth, requireRole("staff"), async (req, res) => {
     try {
-      const profile = await storage.saveStaffProfile("default", req.body);
+      const profile = await storage.saveStaffProfile(req.session.userId!, req.body);
       res.json(profile);
     } catch (error) {
       res.status(500).json({ message: "Failed to save profile" });

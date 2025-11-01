@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation as useWouterLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Store, Tag, UserCircle, Download } from "lucide-react";
@@ -9,6 +9,8 @@ export default function Home() {
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
+  const { setLocation } = useWouterLocation();
+
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -27,7 +29,7 @@ export default function Home() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
       setShowInstallButton(false);
@@ -132,15 +134,23 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          {roles.map((role) => (
-            <Link key={role.path} href={role.path}>
-              <Card className="p-6 hover-elevate active-elevate-2 cursor-pointer h-32 flex flex-col items-center justify-center text-center" data-testid={role.testId}>
-                <role.icon className="w-8 h-8 mb-4 text-primary" />
-                <h2 className="text-xl font-semibold mb-2">{role.title}</h2>
-                <p className="text-sm text-muted-foreground">{role.description}</p>
-              </Card>
-            </Link>
-          ))}
+          <Button 
+            size="lg" 
+            className="w-full h-32 text-lg"
+            onClick={() => setLocation("/login")}
+          >
+            <UserCircle className="mr-2 h-8 w-8" />
+            I'm an Influencer
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="w-full h-32 text-lg"
+            onClick={() => setLocation("/login")}
+          >
+            <Store className="mr-2 h-8 w-8" />
+            I'm Store Staff
+          </Button>
         </div>
       </div>
     </div>
