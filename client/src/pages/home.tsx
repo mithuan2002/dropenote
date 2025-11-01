@@ -138,6 +138,7 @@ export default function Home() {
             size="lg" 
             className="w-full h-32 text-lg"
             onClick={() => setLocation("/login")}
+            data-testid="button-influencer-login"
           >
             <UserCircle className="mr-2 h-8 w-8" />
             I'm an Influencer
@@ -147,6 +148,7 @@ export default function Home() {
             variant="outline" 
             className="w-full h-32 text-lg"
             onClick={() => setLocation("/login")}
+            data-testid="button-staff-login"
           >
             <Store className="mr-2 h-8 w-8" />
             I'm Store Staff
