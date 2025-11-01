@@ -7,6 +7,8 @@ import {
   type InsertRedemption,
   type User,
   type InsertUser,
+  type InfluencerProfile,
+  type InsertInfluencerProfile,
   campaigns,
   coupons,
   redemptions,
@@ -23,6 +25,27 @@ neonConfig.webSocketConstructor = ws;
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle(pool);
+
+interface IStorage {
+  createUser(userData: Omit<InsertUser, 'password'> & { passwordHash: string }): Promise<User>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserById(id: string): Promise<User | undefined>;
+  getCampaigns(): Promise<Campaign[]>;
+  getCampaign(id: string): Promise<Campaign | undefined>;
+  createCampaign(campaign: InsertCampaign): Promise<Campaign>;
+  getCoupon(id: string): Promise<Coupon | undefined>;
+  getCouponsByWCampaign(campaignId: string): Promise<Coupon[]>;
+  getCouponByCode(code: string): Promise<Coupon | undefined>;
+  createCoupon(coupon: InsertCoupon & { code: string }): Promise<Coupon>;
+  getRedemption(couponId: string): Promise<Redemption | undefined>;
+  createRedemption(redemption: InsertRedemption): Promise<Redemption>;
+  getAllRedemptions(): Promise<Redemption[]>;
+  getInfluencerProfile(userId: string): Promise<InfluencerProfile | undefined>;
+  saveInfluencerProfile(userId: string, profileData: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile>;
+  updateInfluencerProfile(userId: string, data: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile>;
+  getStaffProfile(userId: string): Promise<any>;
+  saveStaffProfile(userId: string, profileData: any): Promise<any>;
+}
 
 class DatabaseStorage implements IStorage {
   async createUser(userData: Omit<InsertUser, 'password'> & { passwordHash: string }): Promise<User> {
@@ -91,28 +114,39 @@ class DatabaseStorage implements IStorage {
     return db.select().from(redemptions);
   }
 
-  async getInfluencerProfile(userId: string): Promise<any> {
+  async getInfluencerProfile(userId: string): Promise<InfluencerProfile | undefined> {
     const [profile] = await db.select().from(influencerProfiles).where(eq(influencerProfiles.userId, userId));
     return profile;
   }
 
-  async saveInfluencerProfile(userId: string, profileData: any): Promise<any> {
+  async saveInfluencerProfile(userId: string, profileData: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile> {
     const existing = await this.getInfluencerProfile(userId);
     if (existing) {
       const [updated] = await db.update(influencerProfiles)
-        .set(profileData)
+        .set({
+          name: profileData.name,
+          bio: profileData.bio,
+          whatsappNumber: profileData.whatsappNumber,
+          whatsappGroupLink: profileData.whatsappGroupLink,
+        })
         .where(eq(influencerProfiles.userId, userId))
         .returning();
       return updated;
     } else {
       const [created] = await db.insert(influencerProfiles)
-        .values({ ...profileData, userId })
+        .values({ 
+          userId,
+          name: profileData.name || '',
+          bio: profileData.bio,
+          whatsappNumber: profileData.whatsappNumber,
+          whatsappGroupLink: profileData.whatsappGroupLink,
+        })
         .returning();
       return created;
     }
   }
 
-  async updateInfluencerProfile(userId: string, data: any): Promise<any> {
+  async updateInfluencerProfile(userId: string, data: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile> {
     return this.saveInfluencerProfile(userId, data);
   }
 

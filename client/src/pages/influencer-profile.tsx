@@ -22,9 +22,7 @@ import { z } from "zod";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  businessName: z.string().min(2, "Business name is required"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  description: z.string().optional(),
+  bio: z.string().optional(),
   whatsappNumber: z.string().optional(),
   whatsappGroupLink: z.string().optional(),
 });
@@ -43,9 +41,7 @@ export default function InfluencerProfile() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
-      businessName: "",
-      phone: "",
-      description: "",
+      bio: "",
       whatsappNumber: "",
       whatsappGroupLink: "",
     },
@@ -134,54 +130,16 @@ export default function InfluencerProfile() {
 
               <FormField
                 control={form.control}
-                name="businessName"
+                name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Business/Brand Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="My Business"
-                        {...field}
-                        data-testid="input-business-name"
-                        className="h-12"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="tel"
-                        placeholder="+91 98765 43210"
-                        {...field}
-                        data-testid="input-phone"
-                        className="h-12"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description (Optional)</FormLabel>
+                    <FormLabel>Bio (Optional)</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell your followers about your business..."
+                        placeholder="Tell your followers about yourself..."
                         {...field}
-                        data-testid="input-description"
+                        value={field.value || ""}
+                        data-testid="input-bio"
                         className="min-h-24"
                       />
                     </FormControl>
@@ -197,7 +155,13 @@ export default function InfluencerProfile() {
                   <FormItem>
                     <FormLabel>WhatsApp Number (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="9876543210" {...field} data-testid="input-whatsapp-number" className="h-12" />
+                      <Input 
+                        placeholder="9876543210" 
+                        {...field} 
+                        value={field.value || ""}
+                        data-testid="input-whatsapp-number" 
+                        className="h-12" 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -211,7 +175,13 @@ export default function InfluencerProfile() {
                   <FormItem>
                     <FormLabel>WhatsApp Group Invitation Link (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://chat.whatsapp.com/..." {...field} data-testid="input-whatsapp-group-link" className="h-12" />
+                      <Input 
+                        placeholder="https://chat.whatsapp.com/..." 
+                        {...field} 
+                        value={field.value || ""}
+                        data-testid="input-whatsapp-group-link" 
+                        className="h-12" 
+                      />
                     </FormControl>
                     <p className="text-xs text-muted-foreground mt-1">
                       Followers will receive this link when you invite them to your community
