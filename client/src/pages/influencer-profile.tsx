@@ -33,7 +33,7 @@ export default function InfluencerProfile() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
-  const { data: profile } = useQuery({
+  const { data: profile } = useQuery<ProfileFormData>({
     queryKey: ["/api/influencer/profile"],
   });
 
@@ -50,9 +50,14 @@ export default function InfluencerProfile() {
   // Update form when profile data loads
   React.useEffect(() => {
     if (profile) {
-      form.reset(profile);
+      form.reset({
+        name: profile.name || "",
+        bio: profile.bio || "",
+        whatsappNumber: profile.whatsappNumber || "",
+        whatsappGroupLink: profile.whatsappGroupLink || "",
+      });
     }
-  }, [profile]);
+  }, [profile, form]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {

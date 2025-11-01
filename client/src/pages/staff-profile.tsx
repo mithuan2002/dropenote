@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,15 +28,19 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
+// Define StaffProfile type for clarity, assuming it matches ProfileFormData structure
+// This type definition is assumed based on the context of the original code and intended fix.
+type StaffProfile = ProfileFormData;
+
 export default function StaffProfile() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading } = useQuery<StaffProfile>({
     queryKey: ["/api/staff/profile"],
   });
 
-  const form = useForm<ProfileFormData>({
+  const form = useForm<StaffProfile>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
@@ -47,12 +50,17 @@ export default function StaffProfile() {
     },
   });
 
-  // Update form when profile data loads
+  // Update form when profile data is loaded
   React.useEffect(() => {
     if (profile) {
-      form.reset(profile);
+      form.reset({
+        name: profile.name || "",
+        storeName: profile.storeName || "",
+        storeAddress: profile.storeAddress || "",
+        phone: profile.phone || "",
+      });
     }
-  }, [profile]);
+  }, [profile, form]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {
