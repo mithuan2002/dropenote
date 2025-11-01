@@ -444,6 +444,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get detailed campaign follower analytics
+  app.get("/api/campaigns/:id/followers", async (req, res) => {
+    try {
+      const campaignId = req.params.id;
+      
+      // Get all coupons for this campaign
+      const coupons = await storage.getCouponsByWCampaign(campaignId);
+      
+      // Get all redemptions
+      const allRedemptions = await storage.getAllRedemptions();
+      
+      // Map redemptions by coupon ID
+      const redemptionMap = new Map();
+      allRedemptions.forEach(redemption => {
+        redemptionMap.set(redemption.couponId, redemption);
+      });
+      
+      // Build follower list with redemption status
+      const followers = coupons.map(coupon => {
+        const redemption = redemptionMap.get(coupon.id);
+        return {
+          name: coupon.followerName,
+          whatsapp: coupon.followerWhatsApp,
+          couponCode: coupon.code,
+          generatedAt: coupon.createdAt,
+          redeemed: !!redemption,
+          redeemedAt: redemption?.redeemedAt,
+          purchaseAmount: redemption?.purchaseAmount || 0,
+        };
+      });
+      
+      res.json(followers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch campaign followers" });
+    }
+  });
+
   // Get staff analytics
   app.get("/api/staff/analytics", async (req, res) => {
     try {
@@ -507,6 +544,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(validRedemptions);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch redemption history" });
+    }
+  });
+
+  // Get influencer performance for staff
+  app.get("/api/staff/influencer-performance", async (req, res) => {
+    try {
+      const allCampaigns = await storage.getCampaigns();
+      const allRedemptions = await storage.getAllRedemptions();
+
+      // Calculate performance for each campaign
+      const performance = await Promise.all(
+        allCampaigns.map(async (campaign) => {
+          const coupons = await storage.getCouponsByWCampaign(campaign.id);
+          const totalCodes = coupons.length;
+
+          // Find redemptions for this campaign's coupons
+          const couponIds = new Set(coupons.map(c => c.id));
+          const campaignRedemptions = allRedemptions.filter(r => couponIds.has(r.couponId));
+
+          const redeemedCodes = campaignRedemptions.length;
+          const totalSales = campaignRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
+          const redemptionRate = totalCodes > 0
+            ? Math.round((redeemedCodes / totalCodes) * 100)
+            : 0;
+
+          return {
+            campaignName: campaign.name,
+            totalCodes,
+            redeemedCodes,
+            totalSales,
+            redemptionRate,
+          };
+        })
+      );
+
+      // Sort by total sales (highest first)
+      performance.sort((a, b) => b.totalSales - a.totalSales);
+
+      res.json(performance);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch influencer performance" });
     }
   });
 

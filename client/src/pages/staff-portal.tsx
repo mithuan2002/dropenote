@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, CheckCircle2, XCircle, Search, Store, TrendingUp, History, Receipt } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, Search, Store, TrendingUp, History, Receipt, Award } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -36,6 +36,24 @@ interface RedemptionHistory {
   discountPercentage: number;
 }
 
+interface InfluencerAnalytics {
+  totalFollowers: number;
+  totalCouponsGenerated: number;
+  totalCouponsRedeemed: number;
+  topInfluencers: {
+    name: string;
+    generated: number;
+    redeemed: number;
+  }[];
+  recentRedemptions: RedemptionHistory[];
+  recentGenerations: {
+    generatedAt: Date;
+    couponCode: string;
+    customerName: string;
+    campaignName: string;
+  }[];
+}
+
 interface StaffProfile {
   storeName?: string;
   ownerName?: string;
@@ -58,6 +76,10 @@ export default function StaffPortal() {
 
   const { data: redemptionHistory, isLoading: historyLoading } = useQuery<RedemptionHistory[]>({
     queryKey: ["/api/staff/redemptions"],
+  });
+
+  const { data: influencerAnalytics, isLoading: influencerAnalyticsLoading } = useQuery<InfluencerAnalytics>({
+    queryKey: ["/api/staff/influencers/analytics"],
   });
 
   const verifyMutation = useMutation({
@@ -99,6 +121,7 @@ export default function StaffPortal() {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
       queryClient.invalidateQueries({ queryKey: ["/api/staff/analytics"] });
       queryClient.invalidateQueries({ queryKey: ["/api/staff/redemptions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/staff/influencers/analytics"] });
       setCouponCode("");
       setPurchaseAmount("");
       setVerificationResult(null);
@@ -133,7 +156,7 @@ export default function StaffPortal() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/">
               <Button variant="ghost" size="icon" data-testid="button-back">
@@ -149,12 +172,15 @@ export default function StaffPortal() {
               </p>
             </div>
           </div>
-          <Link href="/staff/profile">
-            <Button variant="outline" data-testid="button-profile">
-              <Store className="w-4 h-4 mr-2" />
-              Profile
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              await fetch('/api/auth/logout', { method: 'POST' });
+              window.location.href = '/';
+            }}
+          >
+            Logout
+          </Button>
         </div>
       </header>
 
@@ -181,7 +207,7 @@ export default function StaffPortal() {
         )}
 
         <Tabs defaultValue="verify" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="verify" data-testid="tab-verify">
               <Search className="w-4 h-4 mr-2" />
               Verify
@@ -193,6 +219,10 @@ export default function StaffPortal() {
             <TabsTrigger value="history" data-testid="tab-history">
               <History className="w-4 h-4 mr-2" />
               History
+            </TabsTrigger>
+            <TabsTrigger value="influencers" data-testid="tab-influencers">
+              <Award className="w-4 h-4 mr-2" />
+              Influencers
             </TabsTrigger>
           </TabsList>
 
@@ -465,6 +495,137 @@ export default function StaffPortal() {
                       </div>
                     </Card>
                   ))}
+                </div>
+              )}
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="influencers">
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Influencer Analytics</h2>
+              {influencerAnalyticsLoading ? (
+                <div className="text-center py-8 text-muted-foreground">Loading influencer data...</div>
+              ) : !influencerAnalytics ? (
+                <div className="text-center py-8 text-muted-foreground">No influencer data available</div>
+              ) : (
+                <div className="space-y-8">
+                  <div className="grid gap-6 md:grid-cols-3">
+                    <Card className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Total Followers</p>
+                          <p className="text-3xl font-bold mt-2" data-testid="text-total-followers">
+                            {influencerAnalytics.totalFollowers.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center">
+                          <Store className="w-6 h-6 text-cyan-500" />
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Total Coupons Generated</p>
+                          <p className="text-3xl font-bold mt-2" data-testid="text-total-generated-coupons">
+                            {influencerAnalytics.totalCouponsGenerated.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
+                          <Receipt className="w-6 h-6 text-orange-500" />
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Total Coupons Redeemed</p>
+                          <p className="text-3xl font-bold mt-2" data-testid="text-total-redeemed-coupons">
+                            {influencerAnalytics.totalCouponsRedeemed.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                          <TrendingUp className="w-6 h-6 text-green-500" />
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+
+                  <Card className="p-6">
+                    <h3 className="font-semibold mb-4">Top Influencers</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="py-2 text-left font-medium text-muted-foreground">Influencer</th>
+                            <th className="py-2 text-right font-medium text-muted-foreground">Coupons Generated</th>
+                            <th className="py-2 text-right font-medium text-muted-foreground">Coupons Redeemed</th>
+                            <th className="py-2 text-right font-medium text-muted-foreground">Redemption Rate</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {influencerAnalytics.topInfluencers.map((influencer, index) => (
+                            <tr key={index} className="border-b hover:bg-muted/50">
+                              <td className="py-2 text-left font-medium">{influencer.name}</td>
+                              <td className="py-2 text-right">{influencer.generated.toLocaleString()}</td>
+                              <td className="py-2 text-right">{influencer.redeemed.toLocaleString()}</td>
+                              <td className="py-2 text-right">
+                                {influencer.generated > 0
+                                  ? `${((influencer.redeemed / influencer.generated) * 100).toFixed(1)}%`
+                                  : "0.0%"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Card className="p-6">
+                      <h3 className="font-semibold mb-4">Recent Coupon Generations</h3>
+                      {influencerAnalytics.recentGenerations.length === 0 ? (
+                        <p className="text-muted-foreground text-center py-4">No recent generations</p>
+                      ) : (
+                        <div className="space-y-4">
+                          {influencerAnalytics.recentGenerations.map((generation, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <div>
+                                <p className="font-medium">{generation.customerName}</p>
+                                <p className="text-muted-foreground">{generation.couponCode}</p>
+                              </div>
+                              <div className="text-right">
+                                <p>{formatDistanceToNow(new Date(generation.generatedAt), { addSuffix: true })}</p>
+                                <p className="text-primary font-medium">{generation.campaignName}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </Card>
+
+                    <Card className="p-6">
+                      <h3 className="font-semibold mb-4">Recent Coupon Redemptions</h3>
+                      {influencerAnalytics.recentRedemptions.length === 0 ? (
+                        <p className="text-muted-foreground text-center py-4">No recent redemptions</p>
+                      ) : (
+                        <div className="space-y-4">
+                          {influencerAnalytics.recentRedemptions.map((redemption) => (
+                            <div key={redemption.id} className="flex justify-between text-sm">
+                              <div>
+                                <p className="font-medium">{redemption.customerName}</p>
+                                <p className="text-muted-foreground">{redemption.couponCode}</p>
+                              </div>
+                              <div className="text-right">
+                                <p>{formatDistanceToNow(new Date(redemption.redeemedAt), { addSuffix: true })}</p>
+                                <p className="text-primary font-medium">{redemption.campaignName}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </Card>
+                  </div>
                 </div>
               )}
             </Card>

@@ -110,6 +110,15 @@ export default function InfluencerDashboard() {
               <Plus className="w-4 h-4 mr-2" />
               New Campaign
             </Button>
+            <Button 
+              variant="outline"
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                window.location.href = '/';
+              }}
+            >
+              Logout
+            </Button>
           </div>
         </div>
       </header>
