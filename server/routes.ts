@@ -247,9 +247,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/staff/profile", requireAuth, requireRole("staff"), async (req, res) => {
     try {
-      const profile = await storage.saveStaffProfile(req.session.userId!, req.body);
-      res.json(profile);
+      const { name } = req.body;
+      const profile = await storage.saveStaffProfile(req.session.userId!, { name });
+      res.status(200).json(profile);
     } catch (error) {
+      console.error("Error saving staff profile:", error);
       res.status(500).json({ message: "Failed to save profile" });
     }
   });

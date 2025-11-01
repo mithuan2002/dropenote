@@ -159,13 +159,18 @@ class DatabaseStorage implements IStorage {
     const existing = await this.getStaffProfile(userId);
     if (existing) {
       const [updated] = await db.update(staffProfiles)
-        .set(profileData)
+        .set({
+          name: profileData.name,
+        })
         .where(eq(staffProfiles.userId, userId))
         .returning();
       return updated;
     } else {
       const [created] = await db.insert(staffProfiles)
-        .values({ ...profileData, userId })
+        .values({ 
+          userId,
+          name: profileData.name || '',
+        })
         .returning();
       return created;
     }
