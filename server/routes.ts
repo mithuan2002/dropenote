@@ -249,6 +249,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get staff analytics
+  app.get("/api/staff/analytics", async (req, res) => {
+    try {
+      const allRedemptions = await storage.getAllRedemptions();
+      const totalRedemptions = allRedemptions.length;
+      const totalRevenue = allRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
+      
+      // Get all campaigns to calculate active campaigns
+      const allCampaigns = await storage.getCampaigns();
+      const activeCampaigns = allCampaigns.filter(c => new Date(c.expirationDate) >= new Date()).length;
+      
+      // Get all coupons
+      const allCoupons = await Promise.all(
+        allCampaigns.map(c => storage.getCouponsByWCampaign(c.id))
+      );
+      const totalCoupons = allCoupons.reduce((sum, coupons) => sum + coupons.length, 0);
+
+      res.json({
+        totalRedemptions,
+        totalRevenue,
+        activeCampaigns,
+        totalCoupons,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  // Get redemption history with details
+  app.get("/api/staff/redemptions", async (req, res) => {
+    try {
+      const allRedemptions = await storage.getAllRedemptions();
+      
+      // Enrich redemptions with coupon and campaign details
+      const enrichedRedemptions = await Promise.all(
+        allRedemptions.map(async (redemption) => {
+          const coupon = await storage.getCoupon(redemption.couponId);
+          if (!coupon) return null;
+          
+          const campaign = await storage.getCampaign(coupon.campaignId);
+          if (!campaign) return null;
+          
+          return {
+            id: redemption.id,
+            redeemedAt: redemption.redeemedAt,
+            purchaseAmount: redemption.purchaseAmount,
+            couponCode: coupon.code,
+            customerName: coupon.followerName,
+            customerWhatsApp: coupon.followerWhatsApp,
+            campaignName: campaign.name,
+            discountPercentage: campaign.discountPercentage,
+          };
+        })
+      );
+
+      // Filter out nulls and sort by date (newest first)
+      const validRedemptions = enrichedRedemptions
+        .filter((r): r is NonNullable<typeof r> => r !== null)
+        .sort((a, b) => new Date(b.redeemedAt).getTime() - new Date(a.redeemedAt).getTime());
+
+      res.json(validRedemptions);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch redemption history" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
