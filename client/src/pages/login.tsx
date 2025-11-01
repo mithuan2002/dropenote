@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "@/lib/queryClient";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -42,6 +43,9 @@ export default function Login() {
         title: isLogin ? "Welcome back!" : "Account created!",
         description: `Logged in as ${data.username}`,
       });
+
+      // Invalidate auth query to update the user state
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
 
       // Redirect based on role
       if (data.role === "influencer") {
@@ -81,6 +85,7 @@ export default function Login() {
                 placeholder="Enter username"
                 required
                 minLength={3}
+                data-testid="input-username"
               />
             </div>
 
@@ -94,6 +99,7 @@ export default function Login() {
                 placeholder="Enter password"
                 required
                 minLength={6}
+                data-testid="input-password"
               />
             </div>
 
@@ -106,6 +112,7 @@ export default function Login() {
                   onChange={(e) => setRole(e.target.value as "influencer" | "staff")}
                   className="w-full h-10 px-3 rounded-md border border-input bg-background"
                   required
+                  data-testid="select-role"
                 >
                   <option value="influencer">Influencer</option>
                   <option value="staff">Store Staff</option>
@@ -113,7 +120,7 @@ export default function Login() {
               </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading} data-testid="button-submit">
               {loading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
             </Button>
 
@@ -122,6 +129,7 @@ export default function Login() {
               variant="ghost"
               className="w-full"
               onClick={() => setIsLogin(!isLogin)}
+              data-testid="button-toggle-mode"
             >
               {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
             </Button>

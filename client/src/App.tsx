@@ -13,10 +13,11 @@ import CampaignDetail from "@/pages/campaign-detail";
 import StaffPortal from "@/pages/staff-portal";
 import StaffProfile from "@/pages/staff-profile";
 import NotFound from "@/pages/not-found";
+import type { User } from "@shared/schema";
 
 function ProtectedRoute({ component: Component, requiredRole }: { component: any; requiredRole?: string }) {
   const [, setLocation] = useLocation();
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading } = useQuery<User>({
     queryKey: ["/api/auth/me"],
     retry: false,
   });
