@@ -14,10 +14,6 @@ run = ["npm", "run", "start"]
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 39617
-externalPort = 3000
-
 [env]
 PORT = "5000"
 
@@ -48,3 +44,8 @@ waitForPort = 5000
 [agent]
 integrations = ["javascript_mem_db:1.0.0"]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+SESSION_SECRET = "035dcdfab499498ce2412c98af097fd04b175972a83bcc9e4340c634f21c949822b7246cc5695af00afa23848279f93565b60ae22e70fc8e587c36bcf9c3f636"
