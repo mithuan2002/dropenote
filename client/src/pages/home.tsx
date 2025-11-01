@@ -1,4 +1,4 @@
-import { Link, useLocation as useWouterLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Store, Tag, UserCircle, Download } from "lucide-react";
@@ -9,7 +9,7 @@ export default function Home() {
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
-  const { setLocation } = useWouterLocation();
+  const [, setLocation] = useLocation();
 
 
   useEffect(() => {
