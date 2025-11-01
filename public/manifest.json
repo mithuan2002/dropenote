@@ -1,12 +1,14 @@
 {
-  "name": "Dropnote",
+  "name": "Dropnote - Coupon Campaign Tracker",
   "short_name": "Dropnote",
   "description": "Create coupon campaigns, distribute unique codes, and track redemptions",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
   "icons": [
     {
       "src": "/icon-192.svg",

@@ -1,10 +1,38 @@
 import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Store, Tag, UserCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Store, Tag, UserCircle, Download } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const appUrl = window.location.origin;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+      setShowInstallButton(false);
+    }
+  };
 
   const roles = [
     {
@@ -37,18 +65,27 @@ export default function Home() {
 
           <Card className="inline-block mb-8">
             <CardHeader>
-              <CardTitle className="text-lg">Install Our PWA</CardTitle>
-              <CardDescription>Scan to install Dropnote on your device</CardDescription>
+              <CardTitle className="text-lg">Install Dropnote App</CardTitle>
+              <CardDescription>Access Dropnote offline and from your home screen</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center gap-3">
-              <img
-                src={qrCodeUrl}
-                alt="QR Code to install PWA"
-                className="w-48 h-48 border-2 border-border rounded-lg"
-              />
-              <p className="text-sm text-muted-foreground">
-                Or install directly from your browser
-              </p>
+            <CardContent className="flex flex-col items-center gap-4">
+              {showInstallButton && (
+                <Button onClick={handleInstallClick} size="lg" className="w-full max-w-xs">
+                  <Download className="mr-2 h-5 w-5" />
+                  Install App
+                </Button>
+              )}
+              <div className="text-center">
+                <p className="text-sm font-medium mb-2">Scan to open on mobile:</p>
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code to open app"
+                  className="w-48 h-48 border-2 border-border rounded-lg mx-auto"
+                />
+                <p className="text-xs text-muted-foreground mt-2">
+                  Then use your browser's "Add to Home Screen" option
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
