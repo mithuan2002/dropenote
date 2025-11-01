@@ -3,11 +3,13 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, CheckCircle2, XCircle, Search, Store } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, CheckCircle2, XCircle, Search, Store, TrendingUp, History, Receipt } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Coupon, Campaign } from "@shared/schema";
+import { formatDistanceToNow } from "date-fns";
 
 interface VerificationResult {
   valid: boolean;
@@ -16,14 +18,46 @@ interface VerificationResult {
   message: string;
 }
 
+interface StaffAnalytics {
+  totalRedemptions: number;
+  totalRevenue: number;
+  activeCampaigns: number;
+  totalCoupons: number;
+}
+
+interface RedemptionHistory {
+  id: string;
+  redeemedAt: Date;
+  purchaseAmount: number;
+  couponCode: string;
+  customerName: string;
+  customerWhatsApp: string;
+  campaignName: string;
+  discountPercentage: number;
+}
+
+interface StaffProfile {
+  storeName?: string;
+  ownerName?: string;
+  location?: string;
+}
+
 export default function StaffPortal() {
   const [couponCode, setCouponCode] = useState("");
   const [verificationResult, setVerificationResult] = useState<VerificationResult | null>(null);
   const [purchaseAmount, setPurchaseAmount] = useState("");
   const { toast } = useToast();
 
-  const { data: profile } = useQuery({
+  const { data: profile } = useQuery<StaffProfile>({
     queryKey: ["/api/staff/profile"],
+  });
+
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<StaffAnalytics>({
+    queryKey: ["/api/staff/analytics"],
+  });
+
+  const { data: redemptionHistory, isLoading: historyLoading } = useQuery<RedemptionHistory[]>({
+    queryKey: ["/api/staff/redemptions"],
   });
 
   const verifyMutation = useMutation({
@@ -63,6 +97,8 @@ export default function StaffPortal() {
         description: "Purchase has been recorded successfully",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/staff/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/staff/redemptions"] });
       setCouponCode("");
       setPurchaseAmount("");
       setVerificationResult(null);
@@ -122,7 +158,7 @@ export default function StaffPortal() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8">
         {(!profile || !profile.storeName) && (
           <Card className="p-6 mb-6 border-primary/50 bg-primary/5">
             <div className="flex items-start gap-4">
@@ -144,7 +180,24 @@ export default function StaffPortal() {
           </Card>
         )}
 
-        <Card className="p-6">
+        <Tabs defaultValue="verify" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="verify" data-testid="tab-verify">
+              <Search className="w-4 h-4 mr-2" />
+              Verify
+            </TabsTrigger>
+            <TabsTrigger value="analytics" data-testid="tab-analytics">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="history" data-testid="tab-history">
+              <History className="w-4 h-4 mr-2" />
+              History
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="verify">
+            <Card className="p-6">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Verify Coupon Code</h2>
             <p className="text-sm text-muted-foreground">
@@ -254,6 +307,165 @@ export default function StaffPortal() {
             )}
           </Card>
         )}
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <div className="grid gap-6 md:grid-cols-2 mb-6">
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Redemptions</p>
+                    <p className="text-3xl font-bold mt-2" data-testid="text-total-redemptions">
+                      {analyticsLoading ? "..." : analytics?.totalRedemptions || 0}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Receipt className="w-6 h-6 text-primary" />
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Revenue</p>
+                    <p className="text-3xl font-bold mt-2" data-testid="text-total-revenue">
+                      {analyticsLoading ? "..." : `₹${analytics?.totalRevenue?.toLocaleString() || 0}`}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-green-500" />
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Active Campaigns</p>
+                    <p className="text-3xl font-bold mt-2" data-testid="text-active-campaigns">
+                      {analyticsLoading ? "..." : analytics?.activeCampaigns || 0}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                    <Store className="w-6 h-6 text-blue-500" />
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Coupons Issued</p>
+                    <p className="text-3xl font-bold mt-2" data-testid="text-total-coupons">
+                      {analyticsLoading ? "..." : analytics?.totalCoupons || 0}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center">
+                    <CheckCircle2 className="w-6 h-6 text-purple-500" />
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {analytics && analytics.totalCoupons > 0 && (
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4">Redemption Rate</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Redeemed</span>
+                    <span className="font-medium">
+                      {analytics.totalRedemptions} / {analytics.totalCoupons}
+                    </span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+                    <div
+                      className="bg-primary h-full transition-all"
+                      style={{
+                        width: `${(analytics.totalRedemptions / analytics.totalCoupons) * 100}%`,
+                      }}
+                      data-testid="progress-redemption-rate"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground text-center">
+                    {((analytics.totalRedemptions / analytics.totalCoupons) * 100).toFixed(1)}% redemption rate
+                  </p>
+                </div>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="history">
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Redemption History</h2>
+              {historyLoading ? (
+                <div className="text-center py-8 text-muted-foreground">Loading history...</div>
+              ) : !redemptionHistory || redemptionHistory.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground" data-testid="text-no-history">
+                  No redemptions yet
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {redemptionHistory.map((redemption) => (
+                    <Card
+                      key={redemption.id}
+                      className="p-4 hover:bg-muted/50 transition-colors"
+                      data-testid={`card-redemption-${redemption.id}`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span
+                              className="font-mono font-semibold text-primary"
+                              data-testid={`text-code-${redemption.id}`}
+                            >
+                              {redemption.couponCode}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                              •
+                            </span>
+                            <span className="text-sm font-medium" data-testid={`text-campaign-${redemption.id}`}>
+                              {redemption.campaignName}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <span className="text-muted-foreground">Customer: </span>
+                              <span className="font-medium" data-testid={`text-customer-${redemption.id}`}>
+                                {redemption.customerName}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">WhatsApp: </span>
+                              <span className="font-medium" data-testid={`text-whatsapp-${redemption.id}`}>
+                                {redemption.customerWhatsApp}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Discount: </span>
+                              <span className="font-medium text-primary" data-testid={`text-discount-${redemption.id}`}>
+                                {redemption.discountPercentage}% OFF
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Purchase: </span>
+                              <span className="font-medium" data-testid={`text-amount-${redemption.id}`}>
+                                ₹{redemption.purchaseAmount.toLocaleString()}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right text-sm text-muted-foreground" data-testid={`text-time-${redemption.id}`}>
+                          {formatDistanceToNow(new Date(redemption.redeemedAt), { addSuffix: true })}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
