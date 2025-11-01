@@ -161,6 +161,9 @@ class DatabaseStorage implements IStorage {
       const [updated] = await db.update(staffProfiles)
         .set({
           name: profileData.name,
+          storeName: profileData.storeName,
+          storeAddress: profileData.storeAddress,
+          phone: profileData.phone,
         })
         .where(eq(staffProfiles.userId, userId))
         .returning();
@@ -170,6 +173,9 @@ class DatabaseStorage implements IStorage {
         .values({ 
           userId,
           name: profileData.name || '',
+          storeName: profileData.storeName,
+          storeAddress: profileData.storeAddress,
+          phone: profileData.phone,
         })
         .returning();
       return created;

@@ -86,6 +86,9 @@ export const staffProfiles = pgTable("staff_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().unique(),
   name: text("name").notNull(),
+  storeName: text("store_name"),
+  storeAddress: text("store_address"),
+  phone: text("phone"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
