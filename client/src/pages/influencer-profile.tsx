@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +25,8 @@ const profileSchema = z.object({
   businessName: z.string().min(2, "Business name is required"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   description: z.string().optional(),
+  whatsappNumber: z.string().optional(),
+  whatsappGroupLink: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -45,6 +46,8 @@ export default function InfluencerProfile() {
       businessName: "",
       phone: "",
       description: "",
+      whatsappNumber: "",
+      whatsappGroupLink: "",
     },
   });
 
@@ -182,6 +185,37 @@ export default function InfluencerProfile() {
                         className="min-h-24"
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="whatsappNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>WhatsApp Number (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="9876543210" {...field} data-testid="input-whatsapp-number" className="h-12" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="whatsappGroupLink"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>WhatsApp Group Invitation Link (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://chat.whatsapp.com/..." {...field} data-testid="input-whatsapp-group-link" className="h-12" />
+                    </FormControl>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Followers will receive this link when you invite them to your community
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}

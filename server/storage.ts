@@ -1,4 +1,3 @@
-
 import {
   type Campaign,
   type InsertCampaign,
@@ -37,6 +36,12 @@ export interface IStorage {
   // Profile methods
   getInfluencerProfile(userId: string): Promise<any>;
   saveInfluencerProfile(userId: string, profile: any): Promise<any>;
+  updateInfluencerProfile(influencerId: number, data: {
+    name?: string;
+    bio?: string;
+    whatsappNumber?: string;
+    whatsappGroupLink?: string;
+  }): Promise<any>;
   getStaffProfile(userId: string): Promise<any>;
   saveStaffProfile(userId: string, profile: any): Promise<any>;
 }
@@ -148,6 +153,48 @@ export class DatabaseStorage implements IStorage {
     this.influencerProfiles.set(userId, profile);
     return profile;
   }
+
+  async updateInfluencerProfile(influencerId: number, data: {
+    name?: string;
+    bio?: string;
+    whatsappNumber?: string;
+    whatsappGroupLink?: string;
+  }) {
+    const updates: string[] = [];
+    const values: any[] = [];
+    let paramCount = 1;
+
+    if (data.name !== undefined) {
+      updates.push(`name = $${paramCount++}`);
+      values.push(data.name);
+    }
+    if (data.bio !== undefined) {
+      updates.push(`bio = $${paramCount++}`);
+      values.push(data.bio);
+    }
+    if (data.whatsappNumber !== undefined) {
+      updates.push(`whatsapp_number = $${paramCount++}`);
+      values.push(data.whatsappNumber);
+    }
+    if (data.whatsappGroupLink !== undefined) {
+      updates.push(`whatsapp_group_link = $${paramCount++}`);
+      values.push(data.whatsappGroupLink);
+    }
+
+    if (updates.length === 0) {
+      return; // No updates to perform
+    }
+
+    const query = `
+      UPDATE influencers
+      SET ${updates.join(", ")}
+      WHERE id = $${paramCount}
+    `;
+    values.push(influencerId);
+
+    await this.db.execute(query, values);
+  }
+
 
   async getStaffProfile(userId: string): Promise<any> {
     return this.staffProfiles.get(userId);

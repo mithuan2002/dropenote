@@ -57,22 +57,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/campaigns/:id/analytics", async (req, res) => {
     try {
       const campaignId = req.params.id;
-      
+
       // Get all coupons for this campaign
       const coupons = await storage.getCouponsByWCampaign(campaignId);
       const totalCodes = coupons.length;
 
       // Get all redemptions
       const allRedemptions = await storage.getAllRedemptions();
-      
+
       // Find redemptions for this campaign's coupons
       const couponIds = new Set(coupons.map(c => c.id));
       const campaignRedemptions = allRedemptions.filter(r => couponIds.has(r.couponId));
-      
+
       const redeemedCodes = campaignRedemptions.length;
       const totalSales = campaignRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
-      const redemptionRate = totalCodes > 0 
-        ? Math.round((redeemedCodes / totalCodes) * 100) 
+      const redemptionRate = totalCodes > 0
+        ? Math.round((redeemedCodes / totalCodes) * 100)
         : 0;
 
       res.json({
@@ -99,8 +99,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/influencer/profile", async (req, res) => {
     try {
-      const profile = await storage.saveInfluencerProfile("default", req.body);
-      res.json(profile);
+      const { name, bio, whatsappNumber, whatsappGroupLink } = req.body;
+
+      await storage.updateInfluencerProfile("default", {
+        name,
+        bio,
+        whatsappNumber,
+        whatsappGroupLink
+      });
+      res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
       res.status(500).json({ message: "Failed to save profile" });
     }
@@ -130,7 +137,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/coupons", async (req, res) => {
     try {
       const validatedData = insertCouponSchema.parse(req.body);
-      
+
       // Verify campaign exists and is not expired
       const campaign = await storage.getCampaign(validatedData.campaignId);
       if (!campaign) {
@@ -143,7 +150,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Generate unique coupon code
       const code = nanoid(6).toUpperCase();
-      
+
       const coupon = await storage.createCoupon({
         ...validatedData,
         code,
@@ -163,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/coupons/verify", async (req, res) => {
     try {
       const { code } = req.body;
-      
+
       if (!code || typeof code !== "string") {
         return res.status(400).json({
           valid: false,
@@ -173,7 +180,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Find coupon by code
       const coupon = await storage.getCouponByCode(code.toUpperCase());
-      
+
       if (!coupon) {
         return res.json({
           valid: false,
@@ -225,7 +232,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/redemptions", async (req, res) => {
     try {
       const validatedData = insertRedemptionSchema.parse(req.body);
-      
+
       // Check if coupon exists
       const coupon = await storage.getCoupon(validatedData.couponId);
       if (!coupon) {
@@ -254,14 +261,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const allCampaigns = await storage.getCampaigns();
       const allRedemptions = await storage.getAllRedemptions();
-      
+
       // Get all coupons for all campaigns
       const allCoupons: any[] = [];
       for (const campaign of allCampaigns) {
         const coupons = await storage.getCouponsByWCampaign(campaign.id);
         allCoupons.push(...coupons);
       }
-      
+
       // Map coupon IDs to follower info
       const couponMap = new Map();
       allCoupons.forEach(coupon => {
@@ -270,15 +277,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           followerWhatsApp: coupon.followerWhatsApp,
         });
       });
-      
+
       // Count redemptions per follower
-      const followerRedemptions = new Map<string, { 
-        name: string; 
-        whatsapp: string; 
+      const followerRedemptions = new Map<string, {
+        name: string;
+        whatsapp: string;
         redemptionCount: number;
         totalSpent: number;
       }>();
-      
+
       allRedemptions.forEach(redemption => {
         const follower = couponMap.get(redemption.couponId);
         if (follower) {
@@ -297,12 +304,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
       });
-      
+
       // Convert to array and sort by redemption count
       const topRedeemers = Array.from(followerRedemptions.values())
         .sort((a, b) => b.redemptionCount - a.redemptionCount)
         .slice(0, 20); // Top 20 redeemers
-      
+
       res.json(topRedeemers);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch top redeemers" });
@@ -315,11 +322,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const allRedemptions = await storage.getAllRedemptions();
       const totalRedemptions = allRedemptions.length;
       const totalRevenue = allRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
-      
+
       // Get all campaigns to calculate active campaigns
       const allCampaigns = await storage.getCampaigns();
       const activeCampaigns = allCampaigns.filter(c => new Date(c.expirationDate) >= new Date()).length;
-      
+
       // Get all coupons
       const allCoupons = await Promise.all(
         allCampaigns.map(c => storage.getCouponsByWCampaign(c.id))
@@ -341,16 +348,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/staff/redemptions", async (req, res) => {
     try {
       const allRedemptions = await storage.getAllRedemptions();
-      
+
       // Enrich redemptions with coupon and campaign details
       const enrichedRedemptions = await Promise.all(
         allRedemptions.map(async (redemption) => {
           const coupon = await storage.getCoupon(redemption.couponId);
           if (!coupon) return null;
-          
+
           const campaign = await storage.getCampaign(coupon.campaignId);
           if (!campaign) return null;
-          
+
           return {
             id: redemption.id,
             redeemedAt: redemption.redeemedAt,

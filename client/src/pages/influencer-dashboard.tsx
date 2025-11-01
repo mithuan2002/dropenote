@@ -30,6 +30,26 @@ export default function InfluencerDashboard() {
     queryKey: ["/api/influencer/top-redeemers"],
   });
 
+  const { data: profile } = useQuery({
+    queryKey: ["/api/influencer/profile"],
+  });
+
+  const handleWhatsAppInvite = (followerName: string, whatsappNumber: string) => {
+    const cleanNumber = whatsappNumber.replace(/\D/g, '');
+    const groupLink = profile?.whatsappGroupLink || '';
+    
+    let message = `Hi ${followerName}! 👋\n\nThank you for being a loyal follower and supporting my campaigns! 🎉\n\n`;
+    
+    if (groupLink) {
+      message += `I'd love to invite you to join my exclusive WhatsApp community where you'll get:\n\n✨ Early access to new deals\n💰 Special discounts\n🎁 Exclusive offers\n\nJoin here: ${groupLink}\n\nLooking forward to having you in the community! 🙌`;
+    } else {
+      message += `I'd love to connect with you directly on WhatsApp and keep you updated with exclusive deals and offers!\n\nLet me know if you're interested! 🙌`;
+    }
+    
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${cleanNumber}?text=${encodedMessage}`, '_blank');
+  };
+
   const getCampaignUrl = (campaignId: string) => {
     return `${window.location.origin}/campaigns/${campaignId}`;
   };
@@ -260,12 +280,10 @@ export default function InfluencerDashboard() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => {
-                                  window.open(`https://wa.me/${redeemer.whatsapp.replace(/\D/g, '')}`, '_blank');
-                                }}
+                                onClick={() => handleWhatsAppInvite(redeemer.name, redeemer.whatsapp)}
                                 data-testid={`button-whatsapp-${index}`}
                               >
-                                WhatsApp
+                                Invite to Group
                               </Button>
                             </td>
                           </tr>
@@ -275,7 +293,8 @@ export default function InfluencerDashboard() {
                   </div>
                 </Card>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
-                  💡 Tip: Add these loyal followers to your WhatsApp/Telegram community to boost repeat purchases
+                  💡 Tip: Click "Invite to Group" to send a personalized WhatsApp message with your community link
+                  {!profile?.whatsappGroupLink && " (Set up your WhatsApp group link in your profile first)"}
                 </p>
               </div>
             )}

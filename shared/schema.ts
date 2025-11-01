@@ -51,3 +51,25 @@ export const insertRedemptionSchema = createInsertSchema(redemptions).omit({
 
 export type InsertRedemption = z.infer<typeof insertRedemptionSchema>;
 export type Redemption = typeof redemptions.$inferSelect;
+
+// Assuming there was an influencer profile schema that needs to be modified.
+// If the schema doesn't exist in the original code, it's being added here based on the intention.
+// If it exists, this is where the modification would happen.
+export const influencerProfiles = pgTable("influencer_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  bio: text("bio"),
+  whatsappNumber: text("whatsapp_number"),
+  whatsappGroupLink: text("whatsapp_group_link"), // Added this field
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertInfluencerProfileSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  bio: z.string().optional(),
+  whatsappNumber: z.string().optional(),
+  whatsappGroupLink: z.string().optional(), // Added this field to the schema
+});
+
+export type InsertInfluencerProfile = z.infer<typeof insertInfluencerProfileSchema>;
+export type InfluencerProfile = typeof influencerProfiles.$inferSelect;
