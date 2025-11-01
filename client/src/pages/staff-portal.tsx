@@ -368,31 +368,35 @@ export default function StaffPortal() {
               </Card>
             </div>
 
-            {analytics && analytics.totalCoupons > 0 && (
-              <Card className="p-6">
-                <h3 className="font-semibold mb-4">Redemption Rate</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Redeemed</span>
-                    <span className="font-medium">
-                      {analytics.totalRedemptions} / {analytics.totalCoupons}
-                    </span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
-                    <div
-                      className="bg-primary h-full transition-all"
-                      style={{
-                        width: `${(analytics.totalRedemptions / analytics.totalCoupons) * 100}%`,
-                      }}
-                      data-testid="progress-redemption-rate"
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground text-center">
-                    {((analytics.totalRedemptions / analytics.totalCoupons) * 100).toFixed(1)}% redemption rate
-                  </p>
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Redemption Rate</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Redeemed</span>
+                  <span className="font-medium">
+                    {analyticsLoading ? "..." : `${analytics?.totalRedemptions || 0} / ${analytics?.totalCoupons || 0}`}
+                  </span>
                 </div>
-              </Card>
-            )}
+                <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+                  <div
+                    className="bg-primary h-full transition-all"
+                    style={{
+                      width: analytics && analytics.totalCoupons > 0
+                        ? `${(analytics.totalRedemptions / analytics.totalCoupons) * 100}%`
+                        : "0%",
+                    }}
+                    data-testid="progress-redemption-rate"
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground text-center">
+                  {analyticsLoading
+                    ? "..."
+                    : analytics && analytics.totalCoupons > 0
+                    ? `${((analytics.totalRedemptions / analytics.totalCoupons) * 100).toFixed(1)}% redemption rate`
+                    : "0% redemption rate"}
+                </p>
+              </div>
+            </Card>
           </TabsContent>
 
           <TabsContent value="history">
