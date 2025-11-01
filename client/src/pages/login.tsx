@@ -45,14 +45,11 @@ export default function Login() {
         description: `Logged in as ${data.username}`,
       });
 
-      // Invalidate auth query to update the user state
-      await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-
-      // Redirect based on role
+      // Use full page redirect to ensure auth state is fresh
       if (data.role === "influencer") {
-        setLocation("/influencer");
+        window.location.href = "/influencer";
       } else {
-        setLocation("/staff");
+        window.location.href = "/staff";
       }
     } catch (error) {
       toast({
