@@ -45,19 +45,13 @@ export default function InfluencerProfile() {
       whatsappNumber: "",
       whatsappGroupLink: "",
     },
+    values: profile ? {
+      name: profile.name || "",
+      bio: profile.bio || "",
+      whatsappNumber: profile.whatsappNumber || "",
+      whatsappGroupLink: profile.whatsappGroupLink || "",
+    } : undefined,
   });
-
-  // Update form when profile data loads
-  React.useEffect(() => {
-    if (profile) {
-      form.reset({
-        name: profile.name || "",
-        bio: profile.bio || "",
-        whatsappNumber: profile.whatsappNumber || "",
-        whatsappGroupLink: profile.whatsappGroupLink || "",
-      });
-    }
-  }, [profile, form]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {

@@ -48,19 +48,13 @@ export default function StaffProfile() {
       storeAddress: "",
       phone: "",
     },
+    values: profile ? {
+      name: profile.name || "",
+      storeName: profile.storeName || "",
+      storeAddress: profile.storeAddress || "",
+      phone: profile.phone || "",
+    } : undefined,
   });
-
-  // Update form when profile data is loaded
-  React.useEffect(() => {
-    if (profile) {
-      form.reset({
-        name: profile.name || "",
-        storeName: profile.storeName || "",
-        storeAddress: profile.storeAddress || "",
-        phone: profile.phone || "",
-      });
-    }
-  }, [profile, form]);
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {

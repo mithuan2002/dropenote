@@ -239,7 +239,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/staff/profile", requireAuth, requireRole("staff"), async (req, res) => {
     try {
       const profile = await storage.getStaffProfile(req.session.userId!);
-      res.json(profile || {});
+      // Return profile with default empty strings for missing fields
+      res.json({
+        name: profile?.name || "",
+        storeName: profile?.storeName || "",
+        storeAddress: profile?.storeAddress || "",
+        phone: profile?.phone || "",
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch profile" });
     }
