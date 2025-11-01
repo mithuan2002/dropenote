@@ -1,8 +1,11 @@
 import { Link } from "wouter";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Store, Tag, UserCircle } from "lucide-react";
 
 export default function Home() {
+  const appUrl = window.location.origin;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
+
   const roles = [
     {
       title: "Influencer",
@@ -21,15 +24,33 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2" data-testid="text-app-title">
-            Dropnote
-          </h1>
-          <p className="text-muted-foreground">
-            Choose your role to get started
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4">Dropnote</h1>
+          <p className="text-xl text-muted-foreground mb-2">
+            Create coupon campaigns, distribute unique codes, and track redemptions
           </p>
+          <p className="text-muted-foreground mb-6">
+            Identify your most loyal followers
+          </p>
+
+          <Card className="inline-block mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg">Install Our PWA</CardTitle>
+              <CardDescription>Scan to install Dropnote on your device</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center gap-3">
+              <img
+                src={qrCodeUrl}
+                alt="QR Code to install PWA"
+                className="w-48 h-48 border-2 border-border rounded-lg"
+              />
+              <p className="text-sm text-muted-foreground">
+                Or install directly from your browser
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
