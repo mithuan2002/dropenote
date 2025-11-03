@@ -3,32 +3,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Store, Tag, UserCircle, Download } from "lucide-react";
 import { useState, useEffect } from "react";
-import Cookies from 'js-cookie'; // Assuming js-cookie is used for cookie management
 
 export default function Home() {
-  // Add state for authentication loading and user authentication status
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Construct full URL with protocol for QR codes
   const protocol = window.location.protocol;
   const host = window.location.host;
-  // Ensure we use the full HTTPS URL for QR codes
   const appUrl = `${protocol}//${host}`.replace('http://', 'https://');
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
   const [, setLocation] = useLocation();
 
-
   useEffect(() => {
-    // Check for existing session cookie
-    const sessionToken = Cookies.get('session_token'); // Replace 'session_token' with your actual cookie name
-    if (sessionToken) {
-      // You might want to validate the token with your backend here
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false); // Authentication check complete
+    // Check authentication status via API
+    fetch('/api/auth/status')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => {
+        // Not authenticated or error
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
 
     const handler = (e: Event) => {
       e.preventDefault();
@@ -41,11 +43,9 @@ export default function Home() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  // Redirect authenticated users to their dashboard
   useEffect(() => {
     if (isAuthenticated) {
-      // Replace '/dashboard' with the actual route for authenticated users
-      setLocation('/dashboard');
+      setLocation('/influencer-dashboard');
     }
   }, [isAuthenticated, setLocation]);
 

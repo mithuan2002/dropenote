@@ -27,12 +27,27 @@ const requireRole = (role: string) => {
   };
 };
 
+// Authentication check endpoint
+function setupAuthRoutes(app: Express) {
+  app.get('/api/auth/status', (req, res) => {
+    if (req.session.userId) {
+      res.json({
+        authenticated: true,
+        userId: req.session.userId,
+        role: req.session.role
+      });
+    } else {
+      res.json({ authenticated: false });
+    }
+  });
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth endpoints
   app.post("/api/auth/register", async (req, res) => {
     try {
       const { username, password, role } = insertUserSchema.parse(req.body);
-      
+
       // Check if username exists
       const existingUser = await storage.getUserByUsername(username);
       if (existingUser) {
@@ -254,11 +269,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/staff/profile", requireAuth, requireRole("staff"), async (req, res) => {
     try {
       const { name, storeName, storeAddress, phone } = req.body;
-      const profile = await storage.saveStaffProfile(req.session.userId!, { 
-        name, 
-        storeName, 
-        storeAddress, 
-        phone 
+      const profile = await storage.saveStaffProfile(req.session.userId!, {
+        name,
+        storeName,
+        storeAddress,
+        phone
       });
       res.status(200).json(profile);
     } catch (error) {
@@ -454,19 +469,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/campaigns/:id/followers", async (req, res) => {
     try {
       const campaignId = req.params.id;
-      
+
       // Get all coupons for this campaign
       const coupons = await storage.getCouponsByWCampaign(campaignId);
-      
+
       // Get all redemptions
       const allRedemptions = await storage.getAllRedemptions();
-      
+
       // Map redemptions by coupon ID
       const redemptionMap = new Map();
       allRedemptions.forEach(redemption => {
         redemptionMap.set(redemption.couponId, redemption);
       });
-      
+
       // Build follower list with redemption status
       const followers = coupons.map(coupon => {
         const redemption = redemptionMap.get(coupon.id);
@@ -480,7 +495,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           purchaseAmount: redemption?.purchaseAmount || 0,
         };
       });
-      
+
       res.json(followers);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch campaign followers" });
@@ -595,5 +610,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   const httpServer = createServer(app);
+  // Setup authentication routes
+  setupAuthRoutes(app);
+
   return httpServer;
 }
