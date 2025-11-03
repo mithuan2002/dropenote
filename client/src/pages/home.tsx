@@ -1,14 +1,15 @@
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Store, UserCircle } from "lucide-react";
+import { Store, UserCircle, Download, Smartphone } from "lucide-react";
 import { useState, useEffect } from "react";
-import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [, setLocation] = useLocation();
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/status')
@@ -31,6 +32,42 @@ export default function Home() {
       setLocation('/influencer-dashboard');
     }
   }, [isAuthenticated, setLocation]);
+
+  useEffect(() => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isInWebApp = (window.navigator as any).standalone === true;
+    
+    if (isStandalone || isInWebApp) {
+      setIsInstalled(true);
+      return;
+    }
+
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) {
+      alert('To install this app:\n\niPhone: Tap Share → Add to Home Screen\nAndroid: Tap menu (⋮) → Install app\nDesktop: Look for install icon in address bar');
+      return;
+    }
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+      setIsInstalled(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -62,9 +99,22 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mb-6">
-            <PWAInstallPrompt />
-          </div>
+          {!isInstalled && (
+            <div className="mb-6">
+              <Button 
+                onClick={handleInstall}
+                size="lg"
+                className="w-full max-w-md min-h-[64px] text-xl font-bold shadow-xl hover:shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+                data-testid="button-install-pwa"
+              >
+                <Download className="mr-3 h-6 w-6" />
+                Install App Now
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Works offline • Fast loading • Native experience
+              </p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 gap-4 sm:gap-6">
             <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
