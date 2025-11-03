@@ -1,11 +1,8 @@
 
-const CACHE_NAME = 'dropnote-v2';
+const CACHE_NAME = 'dropnote-v3';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg'
+  '/manifest.json'
 ];
 
 // Install event - cache essential files
@@ -13,7 +10,10 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache).catch((err) => {
+          console.warn('Cache addAll failed:', err);
+          return Promise.resolve();
+        });
       })
       .then(() => self.skipWaiting())
   );
