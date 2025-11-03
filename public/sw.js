@@ -1,4 +1,5 @@
-const CACHE_NAME = 'dropnote-v4';
+const CACHE_NAME = 'dropnote-v5';
+const RUNTIME_CACHE = 'dropnote-runtime-v5';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -7,9 +8,8 @@ const urlsToCache = [
   '/icon-512.png'
 ];
 
-// Install event - cache essential files
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
+  console.log('[SW] Installing service worker v5...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -26,15 +26,15 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
+  console.log('[SW] Activating service worker v5...');
+  const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME) {
+            if (!currentCaches.includes(cacheName)) {
               console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
@@ -48,36 +48,57 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Cache-first strategy for static assets, network-first for API calls
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Network-first for API calls (especially authentication)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          // Clone the response before caching
-          const responseToCache = response.clone();
-          // Only cache successful GET requests
           if (event.request.method === 'GET' && response.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
+            const responseToCache = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
               cache.put(event.request, responseToCache);
             });
           }
           return response;
         })
         .catch(() => {
-          // If network fails, try cache
-          return caches.match(event.request);
+          return caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            return new Response(JSON.stringify({ error: 'Offline', offline: true }), {
+              status: 503,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          });
         })
     );
-  } else {
-    // Cache-first for static assets
+  } else if (url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|woff|woff2)$/)) {
     event.respondWith(
       caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
+        return response || fetch(event.request).then((fetchResponse) => {
+          return caches.open(RUNTIME_CACHE).then((cache) => {
+            cache.put(event.request, fetchResponse.clone());
+            return fetchResponse;
+          });
+        });
       })
     );
+  } else {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return caches.match(event.request).then((response) => {
+          return response || caches.match('/index.html');
+        });
+      })
+    );
+  }
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
