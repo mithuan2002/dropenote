@@ -5,7 +5,11 @@ import { Store, Tag, UserCircle, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-  const appUrl = window.location.origin;
+  // Construct full URL with protocol for QR codes
+  const protocol = window.location.protocol;
+  const host = window.location.host;
+  // Ensure we use the full HTTPS URL for QR codes
+  const appUrl = `${protocol}//${host}`.replace('http://', 'https://');
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl)}`;
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
@@ -134,8 +138,8 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="w-full h-32 text-lg"
             onClick={() => setLocation("/login")}
             data-testid="button-influencer-login"
@@ -143,9 +147,9 @@ export default function Home() {
             <UserCircle className="mr-2 h-8 w-8" />
             I'm an Influencer
           </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
+          <Button
+            size="lg"
+            variant="outline"
             className="w-full h-32 text-lg"
             onClick={() => setLocation("/login")}
             data-testid="button-staff-login"
