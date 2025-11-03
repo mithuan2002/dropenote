@@ -84,84 +84,75 @@ export default function Home() {
             </Card>
           )}
 
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm">
-            <h3 className="font-semibold mb-3 text-blue-900">📱 Install as Mobile App</h3>
-            <div className="space-y-3 text-blue-800">
-              <div>
-                <strong className="block mb-1">Step 1:</strong>
-                <span className="text-sm">Scan the QR code below with your phone camera</span>
+          <div className="mb-8 p-6 bg-blue-50 border-2 border-blue-200 rounded-xl">
+            <h3 className="font-semibold mb-4 text-blue-900 text-lg text-center">📱 Install as Mobile App</h3>
+            
+            <div className="flex flex-col items-center mb-4">
+              <div className="bg-white p-4 rounded-lg shadow-sm mb-3">
+                <img 
+                  src={qrCodeUrl} 
+                  alt="QR Code to install app" 
+                  className="w-48 h-48"
+                />
               </div>
-              <div>
-                <strong className="block mb-1">Step 2: Install the app</strong>
-                <ul className="list-disc list-inside space-y-1 text-sm ml-2">
-                  <li><strong>iPhone/iPad:</strong> Tap Share <span className="inline-block">⎙</span> → "Add to Home Screen"</li>
-                  <li><strong>Android:</strong> Tap menu <span className="inline-block">⋮</span> → "Install app" or "Add to Home screen"</li>
-                </ul>
+              <p className="text-sm text-blue-800 text-center font-medium">
+                Scan with your phone camera
+              </p>
+            </div>
+
+            <div className="space-y-3 text-blue-800 text-sm">
+              <div className="bg-white p-3 rounded-lg">
+                <strong className="block mb-1 text-blue-900">📱 iPhone/iPad:</strong>
+                <span>Tap Share <span className="inline-block text-lg">⎙</span> → "Add to Home Screen"</span>
+              </div>
+              <div className="bg-white p-3 rounded-lg">
+                <strong className="block mb-1 text-blue-900">🤖 Android:</strong>
+                <span>Tap menu <span className="inline-block text-lg">⋮</span> → "Install app"</span>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 mb-8 max-w-md mx-auto px-4">
-            <Card className="border-2 hover:border-primary transition-colors">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <span className="text-3xl">🛍️</span>
+          <div className="grid grid-cols-1 gap-6 mb-8 max-w-md mx-auto px-4">
+            <Card className="border-2 hover:border-primary transition-colors shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-2xl">
+                  <span className="text-4xl">🛍️</span>
                   For Influencers
                 </CardTitle>
-                <CardDescription className="text-base">
+                <CardDescription className="text-base mt-2">
                   Create campaigns and track your coupon performance
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full h-14 text-lg font-semibold">
+                <Button asChild className="w-full h-16 text-lg font-semibold shadow-md">
                   <Link href="/login?role=influencer">
+                    <UserCircle className="mr-2 h-6 w-6" />
                     Get Started
                   </Link>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-colors">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <span className="text-3xl">🏪</span>
+            <Card className="border-2 hover:border-primary transition-colors shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-2xl">
+                  <span className="text-4xl">🏪</span>
                   For Store Staff
                 </CardTitle>
-                <CardDescription className="text-base">
+                <CardDescription className="text-base mt-2">
                   Verify and redeem customer coupons quickly
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full h-14 text-lg font-semibold">
+                <Button asChild variant="outline" className="w-full h-16 text-lg font-semibold shadow-md border-2">
                   <Link href="/login?role=staff">
+                    <Store className="mr-2 h-6 w-6" />
                     Access Portal
                   </Link>
                 </Button>
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <Button
-            size="lg"
-            className="w-full h-32 text-lg"
-            onClick={() => setLocation("/login")}
-            data-testid="button-influencer-login"
-          >
-            <UserCircle className="mr-2 h-8 w-8" />
-            I'm an Influencer
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="w-full h-32 text-lg"
-            onClick={() => setLocation("/login")}
-            data-testid="button-staff-login"
-          >
-            <Store className="mr-2 h-8 w-8" />
-            I'm Store Staff
-          </Button>
         </div>
       </div>
     </div>

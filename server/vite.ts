@@ -24,19 +24,33 @@ export function log(message: string, source = "express") {
 }
 
 export async function setupVite(app: Express, server: Server) {
-  // Serve service worker with correct MIME type
+  // Serve service worker with correct MIME type - BEFORE vite middleware
   app.get('/sw.js', (req, res) => {
     const swPath = path.join(__dirname, '../public/sw.js');
-    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
     res.setHeader('Service-Worker-Allowed', '/');
-    res.sendFile(swPath);
+    res.setHeader('Cache-Control', 'no-cache');
+    fs.readFile(swPath, 'utf8', (err, data) => {
+      if (err) {
+        res.status(500).send('Error loading service worker');
+        return;
+      }
+      res.send(data);
+    });
   });
 
   // Serve manifest with correct MIME type
   app.get('/manifest.json', (req, res) => {
     const manifestPath = path.join(__dirname, '../public/manifest.json');
-    res.setHeader('Content-Type', 'application/manifest+json');
-    res.sendFile(manifestPath);
+    res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    fs.readFile(manifestPath, 'utf8', (err, data) => {
+      if (err) {
+        res.status(500).send('Error loading manifest');
+        return;
+      }
+      res.send(data);
+    });
   });
 
   const serverOptions = {
