@@ -56,20 +56,20 @@ export default function Home() {
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      // Browser supports native install
+      // Browser supports native install - trigger it
       try {
         await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
           setDeferredPrompt(null);
           setIsInstalled(true);
+          setShowInstructions(false);
         }
       } catch (error) {
         console.error('Install error:', error);
-        setShowInstructions(true);
       }
     } else {
-      // Show manual instructions
+      // Browser doesn't support auto-install, show simple instructions
       setShowInstructions(true);
     }
   };
@@ -115,51 +115,38 @@ export default function Home() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Smartphone className="h-5 w-5" />
-                  How to Install
+                  Install Instructions
                 </CardTitle>
+                <CardDescription className="text-sm mt-1">
+                  Your browser requires manual installation
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="font-semibold mb-2 text-sm">📱 On Your Phone (Scan QR Code):</p>
-                  <div className="bg-white p-3 rounded-lg inline-block shadow-sm">
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(window.location.origin)}`}
-                      alt="QR Code"
-                      className="w-32 h-32"
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Scan with your camera to open on mobile
-                  </p>
-                </div>
-
+              <CardContent className="space-y-3">
                 <div className="space-y-3 text-sm">
                   <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">🍎 iPhone/iPad:</p>
+                    <p className="font-semibold mb-1">🍎 iPhone/iPad (Safari):</p>
                     <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Open the app in Safari browser</li>
-                      <li>Tap the Share button (box with arrow)</li>
-                      <li>Scroll down and tap "Add to Home Screen"</li>
-                      <li>Tap "Add" to confirm</li>
+                      <li>Tap the Share button <span className="font-mono">⎙</span></li>
+                      <li>Scroll and tap "Add to Home Screen"</li>
+                      <li>Tap "Add"</li>
                     </ol>
                   </div>
 
                   <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">🤖 Android:</p>
+                    <p className="font-semibold mb-1">🤖 Android (Chrome):</p>
                     <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Open the app in Chrome browser</li>
-                      <li>Tap the menu (⋮) in the top right</li>
+                      <li>Tap menu <span className="font-mono">⋮</span> (top right)</li>
                       <li>Tap "Install app" or "Add to Home screen"</li>
-                      <li>Tap "Install" to confirm</li>
+                      <li>Tap "Install"</li>
                     </ol>
                   </div>
 
                   <div className="bg-purple-50 dark:bg-purple-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">💻 Desktop:</p>
+                    <p className="font-semibold mb-1">💻 Desktop (Chrome/Edge):</p>
                     <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Look for the install icon (➕) in the address bar</li>
-                      <li>Or go to menu → "Install Dropnote"</li>
-                      <li>Click "Install" to add to your apps</li>
+                      <li>Look for install icon <span className="font-mono">⊕</span> in address bar</li>
+                      <li>Or menu → "Install Dropnote"</li>
+                      <li>Click "Install"</li>
                     </ol>
                   </div>
                 </div>
@@ -170,7 +157,7 @@ export default function Home() {
                   className="w-full"
                   data-testid="button-close-instructions"
                 >
-                  Close Instructions
+                  Got it
                 </Button>
               </CardContent>
             </Card>
