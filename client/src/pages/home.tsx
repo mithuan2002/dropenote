@@ -3,8 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Store, Tag, UserCircle, Download } from "lucide-react";
 import { useState, useEffect } from "react";
+import Cookies from 'js-cookie'; // Assuming js-cookie is used for cookie management
 
 export default function Home() {
+  // Add state for authentication loading and user authentication status
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   // Construct full URL with protocol for QR codes
   const protocol = window.location.protocol;
   const host = window.location.host;
@@ -17,6 +22,14 @@ export default function Home() {
 
 
   useEffect(() => {
+    // Check for existing session cookie
+    const sessionToken = Cookies.get('session_token'); // Replace 'session_token' with your actual cookie name
+    if (sessionToken) {
+      // You might want to validate the token with your backend here
+      setIsAuthenticated(true);
+    }
+    setIsLoading(false); // Authentication check complete
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -27,6 +40,15 @@ export default function Home() {
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
+
+  // Redirect authenticated users to their dashboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Replace '/dashboard' with the actual route for authenticated users
+      setLocation('/dashboard');
+    }
+  }, [isAuthenticated, setLocation]);
+
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -57,6 +79,18 @@ export default function Home() {
     }
   ];
 
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🎟️</div>
+          <p className="text-lg text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -86,12 +120,12 @@ export default function Home() {
 
           <div className="mb-8 p-6 bg-blue-50 border-2 border-blue-200 rounded-xl">
             <h3 className="font-semibold mb-4 text-blue-900 text-lg text-center">📱 Install as Mobile App</h3>
-            
+
             <div className="flex flex-col items-center mb-4">
               <div className="bg-white p-4 rounded-lg shadow-sm mb-3">
-                <img 
-                  src={qrCodeUrl} 
-                  alt="QR Code to install app" 
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code to install app"
                   className="w-48 h-48"
                 />
               </div>
