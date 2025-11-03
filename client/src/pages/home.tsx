@@ -5,8 +5,6 @@ import { Store, UserCircle, Download, Smartphone } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [, setLocation] = useLocation();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -16,22 +14,13 @@ export default function Home() {
       .then(res => res.json())
       .then(data => {
         if (data.authenticated) {
-          setIsAuthenticated(true);
+          setLocation('/influencer-dashboard');
         }
       })
       .catch(() => {
-        setIsAuthenticated(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
+        // Not authenticated, stay on home page
       });
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      setLocation('/influencer-dashboard');
-    }
-  }, [isAuthenticated, setLocation]);
+  }, [setLocation]);
 
   useEffect(() => {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
@@ -69,17 +58,6 @@ export default function Home() {
       setShowInstructions(true);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-pulse">🎟️</div>
-          <p className="text-lg text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
