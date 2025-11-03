@@ -1,4 +1,5 @@
 
+
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,7 @@ export default function Home() {
     const installedHandler = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      setShowInstructions(false);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -54,14 +56,20 @@ export default function Home() {
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-
-      if (outcome === 'accepted') {
-        setDeferredPrompt(null);
-        setIsInstalled(true);
+      // Browser supports native install
+      try {
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setDeferredPrompt(null);
+          setIsInstalled(true);
+        }
+      } catch (error) {
+        console.error('Install error:', error);
+        setShowInstructions(true);
       }
     } else {
+      // Show manual instructions
       setShowInstructions(true);
     }
   };
