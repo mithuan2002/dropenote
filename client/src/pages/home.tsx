@@ -25,7 +25,7 @@ export default function Home() {
   useEffect(() => {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebApp = (window.navigator as any).standalone === true;
-    
+
     if (isStandalone || isInWebApp) {
       setIsInstalled(true);
       return;
@@ -49,7 +49,7 @@ export default function Home() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       if (outcome === 'accepted') {
         setDeferredPrompt(null);
         setIsInstalled(true);
@@ -78,7 +78,7 @@ export default function Home() {
             </p>
           </div>
 
-          {!isInstalled && (
+          {!isInstalled && deferredPrompt && (
             <div className="mb-6 space-y-4">
               <Button 
                 onClick={handleInstall}
@@ -92,73 +92,73 @@ export default function Home() {
               <p className="text-xs text-muted-foreground">
                 Works offline • Fast loading • Native experience
               </p>
-
-              {showInstructions && (
-                <Card className="text-left border-2 border-blue-500 shadow-lg animate-in fade-in slide-in-from-top-4 duration-300">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Smartphone className="h-5 w-5" />
-                      How to Install
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <p className="font-semibold mb-2 text-sm">📱 On Your Phone (Scan QR Code):</p>
-                      <div className="bg-white p-3 rounded-lg inline-block shadow-sm">
-                        <img
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(window.location.origin)}`}
-                          alt="QR Code"
-                          className="w-32 h-32"
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Scan with your camera to open on mobile
-                      </p>
-                    </div>
-
-                    <div className="space-y-3 text-sm">
-                      <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
-                        <p className="font-semibold mb-1">🍎 iPhone/iPad:</p>
-                        <ol className="list-decimal list-inside space-y-1 text-xs">
-                          <li>Open the app in Safari browser</li>
-                          <li>Tap the Share button (box with arrow)</li>
-                          <li>Scroll down and tap "Add to Home Screen"</li>
-                          <li>Tap "Add" to confirm</li>
-                        </ol>
-                      </div>
-
-                      <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
-                        <p className="font-semibold mb-1">🤖 Android:</p>
-                        <ol className="list-decimal list-inside space-y-1 text-xs">
-                          <li>Open the app in Chrome browser</li>
-                          <li>Tap the menu (⋮) in the top right</li>
-                          <li>Tap "Install app" or "Add to Home screen"</li>
-                          <li>Tap "Install" to confirm</li>
-                        </ol>
-                      </div>
-
-                      <div className="bg-purple-50 dark:bg-purple-950 p-3 rounded-lg">
-                        <p className="font-semibold mb-1">💻 Desktop:</p>
-                        <ol className="list-decimal list-inside space-y-1 text-xs">
-                          <li>Look for the install icon (➕) in the address bar</li>
-                          <li>Or go to menu → "Install Dropnote"</li>
-                          <li>Click "Install" to add to your apps</li>
-                        </ol>
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={() => setShowInstructions(false)}
-                      variant="outline"
-                      className="w-full"
-                      data-testid="button-close-instructions"
-                    >
-                      Close Instructions
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
             </div>
+          )}
+
+          {showInstructions && (
+            <Card className="text-left border-2 border-blue-500 shadow-lg animate-in fade-in slide-in-from-top-4 duration-300">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Smartphone className="h-5 w-5" />
+                  How to Install
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="font-semibold mb-2 text-sm">📱 On Your Phone (Scan QR Code):</p>
+                  <div className="bg-white p-3 rounded-lg inline-block shadow-sm">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(window.location.origin)}`}
+                      alt="QR Code"
+                      className="w-32 h-32"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Scan with your camera to open on mobile
+                  </p>
+                </div>
+
+                <div className="space-y-3 text-sm">
+                  <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
+                    <p className="font-semibold mb-1">🍎 iPhone/iPad:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs">
+                      <li>Open the app in Safari browser</li>
+                      <li>Tap the Share button (box with arrow)</li>
+                      <li>Scroll down and tap "Add to Home Screen"</li>
+                      <li>Tap "Add" to confirm</li>
+                    </ol>
+                  </div>
+
+                  <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
+                    <p className="font-semibold mb-1">🤖 Android:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs">
+                      <li>Open the app in Chrome browser</li>
+                      <li>Tap the menu (⋮) in the top right</li>
+                      <li>Tap "Install app" or "Add to Home screen"</li>
+                      <li>Tap "Install" to confirm</li>
+                    </ol>
+                  </div>
+
+                  <div className="bg-purple-50 dark:bg-purple-950 p-3 rounded-lg">
+                    <p className="font-semibold mb-1">💻 Desktop:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs">
+                      <li>Look for the install icon (➕) in the address bar</li>
+                      <li>Or go to menu → "Install Dropnote"</li>
+                      <li>Click "Install" to add to your apps</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => setShowInstructions(false)}
+                  variant="outline"
+                  className="w-full"
+                  data-testid="button-close-instructions"
+                >
+                  Close Instructions
+                </Button>
+              </CardContent>
+            </Card>
           )}
 
           <div className="grid grid-cols-1 gap-4 sm:gap-6">
