@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/status')
@@ -36,14 +38,19 @@ export default function Home() {
       setDeferredPrompt(e);
     };
 
+    const installedHandler = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    };
+
     window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', installedHandler);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('appinstalled', installedHandler);
     };
   }, []);
-
-  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleInstall = async () => {
     if (deferredPrompt) {
@@ -78,7 +85,7 @@ export default function Home() {
             </p>
           </div>
 
-          {!isInstalled && deferredPrompt && (
+          {!isInstalled && (
             <div className="mb-6 space-y-4">
               <Button 
                 onClick={handleInstall}
