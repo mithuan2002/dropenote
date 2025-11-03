@@ -99,7 +99,7 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-          </div>v>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
             <Card>
