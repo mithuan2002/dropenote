@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -38,7 +39,7 @@ export default function CreateCampaignDialog({
   onOpenChange,
 }: CreateCampaignDialogProps) {
   const { toast } = useToast();
-  
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,6 +81,9 @@ export default function CreateCampaignDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button className="h-12 text-base font-semibold flex-1">Create Campaign</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md" data-testid="dialog-create-campaign">
         <DialogHeader>
           <DialogTitle>Create New Campaign</DialogTitle>

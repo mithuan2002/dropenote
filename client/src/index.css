@@ -209,9 +209,26 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply bg-background text-foreground;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    /* Ensure minimum touch target size */
+    button, a, input, select, textarea {
+      min-height: 44px;
+    }
+
+    /* Prevent zoom on input focus on iOS */
+    input, select, textarea {
+      font-size: 16px;
+    }
+
+    /* Improve tap highlighting */
+    * {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
   }
 }
 

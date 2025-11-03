@@ -101,44 +101,42 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <UserCircle className="w-5 h-5 text-primary" />
-                  Influencer Portal
+          <div className="grid grid-cols-1 gap-4 mb-8 max-w-md mx-auto px-4">
+            <Card className="border-2 hover:border-primary transition-colors">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <span className="text-3xl">🛍️</span>
+                  For Influencers
                 </CardTitle>
-                <CardDescription>To install the application, scan QR code</CardDescription>
+                <CardDescription className="text-base">
+                  Create campaigns and track your coupon performance
+                </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col items-center gap-3">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl + '/influencer')}`}
-                  alt="QR Code for Influencer Portal"
-                  className="w-48 h-48 border-2 border-border rounded-lg"
-                />
-                <p className="text-xs text-muted-foreground text-center">
-                  For campaign creators to manage and track campaigns
-                </p>
+              <CardContent>
+                <Button asChild className="w-full h-14 text-lg font-semibold">
+                  <Link href="/login?role=influencer">
+                    Get Started
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Store className="w-5 h-5 text-primary" />
-                  Store Staff Portal
+            <Card className="border-2 hover:border-primary transition-colors">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <span className="text-3xl">🏪</span>
+                  For Store Staff
                 </CardTitle>
-                <CardDescription>To install the application, scan QR code</CardDescription>
+                <CardDescription className="text-base">
+                  Verify and redeem customer coupons quickly
+                </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col items-center gap-3">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appUrl + '/staff')}`}
-                  alt="QR Code for Store Staff Portal"
-                  className="w-48 h-48 border-2 border-border rounded-lg"
-                />
-                <p className="text-xs text-muted-foreground text-center">
-                  For retail staff to verify and redeem coupons
-                </p>
+              <CardContent>
+                <Button asChild className="w-full h-14 text-lg font-semibold">
+                  <Link href="/login?role=staff">
+                    Access Portal
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </div>

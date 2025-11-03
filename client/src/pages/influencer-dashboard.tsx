@@ -37,15 +37,15 @@ export default function InfluencerDashboard() {
   const handleWhatsAppInvite = (followerName: string, whatsappNumber: string) => {
     const cleanNumber = whatsappNumber.replace(/\D/g, '');
     const groupLink = profile?.whatsappGroupLink || '';
-    
+
     let message = `Hi ${followerName}! 👋\n\nThank you for being a loyal follower and supporting my campaigns! 🎉\n\n`;
-    
+
     if (groupLink) {
       message += `I'd love to invite you to join my exclusive WhatsApp community where you'll get:\n\n✨ Early access to new deals\n💰 Special discounts\n🎁 Exclusive offers\n\nJoin here: ${groupLink}\n\nLooking forward to having you in the community! 🙌`;
     } else {
       message += `I'd love to connect with you directly on WhatsApp and keep you updated with exclusive deals and offers!\n\nLet me know if you're interested! 🙌`;
     }
-    
+
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${cleanNumber}?text=${encodedMessage}`, '_blank');
   };
@@ -110,7 +110,7 @@ export default function InfluencerDashboard() {
               <Plus className="w-4 h-4 mr-2" />
               New Campaign
             </Button>
-            <Button 
+            <Button
               variant="outline"
               onClick={async () => {
                 await fetch('/api/auth/logout', { method: 'POST' });
@@ -158,7 +158,20 @@ export default function InfluencerDashboard() {
               </Card>
             )}
             <div>
-              <h2 className="text-lg font-semibold mb-4">Your Campaigns</h2>
+              <div className="mb-6 space-y-4">
+                <h1 className="text-2xl md:text-3xl font-bold">My Campaigns</h1>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button variant="outline" asChild className="h-12 text-base font-semibold flex-1">
+                    <Link href="/influencer/profile">
+                      Profile
+                    </Link>
+                  </Button>
+                  <Button onClick={() => setShowCreateDialog(true)} className="h-12 text-base font-semibold" data-testid="button-create-campaign">
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Campaign
+                  </Button>
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {campaigns?.map((campaign) => {
                   const isExpired = new Date(campaign.expirationDate) < new Date();
@@ -170,7 +183,7 @@ export default function InfluencerDashboard() {
                       className={`p-4 ${isSelected ? 'ring-2 ring-primary' : ''}`}
                       data-testid={`card-campaign-${campaign.id}`}
                     >
-                      <div 
+                      <div
                         className="cursor-pointer hover-elevate active-elevate-2 -m-4 p-4 mb-0"
                         onClick={() => setSelectedCampaignId(campaign.id)}
                       >
@@ -199,7 +212,7 @@ export default function InfluencerDashboard() {
                           </span>
                         </div>
                       </div>
-                      
+
                       {!isExpired && (
                         <div className="border-t pt-3 mt-3">
                           <p className="text-xs text-muted-foreground mb-2">Share this link with your followers:</p>

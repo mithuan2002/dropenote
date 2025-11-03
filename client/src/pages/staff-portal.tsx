@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Coupon, Campaign } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
+import { Label } from "@/components/ui/label";
 
 interface VerificationResult {
   valid: boolean;
@@ -395,7 +396,7 @@ export default function StaffPortal() {
               <Card className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Coupons Issued</p>
+                    <p className="text-sm text-muted-foreground">TotalCoupons Issued</p>
                     <p className="text-3xl font-bold mt-2" data-testid="text-total-coupons">
                       {analyticsLoading ? "..." : analytics?.totalCoupons || 0}
                     </p>
@@ -548,7 +549,7 @@ export default function StaffPortal() {
                     <Card className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-muted-foreground">Total Coupons Redeemed</p>
+                          <p className="text-sm text-muted-foreground">TotalCoupons Redeemed</p>
                           <p className="text-3xl font-bold mt-2" data-testid="text-total-redeemed-coupons">
                             {influencerAnalytics.totalCouponsRedeemed.toLocaleString()}
                           </p>
