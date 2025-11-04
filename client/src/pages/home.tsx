@@ -1,17 +1,13 @@
-
-
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Store, UserCircle, Download, Smartphone } from "lucide-react";
+import { Store, UserCircle, Smartphone, Share, Plus, Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
-  const [isInIframe, setIsInIframe] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/status')
@@ -24,116 +20,26 @@ export default function Home() {
       .catch(() => {
         // Not authenticated, stay on home page
       });
-  }, [setLocation]);
 
-  useEffect(() => {
-    // Check if running in iframe
-    const inIframe = (window as any).isInIframe || window.self !== window.top;
-    setIsInIframe(inIframe);
-    
-    if (inIframe) {
-      console.log('[Home] Running in iframe - install prompt unavailable');
-    }
-
+    // Check if already running as installed app
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebApp = (window.navigator as any).standalone === true;
-
     if (isStandalone || isInWebApp) {
       setIsInstalled(true);
-      return;
     }
+  }, [setLocation]);
 
-    const handler = (e: any) => {
-      e.preventDefault();
-      console.log('[Home] Install prompt captured');
-      setDeferredPrompt(e);
-    };
-
-    const installedHandler = () => {
-      console.log('[Home] App installed');
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-      setShowInstructions(false);
-    };
-
-    window.addEventListener('beforeinstallprompt', handler);
-    window.addEventListener('appinstalled', installedHandler);
-
-    // Check if prompt is already available from main.tsx
-    if ((window as any).deferredPrompt) {
-      console.log('[Home] Using existing deferred prompt');
-      setDeferredPrompt((window as any).deferredPrompt);
-    }
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-      window.removeEventListener('appinstalled', installedHandler);
-    };
-  }, []);
-
-  const handleInstall = async () => {
-    console.log('[Home] Install button clicked, deferredPrompt:', !!deferredPrompt);
-    
-    if (!deferredPrompt) {
-      console.log('[Home] No deferred prompt - checking window');
-      const globalPrompt = (window as any).deferredPrompt;
-      if (globalPrompt) {
-        setDeferredPrompt(globalPrompt);
-        try {
-          await globalPrompt.prompt();
-          const { outcome } = await globalPrompt.userChoice;
-          console.log('[Home] Install outcome:', outcome);
-          if (outcome === 'accepted') {
-            setIsInstalled(true);
-            setDeferredPrompt(null);
-            (window as any).deferredPrompt = null;
-          }
-        } catch (error) {
-          console.error('[Home] Install error:', error);
-        }
-        return;
-      }
-      console.log('[Home] No install prompt available anywhere');
-      setShowInstructions(true);
-      return;
-    }
-
-    try {
-      console.log('[Home] Showing install prompt');
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log('[Home] User choice:', outcome);
-      
-      if (outcome === 'accepted') {
-        setIsInstalled(true);
-      }
-      setDeferredPrompt(null);
-      (window as any).deferredPrompt = null;
-    } catch (error) {
-      console.error('[Home] Install prompt error:', error);
-    }
+  const handleShowInstructions = () => {
+    setShowInstructions(true);
   };
+
+  // Detect browser/device
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {isInIframe && (
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-3 text-center shadow-lg sticky top-0 z-50" data-testid="iframe-warning">
-          <p className="text-sm sm:text-base font-semibold">
-            ⚠️ Preview Mode - PWA install unavailable in iframe
-          </p>
-          <p className="text-xs mt-1">
-            <a 
-              href={window.location.href} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="underline font-bold hover:text-yellow-200"
-              data-testid="link-open-new-tab"
-            >
-              Click here to open in a new tab
-            </a> to enable PWA installation
-          </p>
-        </div>
-      )}
       <div className="container mx-auto px-4 py-6 sm:py-8 max-w-2xl">
         <div className="text-center space-y-6">
           <div className="mb-6">
@@ -153,14 +59,14 @@ export default function Home() {
 
           {!isInstalled && (
             <div className="mb-6 space-y-4">
-              <Button 
-                onClick={handleInstall}
+              <Button
+                onClick={handleShowInstructions}
                 size="lg"
                 className="w-full max-w-md min-h-[64px] text-xl font-bold shadow-xl hover:shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
                 data-testid="button-install-pwa"
               >
-                <Download className="mr-3 h-6 w-6" />
-                Install App Now
+                <Smartphone className="mr-3 h-6 w-6" />
+                Add to Home Screen
               </Button>
               <p className="text-xs text-muted-foreground">
                 Works offline • Fast loading • Native experience
@@ -173,58 +79,108 @@ export default function Home() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Smartphone className="h-5 w-5" />
-                  Install Instructions
+                  Add to Home Screen
                 </CardTitle>
                 <CardDescription className="text-sm mt-1">
-                  {isInIframe 
-                    ? "Open in a new tab first, then install" 
-                    : "Your browser requires manual installation"}
+                  Install this app for quick access and offline use
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {isInIframe && (
-                  <div className="bg-orange-50 dark:bg-orange-950 p-3 rounded-lg border-2 border-orange-300 dark:border-orange-700 mb-3">
-                    <p className="font-bold text-orange-900 dark:text-orange-100 mb-2">🚨 Important: Running in Preview Mode</p>
-                    <p className="text-sm text-orange-800 dark:text-orange-200">
-                      PWA installation <strong>does not work in iframes</strong>. 
-                      <a 
-                        href={window.location.href} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="font-bold underline ml-1"
-                      >
-                        Open this URL in a new tab
-                      </a> to enable automatic installation.
+              <CardContent className="space-y-4">
+                {isIOS && (
+                  <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700">
+                    <p className="font-bold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+                      <span className="text-2xl">🍎</span> iPhone/iPad Instructions:
                     </p>
+                    <ol className="space-y-3 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">1.</span>
+                        <span>Tap the <strong>Share</strong> button <Share className="inline h-4 w-4 mx-1" /> at the bottom of Safari</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">2.</span>
+                        <span>Scroll down and tap <strong>"Add to Home Screen"</strong> <Plus className="inline h-4 w-4 mx-1" /></span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">3.</span>
+                        <span>Tap <strong>"Add"</strong> in the top right</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">4.</span>
+                        <span>The app icon will appear on your home screen! 🎉</span>
+                      </li>
+                    </ol>
                   </div>
                 )}
-                <div className="space-y-3 text-sm">
-                  <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">🍎 iPhone/iPad (Safari):</p>
-                    <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Tap the Share button <span className="font-mono">⎙</span></li>
-                      <li>Scroll and tap "Add to Home Screen"</li>
-                      <li>Tap "Add"</li>
-                    </ol>
-                  </div>
 
-                  <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">🤖 Android (Chrome):</p>
-                    <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Tap menu <span className="font-mono">⋮</span> (top right)</li>
-                      <li>Tap "Install app" or "Add to Home screen"</li>
-                      <li>Tap "Install"</li>
+                {isAndroid && (
+                  <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-300 dark:border-green-700">
+                    <p className="font-bold text-green-900 dark:text-green-100 mb-3 flex items-center gap-2">
+                      <span className="text-2xl">🤖</span> Android Instructions:
+                    </p>
+                    <ol className="space-y-3 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">1.</span>
+                        <span>Tap the <strong>Menu</strong> button <Menu className="inline h-4 w-4 mx-1" /> (three dots) in the top right</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">2.</span>
+                        <span>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">3.</span>
+                        <span>Tap <strong>"Add"</strong> or <strong>"Install"</strong></span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold min-w-[20px]">4.</span>
+                        <span>The app icon will appear on your home screen! 🎉</span>
+                      </li>
                     </ol>
                   </div>
+                )}
 
-                  <div className="bg-purple-50 dark:bg-purple-950 p-3 rounded-lg">
-                    <p className="font-semibold mb-1">💻 Desktop (Chrome/Edge):</p>
-                    <ol className="list-decimal list-inside space-y-1 text-xs">
-                      <li>Look for install icon <span className="font-mono">⊕</span> in address bar</li>
-                      <li>Or menu → "Install Dropnote"</li>
-                      <li>Click "Install"</li>
-                    </ol>
-                  </div>
+                {!isIOS && !isAndroid && (
+                  <>
+                    <div className="bg-purple-50 dark:bg-purple-950 p-4 rounded-lg border-2 border-purple-300 dark:border-purple-700">
+                      <p className="font-bold text-purple-900 dark:text-purple-100 mb-3 flex items-center gap-2">
+                        <span className="text-2xl">💻</span> Desktop (Chrome/Edge):
+                      </p>
+                      <ol className="space-y-3 text-sm">
+                        <li className="flex items-start gap-2">
+                          <span className="font-bold min-w-[20px]">1.</span>
+                          <span>Look for the install icon <Plus className="inline h-4 w-4 mx-1" /> in the address bar</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="font-bold min-w-[20px]">2.</span>
+                          <span>Or click <strong>Menu</strong> → <strong>"Install Dropnote"</strong></span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="font-bold min-w-[20px]">3.</span>
+                          <span>Click <strong>"Install"</strong></span>
+                        </li>
+                      </ol>
+                    </div>
+
+                    <div className="bg-orange-50 dark:bg-orange-950 p-4 rounded-lg border-2 border-orange-300 dark:border-orange-700">
+                      <p className="font-bold text-orange-900 dark:text-orange-100 mb-3">
+                        📱 On Mobile?
+                      </p>
+                      <p className="text-sm text-orange-800 dark:text-orange-200">
+                        Open this page on your phone's browser to add it to your home screen!
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                <div className="pt-2 border-t">
+                  <p className="text-xs text-muted-foreground mb-3">
+                    💡 <strong>Why add to home screen?</strong>
+                  </p>
+                  <ul className="text-xs text-muted-foreground space-y-1">
+                    <li>✅ Quick access from your home screen</li>
+                    <li>✅ Works offline</li>
+                    <li>✅ Faster than opening your browser</li>
+                    <li>✅ Looks and feels like a native app</li>
+                  </ul>
                 </div>
 
                 <Button
@@ -251,8 +207,8 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  asChild 
+                <Button
+                  asChild
                   className="w-full min-h-[56px] sm:h-16 text-base sm:text-lg font-semibold shadow-md hover:shadow-lg transition-all touch-manipulation"
                   data-testid="button-influencer-login"
                 >
@@ -275,9 +231,9 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  asChild 
-                  variant="outline" 
+                <Button
+                  asChild
+                  variant="outline"
                   className="w-full min-h-[56px] sm:h-16 text-base sm:text-lg font-semibold shadow-md hover:shadow-lg border-2 transition-all touch-manipulation"
                   data-testid="button-staff-login"
                 >
@@ -290,12 +246,14 @@ export default function Home() {
             </Card>
           </div>
 
-          <div className="mt-8 p-4 sm:p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              💡 <strong>Tip:</strong> Install this app on your device for the best experience. 
-              Tap the button above or your browser's menu to install.
-            </p>
-          </div>
+          {!showInstructions && (
+            <div className="mt-8 p-4 sm:p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                💡 <strong>Tip:</strong> Add this app to your home screen for instant access.
+                Just tap the button above for instructions!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
