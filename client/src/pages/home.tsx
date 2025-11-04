@@ -11,6 +11,7 @@ export default function Home() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [isInIframe, setIsInIframe] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/status')
@@ -26,6 +27,14 @@ export default function Home() {
   }, [setLocation]);
 
   useEffect(() => {
+    // Check if running in iframe
+    const inIframe = (window as any).isInIframe || window.self !== window.top;
+    setIsInIframe(inIframe);
+    
+    if (inIframe) {
+      console.log('[Home] Running in iframe - install prompt unavailable');
+    }
+
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebApp = (window.navigator as any).standalone === true;
 
@@ -107,6 +116,24 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {isInIframe && (
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-3 text-center shadow-lg sticky top-0 z-50" data-testid="iframe-warning">
+          <p className="text-sm sm:text-base font-semibold">
+            ⚠️ Preview Mode - PWA install unavailable in iframe
+          </p>
+          <p className="text-xs mt-1">
+            <a 
+              href={window.location.href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="underline font-bold hover:text-yellow-200"
+              data-testid="link-open-new-tab"
+            >
+              Click here to open in a new tab
+            </a> to enable PWA installation
+          </p>
+        </div>
+      )}
       <div className="container mx-auto px-4 py-6 sm:py-8 max-w-2xl">
         <div className="text-center space-y-6">
           <div className="mb-6">
@@ -149,10 +176,28 @@ export default function Home() {
                   Install Instructions
                 </CardTitle>
                 <CardDescription className="text-sm mt-1">
-                  Your browser requires manual installation
+                  {isInIframe 
+                    ? "Open in a new tab first, then install" 
+                    : "Your browser requires manual installation"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                {isInIframe && (
+                  <div className="bg-orange-50 dark:bg-orange-950 p-3 rounded-lg border-2 border-orange-300 dark:border-orange-700 mb-3">
+                    <p className="font-bold text-orange-900 dark:text-orange-100 mb-2">🚨 Important: Running in Preview Mode</p>
+                    <p className="text-sm text-orange-800 dark:text-orange-200">
+                      PWA installation <strong>does not work in iframes</strong>. 
+                      <a 
+                        href={window.location.href} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="font-bold underline ml-1"
+                      >
+                        Open this URL in a new tab
+                      </a> to enable automatic installation.
+                    </p>
+                  </div>
+                )}
                 <div className="space-y-3 text-sm">
                   <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
                     <p className="font-semibold mb-1">🍎 iPhone/iPad (Safari):</p>

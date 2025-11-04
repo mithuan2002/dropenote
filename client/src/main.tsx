@@ -41,7 +41,19 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Handle PWA install prompt
+// Detect iframe environment (PWA install won't work in iframes)
+const inIframe = window.self !== window.top;
+if (inIframe) {
+  console.warn('⚠️ Running in iframe - PWA install prompt will NOT fire');
+  console.log('📱 To install this PWA, open this URL directly:', window.location.href);
+  console.log('💡 In Replit: Click "Open in new tab" button or deploy the app');
+  (window as any).isInIframe = true;
+} else {
+  console.log('✅ Top-level document - PWA install available');
+  (window as any).isInIframe = false;
+}
+
+// Handle PWA install prompt (only fires in top-level documents, NOT in iframes)
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('💡 PWA install prompt available');
   e.preventDefault();
