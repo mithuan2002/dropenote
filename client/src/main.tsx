@@ -42,16 +42,14 @@ if ('serviceWorker' in navigator) {
 }
 
 // Handle PWA install prompt
-let deferredPrompt: any;
-
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('💡 PWA install prompt available');
   e.preventDefault();
-  deferredPrompt = e;
+  (window as any).deferredPrompt = e;
   window.dispatchEvent(new CustomEvent('pwa-install-available'));
 });
 
 window.addEventListener('appinstalled', () => {
   console.log('✅ PWA installed successfully');
-  deferredPrompt = null;
+  (window as any).deferredPrompt = null;
 });

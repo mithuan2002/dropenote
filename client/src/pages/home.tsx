@@ -36,10 +36,12 @@ export default function Home() {
 
     const handler = (e: any) => {
       e.preventDefault();
+      console.log('[Home] Install prompt captured');
       setDeferredPrompt(e);
     };
 
     const installedHandler = () => {
+      console.log('[Home] App installed');
       setIsInstalled(true);
       setDeferredPrompt(null);
       setShowInstructions(false);
@@ -48,6 +50,12 @@ export default function Home() {
     window.addEventListener('beforeinstallprompt', handler);
     window.addEventListener('appinstalled', installedHandler);
 
+    // Check if prompt is already available from main.tsx
+    if ((window as any).deferredPrompt) {
+      console.log('[Home] Using existing deferred prompt');
+      setDeferredPrompt((window as any).deferredPrompt);
+    }
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
       window.removeEventListener('appinstalled', installedHandler);
@@ -55,30 +63,45 @@ export default function Home() {
   }, []);
 
   const handleInstall = async () => {
-    if (deferredPrompt) {
-      // Browser supports native install - trigger it directly
-      try {
-        console.log('Triggering install prompt...');
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log('Install outcome:', outcome);
-        
-        if (outcome === 'accepted') {
-          setDeferredPrompt(null);
-          setIsInstalled(true);
-          setShowInstructions(false);
-        } else {
-          // User dismissed the prompt
-          setDeferredPrompt(null);
+    console.log('[Home] Install button clicked, deferredPrompt:', !!deferredPrompt);
+    
+    if (!deferredPrompt) {
+      console.log('[Home] No deferred prompt - checking window');
+      const globalPrompt = (window as any).deferredPrompt;
+      if (globalPrompt) {
+        setDeferredPrompt(globalPrompt);
+        try {
+          await globalPrompt.prompt();
+          const { outcome } = await globalPrompt.userChoice;
+          console.log('[Home] Install outcome:', outcome);
+          if (outcome === 'accepted') {
+            setIsInstalled(true);
+            setDeferredPrompt(null);
+            (window as any).deferredPrompt = null;
+          }
+        } catch (error) {
+          console.error('[Home] Install error:', error);
         }
-      } catch (error) {
-        console.error('Install prompt error:', error);
-        // Don't show instructions on error, let user try again
+        return;
       }
-    } else {
-      // No install prompt available - show manual instructions
-      console.log('No install prompt available, showing instructions');
+      console.log('[Home] No install prompt available anywhere');
       setShowInstructions(true);
+      return;
+    }
+
+    try {
+      console.log('[Home] Showing install prompt');
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('[Home] User choice:', outcome);
+      
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
+      setDeferredPrompt(null);
+      (window as any).deferredPrompt = null;
+    } catch (error) {
+      console.error('[Home] Install prompt error:', error);
     }
   };
 
