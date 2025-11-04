@@ -1,9 +1,9 @@
+
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Store, UserCircle } from "lucide-react";
+import { Store, UserCircle, TrendingUp, Users, Shield, BarChart3, Zap, CheckCircle2 } from "lucide-react";
 import { useEffect } from "react";
-
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -25,75 +25,188 @@ export default function Home() {
   }, [setLocation]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-6 sm:py-10 max-w-2xl">
-        <div className="text-center space-y-4">
-          <div className="mb-4">
-            <div className="inline-block p-3 bg-primary rounded-xl shadow-md mb-3">
-              <span className="text-4xl sm:text-5xl">🎟️</span>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="border-b bg-card">
+        <div className="container mx-auto px-4 py-12 max-w-6xl">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+              <span className="text-2xl">🎟️</span>
+              <span className="text-sm font-medium text-primary">Coupon Management Platform</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
               Dropnote
             </h1>
-            <p className="text-base sm:text-xl text-muted-foreground mb-2 font-medium">
-              Coupon management for influencers
-            </p>
-            <p className="text-sm sm:text-base text-muted-foreground">
-              Identify and reward your loyal followers
-            </p>
-          </div>
-
-          <div className="mb-4">
             
+            <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
+              Turn your influence into measurable value. Create, distribute, and track coupon campaigns to identify and reward your most loyal followers.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button asChild size="lg" className="text-base font-semibold">
+                <Link href="/login?role=influencer">
+                  <UserCircle className="mr-2 h-5 w-5" />
+                  Start as Influencer
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="text-base font-semibold">
+                <Link href="/login?role=staff">
+                  <Store className="mr-2 h-5 w-5" />
+                  Staff Portal
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Why Choose Dropnote?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A complete solution for influencer-driven marketing campaigns with built-in analytics and fraud prevention
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <TrendingUp className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Campaign Analytics</CardTitle>
+              <CardDescription className="text-base">
+                Track redemption rates, revenue impact, and follower engagement in real-time
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Follower Identification</CardTitle>
+              <CardDescription className="text-base">
+                Collect WhatsApp numbers to identify your most valuable supporters automatically
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Fraud Prevention</CardTitle>
+              <CardDescription className="text-base">
+                One-time use codes with instant verification to prevent abuse and duplicate claims
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <BarChart3 className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Performance Insights</CardTitle>
+              <CardDescription className="text-base">
+                Detailed breakdowns of campaign performance with exportable reports
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Instant Redemption</CardTitle>
+              <CardDescription className="text-base">
+                Staff can verify codes in seconds with mobile-optimized interface
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-2">
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <CheckCircle2 className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Simple Setup</CardTitle>
+              <CardDescription className="text-base">
+                Create campaigns in minutes and share links instantly with your audience
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <div className="bg-muted/50 border-y">
+        <div className="container mx-auto px-4 py-16 max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">How It Works</h2>
+            <p className="text-lg text-muted-foreground">Three simple steps to launch your campaign</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <Card className="border hover:border-primary transition-all hover:shadow-md">
-              <CardHeader className="pb-3 pt-4">
-                <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl font-bold">
-                  For Influencers
-                </CardTitle>
-                <CardDescription className="text-sm sm:text-base mt-2 text-center">
-                  Create campaigns and track performance
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Button
-                  asChild
-                  className="w-full text-base font-semibold shadow-sm hover:shadow-md transition-all"
-                  data-testid="button-influencer-login"
-                >
-                  <Link href="/login?role=influencer">
-                    <UserCircle className="mr-2 h-5 w-5" />
-                    Get Started
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-2xl font-bold text-primary-foreground mx-auto">
+                1
+              </div>
+              <h3 className="text-xl font-semibold">Create Campaign</h3>
+              <p className="text-muted-foreground">
+                Set up your discount, configure settings, and generate unique coupon codes
+              </p>
+            </div>
 
-            <Card className="border hover:border-primary transition-all hover:shadow-md">
-              <CardHeader className="pb-3 pt-4">
-                <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl font-bold">
-                  For Store Staff
-                </CardTitle>
-                <CardDescription className="text-sm sm:text-base mt-2 text-center">
-                  Verify and redeem coupons quickly
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full text-base font-semibold shadow-sm hover:shadow-md transition-all"
-                  data-testid="button-staff-login"
-                >
-                  <Link href="/login?role=staff">
-                    <Store className="mr-2 h-5 w-5" />
-                    Access Portal
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-2xl font-bold text-primary-foreground mx-auto">
+                2
+              </div>
+              <h3 className="text-xl font-semibold">Share with Followers</h3>
+              <p className="text-muted-foreground">
+                Distribute campaign link via social media, stories, or direct messages
+              </p>
+            </div>
+
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-2xl font-bold text-primary-foreground mx-auto">
+                3
+              </div>
+              <h3 className="text-xl font-semibold">Track Results</h3>
+              <p className="text-muted-foreground">
+                Monitor redemptions, analyze performance, and grow your loyal community
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl border-2 border-primary/20 p-8 md:p-12 text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to grow your influence?</h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Join successful influencers who are using Dropnote to build stronger connections with their audience
+          </p>
+          <Button asChild size="lg" className="text-base font-semibold">
+            <Link href="/login?role=influencer">
+              Get Started for Free
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t bg-muted/30">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>© 2024 Dropnote. Professional coupon management for influencers.</p>
           </div>
         </div>
       </div>
