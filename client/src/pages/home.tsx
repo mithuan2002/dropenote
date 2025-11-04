@@ -78,9 +78,6 @@ export default function Home() {
                   <Smartphone className="h-5 w-5" />
                   Add to Home Screen
                 </CardTitle>
-                <CardDescription className="text-sm mt-1">
-                  Install this app for quick access and offline use
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {isIOS && (
