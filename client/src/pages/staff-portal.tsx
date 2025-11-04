@@ -109,10 +109,13 @@ export default function StaffPortal() {
   const redeemMutation = useMutation({
     mutationFn: async () => {
       if (!verificationResult?.coupon) return;
-      return await apiRequest("POST", "/api/redemptions", {
+      const payload: any = {
         couponId: verificationResult.coupon.id,
-        purchaseAmount: parseInt(purchaseAmount),
-      });
+      };
+      if (purchaseAmount && parseInt(purchaseAmount) > 0) {
+        payload.purchaseAmount = parseInt(purchaseAmount);
+      }
+      return await apiRequest("POST", "/api/redemptions", payload);
     },
     onSuccess: () => {
       toast({
@@ -143,15 +146,7 @@ export default function StaffPortal() {
   };
 
   const handleRedeem = () => {
-    if (purchaseAmount && parseInt(purchaseAmount) > 0) {
-      redeemMutation.mutate();
-    } else {
-      toast({
-        title: "Invalid Amount",
-        description: "Please enter a valid purchase amount",
-        variant: "destructive",
-      });
-    }
+    redeemMutation.mutate();
   };
 
   return (
@@ -314,11 +309,11 @@ export default function StaffPortal() {
 
                 <div className="border-t pt-6">
                   <label className="block text-sm font-medium mb-2">
-                    Purchase Amount (₹)
+                    Purchase Amount (₹) <span className="text-muted-foreground font-normal">(Optional)</span>
                   </label>
                   <Input
                     type="number"
-                    placeholder="500"
+                    placeholder="500 (optional)"
                     value={purchaseAmount}
                     onChange={(e) => setPurchaseAmount(e.target.value)}
                     className="h-12 mb-4"
@@ -327,7 +322,7 @@ export default function StaffPortal() {
                   <Button
                     onClick={handleRedeem}
                     className="w-full h-12"
-                    disabled={redeemMutation.isPending || !purchaseAmount}
+                    disabled={redeemMutation.isPending}
                     data-testid="button-redeem-coupon"
                   >
                     {redeemMutation.isPending ? "Processing..." : "Redeem Coupon"}
