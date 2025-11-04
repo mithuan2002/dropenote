@@ -40,32 +40,32 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-2xl">
+      <div className="container mx-auto px-6 py-8 sm:py-10 max-w-2xl">
         <div className="text-center space-y-6">
-          <div className="mb-6">
-            <div className="inline-block p-4 bg-primary rounded-2xl shadow-lg mb-4">
-              <span className="text-5xl">🎟️</span>
+          <div className="mb-8">
+            <div className="inline-block p-5 bg-primary rounded-2xl shadow-lg mb-5">
+              <span className="text-6xl sm:text-7xl">🎟️</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl sm:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent px-2">
               Dropnote
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-2 font-medium">
+            <p className="text-xl sm:text-2xl text-muted-foreground mb-3 font-medium px-4">
               Coupon management system for influencers
             </p>
-            <p className="text-sm sm:text-base text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground px-4">
               Identify and reward your loyal followers
             </p>
           </div>
 
           {!isInstalled && (
-            <div className="mb-6 space-y-4">
+            <div className="mb-8 space-y-4 px-2">
               <Button
                 onClick={handleShowInstructions}
                 size="lg"
-                className="w-full max-w-md min-h-[64px] text-xl font-bold shadow-xl hover:shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+                className="w-full min-h-[68px] text-lg sm:text-xl font-bold shadow-xl hover:shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
                 data-testid="button-install-pwa"
               >
-                <Smartphone className="mr-3 h-6 w-6" />
+                <Smartphone className="mr-3 h-7 w-7 sm:h-8 sm:w-8" />
                 Add to Home Screen
               </Button>
             </div>
@@ -147,7 +147,7 @@ export default function Home() {
                 <Button
                   onClick={() => setShowInstructions(false)}
                   variant="outline"
-                  className="w-full"
+                  className="w-full min-h-[56px] text-lg font-semibold"
                   data-testid="button-close-instructions"
                 >
                   Got it
@@ -156,24 +156,24 @@ export default function Home() {
             </Card>
           )}
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:gap-6 px-2">
             <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="flex items-center justify-center gap-3 text-xl sm:text-2xl">
+              <CardHeader className="pb-4 sm:pb-4 pt-6">
+                <CardTitle className="flex items-center justify-center gap-3 text-2xl sm:text-3xl font-bold">
                   For Influencers
                 </CardTitle>
-                <CardDescription className="text-sm sm:text-base mt-2">
+                <CardDescription className="text-base sm:text-lg mt-3 text-center">
                   Create campaigns and track your coupon performance
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-2">
                 <Button
                   asChild
-                  className="w-full min-h-[56px] sm:h-16 text-base sm:text-lg font-semibold shadow-md hover:shadow-lg transition-all touch-manipulation"
+                  className="w-full min-h-[64px] sm:h-16 text-lg sm:text-xl font-semibold shadow-md hover:shadow-lg transition-all touch-manipulation"
                   data-testid="button-influencer-login"
                 >
                   <Link href="/login?role=influencer">
-                    <UserCircle className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                    <UserCircle className="mr-3 h-6 w-6 sm:h-7 sm:w-7" />
                     Get Started
                   </Link>
                 </Button>
@@ -181,23 +181,23 @@ export default function Home() {
             </Card>
 
             <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="flex items-center justify-center gap-3 text-xl sm:text-2xl">
+              <CardHeader className="pb-4 sm:pb-4 pt-6">
+                <CardTitle className="flex items-center justify-center gap-3 text-2xl sm:text-3xl font-bold">
                   For Store Staff
                 </CardTitle>
-                <CardDescription className="text-sm sm:text-base mt-2">
+                <CardDescription className="text-base sm:text-lg mt-3 text-center">
                   Verify and redeem customer coupons quickly
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-2">
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full min-h-[56px] sm:h-16 text-base sm:text-lg font-semibold shadow-md hover:shadow-lg border-2 transition-all touch-manipulation"
+                  className="w-full min-h-[64px] sm:h-16 text-lg sm:text-xl font-semibold shadow-md hover:shadow-lg border-2 transition-all touch-manipulation"
                   data-testid="button-staff-login"
                 >
                   <Link href="/login?role=staff">
-                    <Store className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                    <Store className="mr-3 h-6 w-6 sm:h-7 sm:w-7" />
                     Access Portal
                   </Link>
                 </Button>
