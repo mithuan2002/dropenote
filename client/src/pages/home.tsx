@@ -68,9 +68,6 @@ export default function Home() {
                 <Smartphone className="mr-3 h-6 w-6" />
                 Add to Home Screen
               </Button>
-              <p className="text-xs text-muted-foreground">
-                Quick access • Works offline • Fast loading
-              </p>
             </div>
           )}
 
