@@ -1,15 +1,15 @@
-const CACHE_NAME = 'dropnote-v5';
-const RUNTIME_CACHE = 'dropnote-runtime-v5';
+const CACHE_NAME = 'dropnote-v6';
+const RUNTIME_CACHE = 'dropnote-runtime-v6';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/icon-192.svg',
+  '/icon-512.svg'
 ];
 
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker v5...');
+  console.log('[SW] Installing service worker v6...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -27,7 +27,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker v5...');
+  console.log('[SW] Activating service worker v6...');
   const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
   event.waitUntil(
     caches.keys()
