@@ -139,36 +139,17 @@ export default function Home() {
                 )}
 
                 {!isIOS && !isAndroid && (
-                  <>
-                    <div className="bg-purple-50 dark:bg-purple-950 p-4 rounded-lg border-2 border-purple-300 dark:border-purple-700">
-                      <p className="font-bold text-purple-900 dark:text-purple-100 mb-3 flex items-center gap-2">
-                        <span className="text-2xl">💻</span> Desktop (Chrome/Edge):
-                      </p>
-                      <ol className="space-y-3 text-sm">
-                        <li className="flex items-start gap-2">
-                          <span className="font-bold min-w-[20px]">1.</span>
-                          <span>Look for the install icon <Plus className="inline h-4 w-4 mx-1" /> in the address bar</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="font-bold min-w-[20px]">2.</span>
-                          <span>Or click <strong>Menu</strong> → <strong>"Install Dropnote"</strong></span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="font-bold min-w-[20px]">3.</span>
-                          <span>Click <strong>"Install"</strong></span>
-                        </li>
-                      </ol>
-                    </div>
-
-                    <div className="bg-orange-50 dark:bg-orange-950 p-4 rounded-lg border-2 border-orange-300 dark:border-orange-700">
-                      <p className="font-bold text-orange-900 dark:text-orange-100 mb-3">
-                        📱 On Mobile?
-                      </p>
-                      <p className="text-sm text-orange-800 dark:text-orange-200">
-                        Open this page on your phone's browser to add it to your home screen!
-                      </p>
-                    </div>
-                  </>
+                  <div className="bg-orange-50 dark:bg-orange-950 p-4 rounded-lg border-2 border-orange-300 dark:border-orange-700">
+                    <p className="font-bold text-orange-900 dark:text-orange-100 mb-3 flex items-center gap-2">
+                      <span className="text-2xl">📱</span> Mobile Device Required
+                    </p>
+                    <p className="text-sm text-orange-800 dark:text-orange-200 mb-2">
+                      To install this app, please open this page on your phone's browser.
+                    </p>
+                    <p className="text-xs text-orange-700 dark:text-orange-300">
+                      💡 Works best on iPhone Safari or Android Chrome
+                    </p>
+                  </div>
                 )}
 
                 <div className="pt-2 border-t">
