@@ -56,20 +56,28 @@ export default function Home() {
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      // Browser supports native install - trigger it
+      // Browser supports native install - trigger it directly
       try {
+        console.log('Triggering install prompt...');
         await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
+        console.log('Install outcome:', outcome);
+        
         if (outcome === 'accepted') {
           setDeferredPrompt(null);
           setIsInstalled(true);
           setShowInstructions(false);
+        } else {
+          // User dismissed the prompt
+          setDeferredPrompt(null);
         }
       } catch (error) {
-        console.error('Install error:', error);
+        console.error('Install prompt error:', error);
+        // Don't show instructions on error, let user try again
       }
     } else {
-      // Browser doesn't support auto-install, show simple instructions
+      // No install prompt available - show manual instructions
+      console.log('No install prompt available, showing instructions');
       setShowInstructions(true);
     }
   };
