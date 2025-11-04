@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink, Star } from "lucide-react";
 import { Link } from "wouter";
-import type { Campaign } from "@shared/schema";
+import type { Campaign, InfluencerProfile } from "@shared/schema";
 import CreateCampaignDialog from "@/components/create-campaign-dialog";
 import CampaignAnalytics from "@/components/campaign-analytics";
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +22,7 @@ export default function InfluencerDashboard() {
   const [copiedCampaignId, setCopiedCampaignId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const { data: campaigns, isLoading } = useQuery<Campaign[]>({
+  const { data: campaigns = [], isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
   });
 
@@ -30,7 +30,7 @@ export default function InfluencerDashboard() {
     queryKey: ["/api/influencer/top-redeemers"],
   });
 
-  const { data: profile } = useQuery({
+  const { data: profile } = useQuery<InfluencerProfile>({
     queryKey: ["/api/influencer/profile"],
   });
 
@@ -65,7 +65,7 @@ export default function InfluencerDashboard() {
     setTimeout(() => setCopiedCampaignId(null), 2000);
   };
 
-  const selectedCampaign = campaigns?.find(c => c.id === selectedCampaignId);
+  const selectedCampaign = campaigns.find(c => c.id === selectedCampaignId);
 
   if (isLoading) {
     return (
@@ -323,6 +323,14 @@ export default function InfluencerDashboard() {
           </div>
         )}
       </main>
+
+      <div className="max-w-4xl mx-auto px-4 pb-6">
+        <div className="p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+          <p className="text-xs text-muted-foreground text-center">
+            <strong>Note:</strong> For better experience in mobile use application in desktop mode
+          </p>
+        </div>
+      </div>
 
       <CreateCampaignDialog
         open={showCreateDialog}

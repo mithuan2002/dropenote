@@ -642,6 +642,14 @@ export default function StaffPortal() {
           </TabsContent>
         </Tabs>
       </main>
+
+      <div className="max-w-4xl mx-auto px-4 pb-6">
+        <div className="p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+          <p className="text-xs text-muted-foreground text-center">
+            <strong>Note:</strong> For better experience in mobile use application in desktop mode
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
