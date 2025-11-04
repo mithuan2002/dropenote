@@ -53,6 +53,21 @@ export async function setupVite(app: Express, server: Server) {
     });
   });
 
+  // Serve PNG icons with correct MIME type - BEFORE vite middleware
+  app.get('/icon-192.png', (req, res) => {
+    const iconPath = path.join(__dirname, '../public/icon-192.png');
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(iconPath);
+  });
+
+  app.get('/icon-512.png', (req, res) => {
+    const iconPath = path.join(__dirname, '../public/icon-512.png');
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(iconPath);
+  });
+
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
