@@ -138,20 +138,6 @@ export default function Home() {
                   </div>
                 )}
 
-                {!isIOS && !isAndroid && (
-                  <div className="bg-orange-50 dark:bg-orange-950 p-4 rounded-lg border-2 border-orange-300 dark:border-orange-700">
-                    <p className="font-bold text-orange-900 dark:text-orange-100 mb-3 flex items-center gap-2">
-                      <span className="text-2xl">📱</span> Mobile Device Required
-                    </p>
-                    <p className="text-sm text-orange-800 dark:text-orange-200 mb-2">
-                      To install this app, please open this page on your phone's browser.
-                    </p>
-                    <p className="text-xs text-orange-700 dark:text-orange-300">
-                      💡 Works best on iPhone Safari or Android Chrome
-                    </p>
-                  </div>
-                )}
-
                 <div className="pt-2 border-t">
                   <p className="text-xs text-muted-foreground mb-3">
                     💡 <strong>Why add to home screen?</strong>
