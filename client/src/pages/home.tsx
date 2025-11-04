@@ -207,9 +207,12 @@ export default function Home() {
           </div>
 
           {!showInstructions && (
-            <div className="mt-4 p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+            <div className="mt-4 p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg space-y-2">
               <p className="text-xs text-muted-foreground">
                 <strong>Tip:</strong> Add to home screen for quick access
+              </p>
+              <p className="text-xs text-muted-foreground">
+                <strong>Note:</strong> For better experience in mobile use application in desktop mode
               </p>
             </div>
           )}
