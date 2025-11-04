@@ -208,7 +208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const campaignRedemptions = allRedemptions.filter(r => couponIds.has(r.couponId));
 
       const redeemedCodes = campaignRedemptions.length;
-      const totalSales = campaignRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
+      const totalSales = campaignRedemptions.reduce((sum, r) => sum + (r.purchaseAmount ?? 0), 0);
       const redemptionRate = totalCodes > 0
         ? Math.round((redeemedCodes / totalCodes) * 100)
         : 0;
@@ -442,13 +442,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (followerRedemptions.has(key)) {
             const existing = followerRedemptions.get(key)!;
             existing.redemptionCount++;
-            existing.totalSpent += redemption.purchaseAmount;
+            existing.totalSpent += (redemption.purchaseAmount ?? 0);
           } else {
             followerRedemptions.set(key, {
               name: follower.followerName,
               whatsapp: follower.followerWhatsApp,
               redemptionCount: 1,
-              totalSpent: redemption.purchaseAmount,
+              totalSpent: (redemption.purchaseAmount ?? 0),
             });
           }
         }
@@ -507,7 +507,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const allRedemptions = await storage.getAllRedemptions();
       const totalRedemptions = allRedemptions.length;
-      const totalRevenue = allRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
+      const totalRevenue = allRedemptions.reduce((sum, r) => sum + (r.purchaseAmount ?? 0), 0);
 
       // Get all campaigns to calculate active campaigns
       const allCampaigns = await storage.getCampaigns();
@@ -585,7 +585,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const campaignRedemptions = allRedemptions.filter(r => couponIds.has(r.couponId));
 
           const redeemedCodes = campaignRedemptions.length;
-          const totalSales = campaignRedemptions.reduce((sum, r) => sum + r.purchaseAmount, 0);
+          const totalSales = campaignRedemptions.reduce((sum, r) => sum + (r.purchaseAmount ?? 0), 0);
           const redemptionRate = totalCodes > 0
             ? Math.round((redeemedCodes / totalCodes) * 100)
             : 0;
