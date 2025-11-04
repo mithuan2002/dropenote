@@ -14,7 +14,11 @@ export default function Home() {
       .then(res => res.json())
       .then(data => {
         if (data.authenticated) {
-          setLocation('/influencer-dashboard');
+          if (data.role === 'influencer') {
+            setLocation('/influencer');
+          } else if (data.role === 'staff') {
+            setLocation('/staff');
+          }
         }
       })
       .catch(() => {
