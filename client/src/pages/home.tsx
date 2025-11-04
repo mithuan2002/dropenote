@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Store, UserCircle } from "lucide-react";
 import { useEffect } from "react";
-import { SimplePWAInstall } from "@/components/simple-pwa-install";
+
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -44,7 +44,7 @@ export default function Home() {
           </div>
 
           <div className="mb-4">
-            <SimplePWAInstall />
+            
           </div>
 
           <div className="grid grid-cols-1 gap-4">
