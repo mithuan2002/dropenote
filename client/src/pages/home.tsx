@@ -69,7 +69,7 @@ export default function Home() {
                 Add to Home Screen
               </Button>
               <p className="text-xs text-muted-foreground">
-                Works offline • Fast loading • Native experience
+                Quick access • Works offline • Fast loading
               </p>
             </div>
           )}
@@ -180,7 +180,6 @@ export default function Home() {
             <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
               <CardHeader className="pb-3 sm:pb-4">
                 <CardTitle className="flex items-center justify-center gap-3 text-xl sm:text-2xl">
-                  <span className="text-3xl sm:text-4xl">🛍️</span>
                   For Influencers
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base mt-2">
@@ -204,7 +203,6 @@ export default function Home() {
             <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
               <CardHeader className="pb-3 sm:pb-4">
                 <CardTitle className="flex items-center justify-center gap-3 text-xl sm:text-2xl">
-                  <span className="text-3xl sm:text-4xl">🏪</span>
                   For Store Staff
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base mt-2">
@@ -230,8 +228,8 @@ export default function Home() {
           {!showInstructions && (
             <div className="mt-8 p-4 sm:p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
               <p className="text-xs sm:text-sm text-muted-foreground">
-                💡 <strong>Tip:</strong> Add this app to your home screen for instant access.
-                Just tap the button above for instructions!
+                <strong>Tip:</strong> Add this app to your home screen for quick access.
+                Tap the button above for instructions!
               </p>
             </div>
           )}
