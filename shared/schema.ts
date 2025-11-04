@@ -57,13 +57,15 @@ export type Coupon = typeof coupons.$inferSelect;
 export const redemptions = pgTable("redemptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   couponId: varchar("coupon_id").notNull().unique(),
-  purchaseAmount: integer("purchase_amount").notNull(),
+  purchaseAmount: integer("purchase_amount"),
   redeemedAt: timestamp("redeemed_at").notNull().defaultNow(),
 });
 
 export const insertRedemptionSchema = createInsertSchema(redemptions).omit({
   id: true,
   redeemedAt: true,
+}).extend({
+  purchaseAmount: z.number().int().positive().optional(),
 });
 
 export type InsertRedemption = z.infer<typeof insertRedemptionSchema>;
