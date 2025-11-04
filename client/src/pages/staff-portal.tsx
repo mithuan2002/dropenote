@@ -489,7 +489,9 @@ export default function StaffPortal() {
                             <div>
                               <span className="text-muted-foreground">Purchase: </span>
                               <span className="font-medium" data-testid={`text-amount-${redemption.id}`}>
-                                ₹{redemption.purchaseAmount.toLocaleString()}
+                                {redemption.purchaseAmount 
+                                  ? `₹${redemption.purchaseAmount.toLocaleString()}` 
+                                  : 'N/A'}
                               </span>
                             </div>
                           </div>
