@@ -40,52 +40,52 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-6 py-8 sm:py-10 max-w-2xl">
-        <div className="text-center space-y-6">
-          <div className="mb-8">
-            <div className="inline-block p-5 bg-primary rounded-2xl shadow-lg mb-5">
-              <span className="text-6xl sm:text-7xl">🎟️</span>
+      <div className="container mx-auto px-4 py-6 sm:py-10 max-w-2xl">
+        <div className="text-center space-y-4">
+          <div className="mb-4">
+            <div className="inline-block p-3 bg-primary rounded-xl shadow-md mb-3">
+              <span className="text-4xl sm:text-5xl">🎟️</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent px-2">
+            <h1 className="text-3xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Dropnote
             </h1>
-            <p className="text-xl sm:text-2xl text-muted-foreground mb-3 font-medium px-4">
-              Coupon management system for influencers
+            <p className="text-base sm:text-xl text-muted-foreground mb-2 font-medium">
+              Coupon management for influencers
             </p>
-            <p className="text-base sm:text-lg text-muted-foreground px-4">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Identify and reward your loyal followers
             </p>
           </div>
 
           {!isInstalled && (
-            <div className="mb-8 space-y-4 px-2">
+            <div className="mb-4">
               <Button
                 onClick={handleShowInstructions}
-                size="lg"
-                className="w-full min-h-[68px] text-lg sm:text-xl font-bold shadow-xl hover:shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+                size="default"
+                className="w-full text-base font-semibold shadow-lg"
                 data-testid="button-install-pwa"
               >
-                <Smartphone className="mr-3 h-7 w-7 sm:h-8 sm:w-8" />
+                <Smartphone className="mr-2 h-5 w-5" />
                 Add to Home Screen
               </Button>
             </div>
           )}
 
           {showInstructions && (
-            <Card className="text-left border-2 border-blue-500 shadow-lg animate-in fade-in slide-in-from-top-4 duration-300">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Smartphone className="h-5 w-5" />
+            <Card className="text-left border-2 border-blue-500 shadow-md animate-in fade-in slide-in-from-top-4 duration-300">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
                   Add to Home Screen
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 {isIOS && (
-                  <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700">
-                    <p className="font-bold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
-                      <span className="text-2xl">🍎</span> iPhone/iPad Instructions:
+                  <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg border border-blue-300 dark:border-blue-700">
+                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2 flex items-center gap-2 text-sm">
+                      <span className="text-lg">🍎</span> iPhone/iPad:
                     </p>
-                    <ol className="space-y-3 text-sm">
+                    <ol className="space-y-2 text-xs">
                       <li className="flex items-start gap-2">
                         <span className="font-bold min-w-[20px]">1.</span>
                         <span>Tap the <strong>Share</strong> button <Share className="inline h-4 w-4 mx-1" /> at the bottom of Safari</span>
@@ -107,11 +107,11 @@ export default function Home() {
                 )}
 
                 {isAndroid && (
-                  <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-300 dark:border-green-700">
-                    <p className="font-bold text-green-900 dark:text-green-100 mb-3 flex items-center gap-2">
-                      <span className="text-2xl">🤖</span> Android Instructions:
+                  <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg border border-green-300 dark:border-green-700">
+                    <p className="font-semibold text-green-900 dark:text-green-100 mb-2 flex items-center gap-2 text-sm">
+                      <span className="text-lg">🤖</span> Android:
                     </p>
-                    <ol className="space-y-3 text-sm">
+                    <ol className="space-y-2 text-xs">
                       <li className="flex items-start gap-2">
                         <span className="font-bold min-w-[20px]">1.</span>
                         <span>Tap the <strong>Menu</strong> button <Menu className="inline h-4 w-4 mx-1" /> (three dots) in the top right</span>
@@ -133,21 +133,18 @@ export default function Home() {
                 )}
 
                 <div className="pt-2 border-t">
-                  <p className="text-xs text-muted-foreground mb-3">
-                    💡 <strong>Why add to home screen?</strong>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    💡 <strong>Benefits:</strong>
                   </p>
                   <ul className="text-xs text-muted-foreground space-y-1">
-                    <li>✅ Quick access from your home screen</li>
-                    <li>✅ Works offline</li>
-                    <li>✅ Faster than opening your browser</li>
-                    <li>✅ Looks and feels like a native app</li>
+                    <li>✅ Quick access • Works offline • Fast loading</li>
                   </ul>
                 </div>
 
                 <Button
                   onClick={() => setShowInstructions(false)}
                   variant="outline"
-                  className="w-full min-h-[56px] text-lg font-semibold"
+                  className="w-full text-sm font-medium"
                   data-testid="button-close-instructions"
                 >
                   Got it
@@ -156,48 +153,48 @@ export default function Home() {
             </Card>
           )}
 
-          <div className="grid grid-cols-1 gap-6 sm:gap-6 px-2">
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
-              <CardHeader className="pb-4 sm:pb-4 pt-6">
-                <CardTitle className="flex items-center justify-center gap-3 text-2xl sm:text-3xl font-bold">
+          <div className="grid grid-cols-1 gap-4">
+            <Card className="border hover:border-primary transition-all hover:shadow-md">
+              <CardHeader className="pb-3 pt-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl font-bold">
                   For Influencers
                 </CardTitle>
-                <CardDescription className="text-base sm:text-lg mt-3 text-center">
-                  Create campaigns and track your coupon performance
+                <CardDescription className="text-sm sm:text-base mt-2 text-center">
+                  Create campaigns and track performance
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-2">
+              <CardContent className="pt-0">
                 <Button
                   asChild
-                  className="w-full min-h-[64px] sm:h-16 text-lg sm:text-xl font-semibold shadow-md hover:shadow-lg transition-all touch-manipulation"
+                  className="w-full text-base font-semibold shadow-sm hover:shadow-md transition-all"
                   data-testid="button-influencer-login"
                 >
                   <Link href="/login?role=influencer">
-                    <UserCircle className="mr-3 h-6 w-6 sm:h-7 sm:w-7" />
+                    <UserCircle className="mr-2 h-5 w-5" />
                     Get Started
                   </Link>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-xl">
-              <CardHeader className="pb-4 sm:pb-4 pt-6">
-                <CardTitle className="flex items-center justify-center gap-3 text-2xl sm:text-3xl font-bold">
+            <Card className="border hover:border-primary transition-all hover:shadow-md">
+              <CardHeader className="pb-3 pt-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl font-bold">
                   For Store Staff
                 </CardTitle>
-                <CardDescription className="text-base sm:text-lg mt-3 text-center">
-                  Verify and redeem customer coupons quickly
+                <CardDescription className="text-sm sm:text-base mt-2 text-center">
+                  Verify and redeem coupons quickly
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-2">
+              <CardContent className="pt-0">
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full min-h-[64px] sm:h-16 text-lg sm:text-xl font-semibold shadow-md hover:shadow-lg border-2 transition-all touch-manipulation"
+                  className="w-full text-base font-semibold shadow-sm hover:shadow-md transition-all"
                   data-testid="button-staff-login"
                 >
                   <Link href="/login?role=staff">
-                    <Store className="mr-3 h-6 w-6 sm:h-7 sm:w-7" />
+                    <Store className="mr-2 h-5 w-5" />
                     Access Portal
                   </Link>
                 </Button>
@@ -206,10 +203,9 @@ export default function Home() {
           </div>
 
           {!showInstructions && (
-            <div className="mt-8 p-4 sm:p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl">
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                <strong>Tip:</strong> Add this app to your home screen for quick access.
-                Tap the button above for instructions!
+            <div className="mt-4 p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+              <p className="text-xs text-muted-foreground">
+                <strong>Tip:</strong> Add to home screen for quick access
               </p>
             </div>
           )}
