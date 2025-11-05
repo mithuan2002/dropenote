@@ -28,6 +28,11 @@ if (!process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET environment variable is required');
 }
 
+// CRITICAL: Trust proxy for Render/cloud deployments
+// Render uses reverse proxies, so Express needs to trust the proxy
+// This must be set BEFORE session middleware
+app.set('trust proxy', 1);
+
 app.use(session({
   store: new PgSession({
     pool: pool,
