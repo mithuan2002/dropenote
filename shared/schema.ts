@@ -25,6 +25,7 @@ export const campaigns = pgTable("campaigns", {
   name: text("name").notNull(),
   discountPercentage: integer("discount_percentage").notNull(),
   expirationDate: timestamp("expiration_date").notNull(),
+  termsAndConditions: text("terms_and_conditions"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
