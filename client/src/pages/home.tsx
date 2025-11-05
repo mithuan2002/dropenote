@@ -37,25 +37,28 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="mx-auto max-w-screen-md px-4 sm:px-6 py-12 sm:py-16">
-        <div className="space-y-6 animate-fade-in">
-          <div className="space-y-3">
-            <h1 className="max-w-2xl">
-              Coupon tracking for influencers
+      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-16 sm:py-24">
+        <div className="text-center space-y-8 animate-fade-in">
+          <div className="space-y-6">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+              Track every sale.
+              <br />
+              Prove your impact.
             </h1>
             
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl">
-              Distribute trackable discount codes to your followers. Monitor redemptions in real-time. Build data-driven partnerships with brands.
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Give your followers unique discount codes. Watch real-time redemptions. 
+              Show brands exactly how much revenue you drive.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="h-10" data-testid="button-get-started">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button asChild size="lg" className="h-12 px-8 text-base font-semibold" data-testid="button-get-started">
               <Link href="/login">
-                Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="h-10" data-testid="button-learn-more">
+            <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base" data-testid="button-learn-more">
               <Link href="#features">
                 View Features
               </Link>
