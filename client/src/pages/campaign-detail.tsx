@@ -147,7 +147,7 @@ export default function CampaignDetail() {
             <p className="text-sm text-muted-foreground mb-6">
               Show this code at checkout to get {campaign.discountPercentage}% off
             </p>
-            
+
             <div className="bg-muted rounded-lg p-8 mb-6">
               <div
                 className="text-5xl font-mono font-bold tracking-wider mb-4"
@@ -183,58 +183,26 @@ export default function CampaignDetail() {
           </Card>
         ) : (
           <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-6">Get Your Coupon Code</h2>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="followerName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="John Doe"
-                          {...field}
-                          data-testid="input-follower-name"
-                          className="h-12"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="followerWhatsApp"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>WhatsApp Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="tel"
-                          placeholder="9876543210"
-                          {...field}
-                          data-testid="input-follower-whatsapp"
-                          className="h-12"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  className="w-full h-12"
-                  disabled={mutation.isPending}
-                  data-testid="button-submit-form"
-                >
-                  {mutation.isPending ? "Generating..." : "Get Coupon Code"}
-                </Button>
-              </form>
-            </Form>
+            <h1 className="text-2xl font-bold mb-2" data-testid="text-campaign-name">
+              {campaign.name}
+            </h1>
+            <div className="flex gap-2 text-sm text-muted-foreground mb-6">
+              <span className="font-semibold text-lg text-foreground">
+                {campaign.discountPercentage}% OFF
+              </span>
+              <span>•</span>
+              <span data-testid="text-expiry">
+                Valid until {new Date(campaign.expirationDate).toLocaleDateString()}
+              </span>
+            </div>
+            {campaign.termsAndConditions && (
+              <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                <h3 className="text-sm font-semibold mb-2">Terms and Conditions</h3>
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                  {campaign.termsAndConditions}
+                </p>
+              </div>
+            )}
           </Card>
         )}
       </main>
