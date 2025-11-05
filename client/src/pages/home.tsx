@@ -31,16 +31,15 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12 max-w-6xl">
           <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
-              <span className="text-2xl">🎟️</span>
-              <span className="text-sm font-medium text-primary">Coupon Management Platform</span>
+              <span className="text-sm font-medium text-primary">For Creators</span>
             </div>
             
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
-              Dropnote
+              Reward your followers with <span className="text-primary">trackable coupons</span>
             </h1>
             
             <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              Turn your influence into measurable value. Create, distribute, and track coupon campaigns to identify and reward your most loyal followers.
+              Give your followers exclusive coupon codes and giveaways they can claim in-store. Track every redemption to show brands your real influence.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
