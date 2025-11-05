@@ -46,17 +46,10 @@ export default function Home() {
               Give your followers exclusive coupon codes and giveaways they can claim in-store. Track every redemption to show brands your real influence.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <div className="flex justify-center pt-4">
               <Button asChild size="lg" className="text-base font-semibold">
-                <Link href="/login?role=influencer">
-                  <UserCircle className="mr-2 h-5 w-5" />
-                  Start as Influencer
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-base font-semibold">
-                <Link href="/login?role=staff">
-                  <Store className="mr-2 h-5 w-5" />
-                  Staff Portal
+                <Link href="/login">
+                  Get Started for Free
                 </Link>
               </Button>
             </div>
