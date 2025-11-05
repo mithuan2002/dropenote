@@ -40,15 +40,18 @@ export default function Home() {
       <section className="mx-auto max-w-4xl px-4 sm:px-6 py-16 sm:py-24">
         <div className="text-center space-y-8 animate-fade-in">
           <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <ArrowRight className="h-4 w-4" />
+              <span className="text-sm font-medium">For Creators</span>
+            </div>
+            
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
-              Track every sale.
-              <br />
-              Prove your impact.
+              Reward your followers with{" "}
+              <span className="text-primary">trackable coupons</span>
             </h1>
             
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Give your followers unique discount codes. Watch real-time redemptions. 
-              Show brands exactly how much revenue you drive.
+              Give your followers exclusive coupon codes and giveaways they can claim in-store. Track every redemption to show brands your real influence.
             </p>
           </div>
 
