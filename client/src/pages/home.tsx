@@ -75,9 +75,6 @@ export default function Home() {
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
           <div className="mb-8">
             <h2 className="mb-2">Platform Features</h2>
-            <p className="text-sm text-muted-foreground">
-              Built for creators, retailers, and followers
-            </p>
           </div>
 
           <div className="grid gap-4">
