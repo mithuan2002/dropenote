@@ -208,10 +208,12 @@ export default function Home() {
       <footer className="border-t">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6 py-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
-            <p>© 2024 Dropnote</p>
-            <div className="flex gap-4">
-              <Link href="/login?role=influencer" className="hover:text-foreground transition-colors" data-testid="link-footer-creator">Creators</Link>
-              <Link href="/login?role=staff" className="hover:text-foreground transition-colors" data-testid="link-footer-staff">Staff</Link>
+            <p>© 2025 Dropnote</p>
+            <div className="text-right">
+              <p>Made with love from Coimbatore</p>
+              <a href="mailto:mithuan137@gmail.com" className="hover:text-foreground transition-colors">
+                mithuan137@gmail.com
+              </a>
             </div>
           </div>
         </div>
