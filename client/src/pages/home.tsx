@@ -51,7 +51,7 @@ export default function Home() {
             </h1>
             
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Give your followers exclusive coupon codes and giveaways they can claim in-store. Track every redemption to show brands your real influence.
+              Give your followers exclusive coupon codes and giveaways they can claim in-store. Build a powerful sales engine through your followers and keep repeating sales.
             </p>
           </div>
 
