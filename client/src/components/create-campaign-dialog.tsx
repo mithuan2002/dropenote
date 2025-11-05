@@ -25,7 +25,6 @@ import { z } from "zod";
 
 const formSchema = insertCampaignSchema.extend({
   expirationDate: z.string().min(1, "Expiration date is required"),
-  termsAndConditions: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -47,7 +46,6 @@ export default function CreateCampaignDialog({
       name: "",
       discountPercentage: 10,
       expirationDate: "",
-      termsAndConditions: "",
     },
   });
 
@@ -143,25 +141,6 @@ export default function CreateCampaignDialog({
                       type="date"
                       {...field}
                       data-testid="input-expiration-date"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="termsAndConditions"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Terms and Conditions (Optional)</FormLabel>
-                  <FormControl>
-                    <textarea
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="Enter terms and conditions for this campaign..."
-                      {...field}
-                      data-testid="input-terms-conditions"
                     />
                   </FormControl>
                   <FormMessage />
