@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { queryClient } from "@/lib/queryClient";
+import { AlertCircle, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -15,13 +16,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"influencer" | "staff">("influencer");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(""); // State to hold error messages
-  const isLoading = loading; // Alias for clarity in JSX
+  const [error, setError] = useState("");
+  const isLoading = loading;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
@@ -55,7 +56,7 @@ export default function Login() {
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Authentication failed";
-      setError(errorMessage); // Set error state
+      setError(errorMessage);
       toast({
         title: "Error",
         description: errorMessage,
@@ -67,92 +68,139 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="space-y-3 pb-6">
-          <CardTitle className="text-3xl text-center font-bold">
-            {isLogin ? (role === 'influencer' ? '🛍️ Influencer Login' : '🏪 Staff Login') : 'Create Account'}
-          </CardTitle>
-          <CardDescription className="text-center text-base">
-            {isLogin 
-              ? (role === 'influencer' ? 'Access your campaign dashboard' : 'Verify and redeem coupons')
-              : 'Sign up for a new account'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="role" className="text-base font-semibold">Account Type</Label>
-                <select
-                  id="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value as "influencer" | "staff")}
-                  className="w-full h-12 px-3 rounded-md border border-input bg-background text-base focus:ring-2 focus:ring-primary focus:border-primary"
-                  required
-                  data-testid="select-role"
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="mx-auto max-w-screen-md px-4 sm:px-6">
+          <div className="flex h-14 items-center justify-between">
+            <Link href="/">
+              <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors" data-testid="link-home">
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to home</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex items-center justify-center px-4 py-12 sm:py-16">
+        <div className="w-full max-w-sm space-y-8">
+          <div className="space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {isLogin ? "Welcome back" : "Create your account"}
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {isLogin 
+                ? "Sign in to access your dashboard" 
+                : "Get started with Dropnote today"}
+            </p>
+          </div>
+
+          <Card className="border-border/50">
+            <CardContent className="pt-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <div className="space-y-2">
+                    <Label htmlFor="role" className="text-sm font-medium">
+                      Account Type
+                    </Label>
+                    <select
+                      id="role"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value as "influencer" | "staff")}
+                      className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm focus:ring-2 focus:ring-ring focus:border-input transition-colors"
+                      required
+                      data-testid="select-role"
+                    >
+                      <option value="influencer">Influencer</option>
+                      <option value="staff">Store Staff</option>
+                    </select>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="username" className="text-sm font-medium">
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="h-10 text-sm"
+                    placeholder="Enter your username"
+                    required
+                    minLength={3}
+                    data-testid="input-username"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium">
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-10 text-sm"
+                    placeholder="Enter your password"
+                    required
+                    minLength={6}
+                    data-testid="input-password"
+                  />
+                </div>
+
+                {error && (
+                  <div className="flex items-start gap-3 text-sm text-destructive bg-destructive/5 p-3 rounded-md border border-destructive/20">
+                    <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-10 text-sm font-medium" 
+                  disabled={isLoading} 
+                  data-testid="button-submit"
                 >
-                  <option value="influencer">Influencer</option>
-                  <option value="staff">Store Staff</option>
-                </select>
-              </div>
-            )}
+                  {isLoading ? "Please wait..." : isLogin ? "Sign in" : "Create account"}
+                </Button>
 
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-base font-semibold">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="h-12 text-base"
-                placeholder="Enter username"
-                required
-                minLength={3}
-                data-testid="input-username"
-              />
-            </div>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border/50" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      or
+                    </span>
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-base font-semibold">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="h-12 text-base"
-                placeholder="Enter password"
-                required
-                minLength={6}
-                data-testid="input-password"
-              />
-            </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-10 text-sm"
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setError("");
+                  }}
+                  data-testid="button-toggle-mode"
+                >
+                  {isLogin ? "Create new account" : "Sign in instead"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
 
-            {error && (
-              <div className="text-sm text-red-600 bg-red-50 p-4 rounded-md border border-red-200">
-                {error}
-              </div>
-            )}
-
-            <Button type="submit" className="w-full h-14 text-lg font-semibold" disabled={isLoading} data-testid="button-submit">
-              {isLoading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
-            </Button>
-
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full text-base"
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError(""); // Clear error when toggling mode
-              }}
-              data-testid="button-toggle-mode"
-            >
-              {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          <p className="text-center text-xs text-muted-foreground">
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
