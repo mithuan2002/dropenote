@@ -19,6 +19,7 @@ import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { z } from "zod";
+import { UserGuide } from "@/components/user-guide";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -92,7 +93,22 @@ export default function InfluencerProfile() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+        <UserGuide
+          title="Profile Setup Guide"
+          steps={[
+            "Enter your full name to build trust with followers",
+            "Add a bio to tell followers about yourself (optional)",
+            "Provide your WhatsApp number for direct communication (optional)",
+            "Add a WhatsApp group link to build your community (optional)",
+            "Click 'Save Profile' to update your information"
+          ]}
+          tips={[
+            "WhatsApp group links help you build a community of loyal followers",
+            "Your profile info is visible to followers when they redeem coupons",
+            "Keep your contact information up to date for better engagement"
+          ]}
+        />
         <Card className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">

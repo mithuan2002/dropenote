@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import { Link } from "wouter";
+import { UserGuide } from "@/components/user-guide";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -85,7 +86,7 @@ export default function Login() {
 
       {/* Main Content */}
       <div className="flex items-center justify-center px-4 py-12 sm:py-16">
-        <div className="w-full max-w-sm space-y-8">
+        <div className="w-full max-w-sm space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
               {isLogin ? "Welcome back" : "Create your account"}
@@ -96,6 +97,22 @@ export default function Login() {
                 : "Get started with Dropnote today"}
             </p>
           </div>
+
+          {!isLogin && (
+            <UserGuide
+              title="Account Setup Guide"
+              steps={[
+                "Choose your account type (Influencer or Store Staff)",
+                "Create a username (min. 3 characters)",
+                "Set a strong password (min. 6 characters)",
+                "Click 'Create account' to get started"
+              ]}
+              tips={[
+                "Influencers: Create campaigns and track follower conversions",
+                "Store Staff: Verify and redeem customer coupons at checkout"
+              ]}
+            />
+          )}
 
           <Card className="border-border/50">
             <CardContent className="pt-6">

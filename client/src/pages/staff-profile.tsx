@@ -18,6 +18,7 @@ import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { z } from "zod";
+import { UserGuide } from "@/components/user-guide";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -101,7 +102,22 @@ export default function StaffProfile() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+        <UserGuide
+          title="Store Profile Setup"
+          steps={[
+            "Enter your name as the staff member",
+            "Provide your store's name for identification",
+            "Add the complete store address",
+            "Enter a valid contact phone number",
+            "Click 'Save Profile' to update your information"
+          ]}
+          tips={[
+            "This information helps track which store redeemed each coupon",
+            "Make sure the phone number is correct for customer support",
+            "Complete your profile before verifying coupons"
+          ]}
+        />
         <Card className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">

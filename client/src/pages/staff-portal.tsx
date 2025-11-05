@@ -11,6 +11,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Coupon, Campaign } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
 import { Label } from "@/components/ui/label";
+import { UserGuide } from "@/components/user-guide";
 
 interface VerificationResult {
   valid: boolean;
@@ -213,6 +214,9 @@ export default function StaffPortal() {
 
         <Tabs defaultValue="verify" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-6">
+            <TabsTrigger value="guide" data-testid="tab-guide">
+              Guide
+            </TabsTrigger>
             <TabsTrigger value="verify" data-testid="tab-verify">
               <Search className="w-4 h-4 mr-2" />
               Verify
@@ -230,6 +234,28 @@ export default function StaffPortal() {
               Influencers
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="guide">
+            <UserGuide
+              title="Staff Portal User Guide"
+              steps={[
+                "Go to the 'Verify' tab to check customer coupon codes",
+                "Enter the coupon code shown by the customer",
+                "Click 'Verify Code' to check if it's valid",
+                "If valid, enter the purchase amount",
+                "Click 'Redeem Coupon' to complete the transaction",
+                "View analytics and history in their respective tabs"
+              ]}
+              tips={[
+                "Each coupon can only be redeemed once",
+                "Expired coupons will show as invalid",
+                "Use the 'History' tab to review past redemptions",
+                "Check 'Influencers' tab to see campaign performance",
+                "For mobile: Use desktop mode for best experience"
+              ]}
+              defaultExpanded={true}
+            />
+          </TabsContent>
 
           <TabsContent value="verify">
             <Card className="p-6">

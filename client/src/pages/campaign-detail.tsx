@@ -20,6 +20,7 @@ import { insertCouponSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { z } from "zod";
+import { UserGuide } from "@/components/user-guide";
 
 const formSchema = insertCouponSchema.extend({
   followerWhatsApp: z.string().min(10, "Please enter a valid WhatsApp number"),
@@ -129,7 +130,25 @@ export default function CampaignDetail() {
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-4 py-8">
+      <main className="max-w-md mx-auto px-4 py-8 space-y-6">
+        {!isExpired && !generatedCoupon && (
+          <UserGuide
+            title="Quick Guide"
+            steps={[
+              "Read the terms and conditions carefully",
+              "Enter your full name as it appears on your ID",
+              "Provide your active WhatsApp number",
+              "Click 'Get Coupon Code' to generate your unique code",
+              "Save or screenshot your coupon code",
+              "Present the code at checkout to get your discount"
+            ]}
+            tips={[
+              "Double-check your WhatsApp number - creators use it to send exclusive offers",
+              "One coupon per person per campaign",
+              "The code expires on the date shown - use it before then!"
+            ]}
+          />
+        )}
         {isExpired ? (
           <Card className="p-8 text-center">
             <h2 className="text-xl font-semibold mb-2">Campaign Expired</h2>

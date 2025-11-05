@@ -9,6 +9,7 @@ import CreateCampaignDialog from "@/components/create-campaign-dialog";
 import CampaignAnalytics from "@/components/campaign-analytics";
 import { useToast } from "@/hooks/use-toast";
 import { AppShell, PageHeader, MetricCard, EmptyState, SkeletonCard } from "@/components/layout-primitives";
+import { UserGuide } from "@/components/user-guide";
 
 interface TopRedeemer {
   name: string;
@@ -125,31 +126,65 @@ export default function InfluencerDashboard() {
 
       <AppShell>
         <div className="space-y-6">
-            {(!campaigns || campaigns.length === 0) && (
-              <Card className="p-6 border-primary/50 bg-primary/5">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <UserCircle className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1">Welcome to Your Dashboard</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Set up your profile and create your first campaign to get started
-                    </p>
-                    <div className="flex gap-2">
-                      <Link href="/influencer/profile">
-                        <Button variant="outline">
-                          Set Up Profile
+            {(!campaigns || campaigns.length === 0) ? (
+              <>
+                <UserGuide
+                  title="Getting Started Guide"
+                  steps={[
+                    "Set up your profile with name and WhatsApp details",
+                    "Click 'New Campaign' to create your first campaign",
+                    "Set discount percentage and expiration date",
+                    "Copy the campaign URL and share with your followers",
+                    "Track redemptions and revenue in real-time"
+                  ]}
+                  tips={[
+                    "Add a WhatsApp group link to build your community",
+                    "Share campaign URLs on social media for maximum reach",
+                    "Check 'Top Redeemers' to identify your most loyal followers"
+                  ]}
+                  defaultExpanded={true}
+                />
+                <Card className="p-6 border-primary/50 bg-primary/5">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <UserCircle className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold mb-1">Welcome to Your Dashboard</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Set up your profile and create your first campaign to get started
+                      </p>
+                      <div className="flex gap-2">
+                        <Link href="/influencer/profile">
+                          <Button variant="outline">
+                            Set Up Profile
+                          </Button>
+                        </Link>
+                        <Button onClick={() => setShowCreateDialog(true)}>
+                          <Plus className="w-4 h-4 mr-2" />
+                          Create Campaign
                         </Button>
-                      </Link>
-                      <Button onClick={() => setShowCreateDialog(true)}>
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create Campaign
-                      </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </>
+            ) : (
+              <UserGuide
+                title="Dashboard Guide"
+                steps={[
+                  "Create new campaigns using the 'New Campaign' button",
+                  "Copy campaign URLs and share them with your followers",
+                  "Click on a campaign card to view detailed analytics",
+                  "Invite top redeemers to your WhatsApp community",
+                  "Monitor your revenue and redemption metrics"
+                ]}
+                tips={[
+                  "Update your profile to add WhatsApp group links",
+                  "Share campaign URLs on Instagram, Twitter, and other platforms",
+                  "Engage with top redeemers to build loyalty"
+                ]}
+              />
             )}
             <div>
               <div className="mb-6">

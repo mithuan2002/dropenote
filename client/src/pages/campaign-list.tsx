@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Tag } from "lucide-react";
 import { Link } from "wouter";
 import type { Campaign } from "@shared/schema";
+import { UserGuide } from "@/components/user-guide";
 
 export default function CampaignList() {
   const { data: campaigns, isLoading } = useQuery<Campaign[]>({
@@ -47,7 +48,22 @@ export default function CampaignList() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+        <UserGuide
+          title="How to Get Your Coupon"
+          steps={[
+            "Browse the available campaigns below",
+            "Click on any campaign card that interests you",
+            "Fill in your details (name and WhatsApp number)",
+            "Get your unique coupon code instantly",
+            "Show the code at the store checkout to redeem your discount"
+          ]}
+          tips={[
+            "Each coupon can only be used once",
+            "Make sure to use the coupon before it expires",
+            "Keep your WhatsApp number handy - the creator might send you exclusive deals"
+          ]}
+        />
         {!activeCampaigns || activeCampaigns.length === 0 ? (
           <Card className="p-12 text-center">
             <Tag className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
