@@ -203,53 +203,38 @@ export default function InfluencerDashboard() {
                       </div>
 
                       {!isExpired && (
-                        <div className="border-t pt-3 mt-3 space-y-3">
-                          <div>
-                            <p className="text-xs text-muted-foreground mb-2">Share this link with your followers:</p>
-                            <div className="flex gap-2">
-                              <div className="flex-1 bg-muted rounded px-3 py-2 text-xs font-mono truncate">
-                                {getCampaignUrl(campaign.id)}
-                              </div>
+                        <div className="border-t pt-3 mt-3">
+                          <p className="text-xs text-muted-foreground mb-2">Share this link with your followers:</p>
+                          <div className="flex gap-2">
+                            <div className="flex-1 bg-muted rounded px-3 py-2 text-xs font-mono truncate">
+                              {getCampaignUrl(campaign.id)}
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyUrl(campaign.id);
+                              }}
+                              data-testid={`button-copy-url-${campaign.id}`}
+                            >
+                              {copiedCampaignId === campaign.id ? (
+                                <CheckCircle2 className="w-4 h-4" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </Button>
+                            <Link href={`/campaigns/${campaign.id}`}>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCopyUrl(campaign.id);
-                                }}
-                                data-testid={`button-copy-url-${campaign.id}`}
+                                onClick={(e) => e.stopPropagation()}
+                                data-testid={`button-view-${campaign.id}`}
                               >
-                                {copiedCampaignId === campaign.id ? (
-                                  <CheckCircle2 className="w-4 h-4" />
-                                ) : (
-                                  <Copy className="w-4 h-4" />
-                                )}
+                                <ExternalLink className="w-4 h-4" />
                               </Button>
-                              <Link href={`/campaigns/${campaign.id}`}>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={(e) => e.stopPropagation()}
-                                  data-testid={`button-view-${campaign.id}`}
-                                >
-                                  <ExternalLink className="w-4 h-4" />
-                                </Button>
-                              </Link>
-                            </div>
+                            </Link>
                           </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="w-full"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedCampaignId(campaign.id);
-                            }}
-                            data-testid={`button-analytics-${campaign.id}`}
-                          >
-                            <BarChart3 className="w-4 h-4 mr-2" />
-                            View Analytics
-                          </Button>
                         </div>
                       )}
                     </Card>
