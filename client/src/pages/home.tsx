@@ -34,6 +34,10 @@ export default function Home() {
               <span className="text-sm font-medium text-primary">For Creators</span>
             </div>
             
+            <div className="text-5xl sm:text-7xl font-bold text-primary mb-2">
+              Dropnote
+            </div>
+            
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
               Reward your followers with <span className="text-primary">trackable coupons</span>
             </h1>
