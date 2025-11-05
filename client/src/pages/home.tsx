@@ -62,9 +62,9 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base" data-testid="button-learn-more">
-              <Link href="#features">
-                View Features
-              </Link>
+              <a href="https://wa.me/919600267509" target="_blank" rel="noopener noreferrer">
+                Have doubts? Let's chat
+              </a>
             </Button>
           </div>
         </div>
