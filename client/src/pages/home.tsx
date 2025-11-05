@@ -37,76 +37,58 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="mx-auto max-w-screen-md px-4 sm:px-6 py-16 sm:py-24">
-        <div className="space-y-8 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-muted rounded-full text-xs font-medium">
-            Trusted by creators
-          </div>
-          
-          <div className="space-y-4">
+      <section className="mx-auto max-w-screen-md px-4 sm:px-6 py-12 sm:py-16">
+        <div className="space-y-6 animate-fade-in">
+          <div className="space-y-3">
             <h1 className="max-w-2xl">
-              Reward your followers with trackable coupons
+              Coupon tracking for influencers
             </h1>
             
-            <p className="text-lg text-muted-foreground max-w-xl">
-              Create exclusive discount codes for your audience. Track every redemption. 
-              Prove your real influence to brands.
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl">
+              Distribute trackable discount codes to your followers. Monitor redemptions in real-time. Build data-driven partnerships with brands.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild size="lg" className="transition-all duration-200 hover:shadow-lg" data-testid="button-get-started">
+            <Button asChild className="h-10" data-testid="button-get-started">
               <Link href="/login">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" data-testid="button-learn-more">
-              <Link href="#how-it-works">
-                How it works
+            <Button asChild variant="outline" className="h-10" data-testid="button-learn-more">
+              <Link href="#features">
+                View Features
               </Link>
             </Button>
-          </div>
-
-          {/* Social Proof */}
-          <div className="pt-8 flex items-center gap-8 text-sm text-muted-foreground flex-wrap">
-            <div className="flex items-center gap-2">
-              <Check className="h-4 w-4" />
-              <span>No credit card required</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="h-4 w-4" />
-              <span>Free to get started</span>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Who It's For Section */}
-      <section id="how-it-works" className="border-y bg-muted/30 py-16 sm:py-20">
+      {/* Features Section */}
+      <section id="features" className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="mb-3">Built for everyone in the coupon ecosystem</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Whether you're a creator, running a store, or tracking campaign performance
+          <div className="mb-8">
+            <h2 className="mb-2">Platform Features</h2>
+            <p className="text-sm text-muted-foreground">
+              Built for creators, retailers, and followers
             </p>
           </div>
 
-          <div className="grid gap-6 sm:gap-8">
+          <div className="grid gap-4">
             {/* Influencer Card */}
-            <div className="group bg-card border rounded-lg p-6 sm:p-8 transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Users2 className="h-6 w-6" />
+            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
+                  <Users2 className="h-5 w-5 text-foreground" />
                 </div>
-                <div className="flex-1 space-y-2">
-                  <h3 className="font-semibold">For Creators</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Create campaigns, generate unique codes for your followers, and track every redemption. 
-                    Build proof of your influence with real conversion data.
+                <div className="flex-1 space-y-1.5">
+                  <h3 className="text-sm font-semibold">Creator Dashboard</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Create campaigns, distribute unique codes, and track redemptions. Real conversion data to prove your influence.
                   </p>
-                  <Button asChild variant="ghost" className="h-auto p-0 font-normal text-foreground hover:text-foreground" data-testid="link-creator-signup">
+                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-creator-signup">
                     <Link href="/login?role=influencer">
-                      Sign up as creator <ArrowRight className="ml-1 h-3 w-3" />
+                      Get started <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                   </Button>
                 </div>
@@ -114,20 +96,19 @@ export default function Home() {
             </div>
 
             {/* Staff Card */}
-            <div className="group bg-card border rounded-lg p-6 sm:p-8 transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Store className="h-6 w-6" />
+            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
+                  <Store className="h-5 w-5 text-foreground" />
                 </div>
-                <div className="flex-1 space-y-2">
-                  <h3 className="font-semibold">For Store Staff</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Verify coupon codes instantly at checkout. Mobile-optimized interface for quick validation. 
-                    Prevent fraud with one-time use codes.
+                <div className="flex-1 space-y-1.5">
+                  <h3 className="text-sm font-semibold">Staff Portal</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Instant code verification at checkout. Mobile-optimized for quick validation. One-time use fraud prevention.
                   </p>
-                  <Button asChild variant="ghost" className="h-auto p-0 font-normal text-foreground hover:text-foreground" data-testid="link-staff-signup">
+                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-staff-signup">
                     <Link href="/login?role=staff">
-                      Sign in as staff <ArrowRight className="ml-1 h-3 w-3" />
+                      Access portal <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                   </Button>
                 </div>
@@ -135,16 +116,15 @@ export default function Home() {
             </div>
 
             {/* Analytics Card */}
-            <div className="group bg-card border rounded-lg p-6 sm:p-8 transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="h-6 w-6" />
+            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
+                  <BarChart3 className="h-5 w-5 text-foreground" />
                 </div>
-                <div className="flex-1 space-y-2">
-                  <h3 className="font-semibold">Campaign Analytics</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Monitor campaign performance in real-time. See which followers convert, track revenue impact, 
-                    and export reports to share with brand partners.
+                <div className="flex-1 space-y-1.5">
+                  <h3 className="text-sm font-semibold">Real-time Analytics</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Monitor performance in real-time. Track follower conversions, revenue impact, and campaign ROI.
                   </p>
                 </div>
               </div>
@@ -154,46 +134,46 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 sm:py-20">
+      <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="mb-3">Simple, transparent process</h2>
-            <p className="text-muted-foreground">Get started in minutes</p>
+          <div className="mb-6">
+            <h2 className="mb-1">How it works</h2>
+            <p className="text-sm text-muted-foreground">Three steps to start tracking</p>
           </div>
 
-          <div className="space-y-8">
-            <div className="flex gap-4 items-start animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+          <div className="space-y-4">
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
                 1
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Create your campaign</h3>
+                <h3 className="text-sm font-semibold mb-0.5">Create campaign</h3>
                 <p className="text-sm text-muted-foreground">
-                  Set up your discount, add campaign details, and generate shareable links
+                  Set discount percentage, expiration date, and generate shareable link
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-4 items-start animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
                 2
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Share with your audience</h3>
+                <h3 className="text-sm font-semibold mb-0.5">Distribute to followers</h3>
                 <p className="text-sm text-muted-foreground">
-                  Post your campaign link on social media, stories, or direct messages
+                  Share campaign URL via social media, stories, or direct messages
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-4 items-start animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
                 3
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Track and grow</h3>
+                <h3 className="text-sm font-semibold mb-0.5">Monitor results</h3>
                 <p className="text-sm text-muted-foreground">
-                  Monitor redemptions in real-time and use the data to grow your partnerships
+                  Real-time analytics on redemptions, revenue, and conversion rates
                 </p>
               </div>
             </div>
@@ -202,28 +182,30 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-y bg-muted/30 py-16 sm:py-20">
-        <div className="mx-auto max-w-screen-md px-4 sm:px-6 text-center">
-          <h2 className="mb-4">Ready to start tracking your influence?</h2>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Join creators who are building stronger relationships with their audience through trackable campaigns
-          </p>
-          <Button asChild size="lg" className="transition-all duration-200 hover:shadow-lg" data-testid="button-cta-signup">
-            <Link href="/login">
-              Get Started for Free <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+      <section className="border-y bg-foreground/[0.02] py-12 sm:py-16">
+        <div className="mx-auto max-w-screen-md px-4 sm:px-6">
+          <div className="max-w-lg">
+            <h2 className="mb-2">Start tracking campaigns</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Join creators using data-driven insights to strengthen brand partnerships
+            </p>
+            <Button asChild className="h-10" data-testid="button-cta-signup">
+              <Link href="/login">
+                Create account <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="border-t">
-        <div className="mx-auto max-w-screen-md px-4 sm:px-6 py-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+        <div className="mx-auto max-w-screen-md px-4 sm:px-6 py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
             <p>© 2024 Dropnote</p>
-            <div className="flex gap-6">
-              <Link href="/login?role=influencer" data-testid="link-footer-creator">For Creators</Link>
-              <Link href="/login?role=staff" data-testid="link-footer-staff">For Staff</Link>
+            <div className="flex gap-4">
+              <Link href="/login?role=influencer" className="hover:text-foreground transition-colors" data-testid="link-footer-creator">Creators</Link>
+              <Link href="/login?role=staff" className="hover:text-foreground transition-colors" data-testid="link-footer-staff">Staff</Link>
             </div>
           </div>
         </div>

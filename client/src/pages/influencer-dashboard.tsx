@@ -87,9 +87,9 @@ export default function InfluencerDashboard() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="flex h-16 items-center justify-between gap-4">
+          <div className="flex h-14 items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-xl font-semibold truncate" data-testid="text-dashboard-title">
+              <h1 className="text-base font-semibold truncate" data-testid="text-dashboard-title">
                 Dashboard
               </h1>
             </div>
@@ -98,17 +98,18 @@ export default function InfluencerDashboard() {
                 variant="ghost"
                 size="sm"
                 asChild
-                className="hidden sm:flex"
+                className="hidden sm:flex h-8 text-sm"
                 data-testid="button-profile"
               >
                 <Link href="/influencer/profile">
-                  <UserCircle className="w-4 h-4 sm:mr-2" />
+                  <UserCircle className="w-4 h-4 sm:mr-1.5" />
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
+                className="h-8"
                 onClick={async () => {
                   await fetch('/api/auth/logout', { method: 'POST' });
                   window.location.href = '/';
@@ -151,16 +152,11 @@ export default function InfluencerDashboard() {
               </Card>
             )}
             <div>
-              <div className="mb-6 space-y-4">
-                <h1 className="text-2xl md:text-3xl font-bold">My Campaigns</h1>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" asChild className="h-12 text-base font-semibold flex-1">
-                    <Link href="/influencer/profile">
-                      Profile
-                    </Link>
-                  </Button>
-                  <Button onClick={() => setShowCreateDialog(true)} className="h-12 text-base font-semibold" data-testid="button-create-campaign">
-                    <Plus className="w-4 h-4 mr-2" />
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold">Campaigns</h2>
+                  <Button onClick={() => setShowCreateDialog(true)} className="h-9" data-testid="button-create-campaign">
+                    <Plus className="w-4 h-4 mr-1.5" />
                     New Campaign
                   </Button>
                 </div>
