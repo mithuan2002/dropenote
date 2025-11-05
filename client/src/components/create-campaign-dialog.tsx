@@ -83,9 +83,6 @@ export default function CreateCampaignDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button className="h-12 text-base font-semibold flex-1">Create Campaign</Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-md" data-testid="dialog-create-campaign">
         <DialogHeader>
           <DialogTitle>Create New Campaign</DialogTitle>
