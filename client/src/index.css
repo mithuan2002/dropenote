@@ -2,75 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LIGHT MODE */
+/* LIGHT MODE - Modern SaaS Blue/Slate */
 :root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+  --button-outline: rgba(0,0,0, .08);
+  --badge-outline: rgba(0,0,0, .04);
 
   /* Automatic computation of border around primary / danger buttons */
   --opaque-button-border-intensity: -8; /* In terms of percentages */
 
   /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
+  --elevate-1: rgba(0,0,0, .02);
+  --elevate-2: rgba(0,0,0, .05);
 
-  --background: 0 0% 99%;
+  --background: 220 20% 98%;
 
-  --foreground: 240 10% 10%;
+  --foreground: 222 47% 11%;
 
-  --border: 240 6% 92%;
+  --border: 220 13% 91%;
 
   --card: 0 0% 100%;
 
-  --card-foreground: 240 10% 10%;
+  --card-foreground: 222 47% 11%;
 
-  --card-border: 240 6% 94%;
+  --card-border: 220 13% 91%;
 
-  --sidebar: 0 0% 98%;
+  --sidebar: 220 20% 98%;
 
-  --sidebar-foreground: 240 10% 10%;
+  --sidebar-foreground: 222 47% 11%;
 
-  --sidebar-border: 240 6% 92%;
+  --sidebar-border: 220 13% 91%;
 
-  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary: 217 91% 60%;
 
-  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-primary-foreground: 0 0% 100%;
 
-  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent: 220 13% 95%;
 
-  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-accent-foreground: 222 47% 11%;
 
-  --sidebar-ring: 240 5.9% 10%;
+  --sidebar-ring: 217 91% 60%;
 
   --popover: 0 0% 100%;
 
-  --popover-foreground: 240 10% 10%;
+  --popover-foreground: 222 47% 11%;
 
-  --popover-border: 240 6% 92%;
+  --popover-border: 220 13% 91%;
 
-  --primary: 240 6% 10%;
+  --primary: 217 91% 60%;
 
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 240 5% 96%;
+  --secondary: 220 13% 95%;
 
-  --secondary-foreground: 240 6% 10%;
+  --secondary-foreground: 222 47% 11%;
 
-  --muted: 240 5% 96%;
+  --muted: 220 13% 95%;
 
-  --muted-foreground: 240 4% 46%;
+  --muted-foreground: 215 16% 47%;
 
-  --accent: 240 5% 96%;
+  --accent: 220 13% 95%;
 
-  --accent-foreground: 240 6% 10%;
+  --accent-foreground: 222 47% 11%;
 
   --destructive: 0 84% 60%;
 
-  --destructive-foreground: 0 0% 98%;
+  --destructive-foreground: 0 0% 100%;
 
-  --input: 240 6% 90%;
-  --ring: 240 6% 10%;
-  --chart-1: 221 83% 53%;
+  --input: 220 13% 91%;
+  --ring: 217 91% 60%;
+  --chart-1: 217 91% 60%;
   --chart-2: 142 76% 36%;
   --chart-3: 262 83% 58%;
   --chart-4: 291 64% 42%;
@@ -123,72 +123,72 @@
 }
 
 .dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(255,255,255, .08);
+  --badge-outline: rgba(255,255,255, .04);
 
   --opaque-button-border-intensity: 9;  /* In terms of percentages */
 
   /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-1: rgba(255,255,255, .03);
+  --elevate-2: rgba(255,255,255, .06);
 
-  --background: 240 8% 7%;
+  --background: 222 47% 11%;
 
-  --foreground: 0 0% 98%;
+  --foreground: 210 40% 98%;
 
-  --border: 240 4% 16%;
+  --border: 217 19% 27%;
 
-  --card: 240 6% 10%;
+  --card: 222 47% 14%;
 
-  --card-foreground: 0 0% 98%;
+  --card-foreground: 210 40% 98%;
 
-  --card-border: 240 4% 16%;
+  --card-border: 217 19% 27%;
 
-  --sidebar: 240 6% 10%;
+  --sidebar: 222 47% 14%;
 
-  --sidebar-foreground: 0 0% 98%;
+  --sidebar-foreground: 210 40% 98%;
 
-  --sidebar-border: 240 4% 16%;
+  --sidebar-border: 217 19% 27%;
 
-  --sidebar-primary: 0 0% 98%;
+  --sidebar-primary: 217 91% 60%;
 
-  --sidebar-primary-foreground: 240 6% 10%;
+  --sidebar-primary-foreground: 222 47% 11%;
 
-  --sidebar-accent: 240 4% 16%;
+  --sidebar-accent: 217 19% 27%;
 
-  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-accent-foreground: 210 40% 98%;
 
-  --sidebar-ring: 240 4.9% 83.9%;
+  --sidebar-ring: 217 91% 60%;
 
-  --popover: 240 6% 10%;
+  --popover: 222 47% 14%;
 
-  --popover-foreground: 0 0% 98%;
+  --popover-foreground: 210 40% 98%;
 
-  --popover-border: 240 4% 16%;
+  --popover-border: 217 19% 27%;
 
-  --primary: 0 0% 98%;
+  --primary: 217 91% 60%;
 
-  --primary-foreground: 240 6% 10%;
+  --primary-foreground: 222 47% 11%;
 
-  --secondary: 240 4% 16%;
+  --secondary: 217 19% 27%;
 
-  --secondary-foreground: 0 0% 98%;
+  --secondary-foreground: 210 40% 98%;
 
-  --muted: 240 4% 16%;
+  --muted: 217 19% 27%;
 
-  --muted-foreground: 240 5% 60%;
+  --muted-foreground: 215 20% 65%;
 
-  --accent: 240 4% 16%;
+  --accent: 217 19% 27%;
 
-  --accent-foreground: 0 0% 98%;
+  --accent-foreground: 210 40% 98%;
 
   --destructive: 0 72% 51%;
 
-  --destructive-foreground: 0 0% 98%;
+  --destructive-foreground: 210 40% 98%;
 
-  --input: 240 4% 16%;
-  --ring: 240 6% 90%;
-  --chart-1: 221 83% 63%;
+  --input: 217 19% 27%;
+  --ring: 217 91% 60%;
+  --chart-1: 217 91% 60%;
   --chart-2: 142 76% 46%;
   --chart-3: 262 83% 68%;
   --chart-4: 291 64% 52%;
