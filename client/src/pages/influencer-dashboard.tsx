@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowLeft, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink, Star } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Plus, TrendingUp, Users, DollarSign, UserCircle, Copy, CheckCircle2, ExternalLink, Star, LogOut } from "lucide-react";
 import { Link } from "wouter";
 import type { Campaign, InfluencerProfile } from "@shared/schema";
 import CreateCampaignDialog from "@/components/create-campaign-dialog";
 import CampaignAnalytics from "@/components/campaign-analytics";
 import { useToast } from "@/hooks/use-toast";
+import { AppShell, PageHeader, MetricCard, EmptyState, SkeletonCard } from "@/components/layout-primitives";
 
 interface TopRedeemer {
   name: string;
@@ -69,68 +70,60 @@ export default function InfluencerDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-pulse">
-            <div className="h-8 w-48 bg-muted rounded mb-4 mx-auto"></div>
-            <div className="h-4 w-32 bg-muted rounded mx-auto"></div>
-          </div>
+      <AppShell>
+        <div className="space-y-6">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
         </div>
-      </div>
+      </AppShell>
     );
   }
 
+  const activeCampaigns = campaigns?.filter(c => new Date(c.expirationDate) >= new Date()) || [];
+
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-semibold" data-testid="text-dashboard-title">
-                Influencer Dashboard
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="mx-auto max-w-screen-md px-4 sm:px-6">
+          <div className="flex h-16 items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-xl font-semibold truncate" data-testid="text-dashboard-title">
+                Dashboard
               </h1>
-              <p className="text-sm text-muted-foreground">
-                Manage your campaigns
-              </p>
             </div>
-          </div>
-          <div className="flex gap-2">
-            <Link href="/influencer/profile">
-              <Button variant="outline" data-testid="button-profile">
-                <UserCircle className="w-4 h-4 mr-2" />
-                Profile
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="hidden sm:flex"
+                data-testid="button-profile"
+              >
+                <Link href="/influencer/profile">
+                  <UserCircle className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Profile</span>
+                </Link>
               </Button>
-            </Link>
-            <Button onClick={() => setShowCreateDialog(true)} data-testid="button-create-campaign">
-              <Plus className="w-4 h-4 mr-2" />
-              New Campaign
-            </Button>
-            <Button
-              variant="outline"
-              onClick={async () => {
-                await fetch('/api/auth/logout', { method: 'POST' });
-                window.location.href = '/';
-              }}
-            >
-              Logout
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={async () => {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                  window.location.href = '/';
+                }}
+                data-testid="button-logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {selectedCampaign ? (
-          <CampaignAnalytics
-            campaignId={selectedCampaign.id}
-            campaignName={selectedCampaign.name}
-          />
-        ) : (
-          <div className="space-y-6">
+      <AppShell>
+        <div className="space-y-6">
             {(!campaigns || campaigns.length === 0) && (
               <Card className="p-6 border-primary/50 bg-primary/5">
                 <div className="flex items-start gap-4">
@@ -320,17 +313,8 @@ export default function InfluencerDashboard() {
                 </p>
               </div>
             )}
-          </div>
-        )}
-      </main>
-
-      <div className="max-w-4xl mx-auto px-4 pb-6">
-        <div className="p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
-          <p className="text-xs text-muted-foreground text-center">
-            <strong>Note:</strong> For better experience in mobile use application in desktop mode
-          </p>
         </div>
-      </div>
+      </AppShell>
 
       <CreateCampaignDialog
         open={showCreateDialog}
