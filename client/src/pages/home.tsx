@@ -207,14 +207,13 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6 py-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
             <p>© 2025 Dropnote</p>
-            <div className="text-right">
-              <p>Made with love from Coimbatore</p>
-              <a href="mailto:mithuan137@gmail.com" className="hover:text-foreground transition-colors">
-                mithuan137@gmail.com
-              </a>
-            </div>
+            <p>Made with 💙 from Coimbatore</p>
+            <a href="mailto:mithuan137@gmail.com" className="hover:text-foreground transition-colors flex items-center gap-1">
+              <span>✉</span>
+              <span>mithuan137@gmail.com</span>
+            </a>
           </div>
         </div>
       </footer>
