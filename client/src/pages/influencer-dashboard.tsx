@@ -243,12 +243,13 @@ export default function InfluencerDashboard() {
                           <div>
                             <p className="text-xs text-muted-foreground mb-2">Share this link with your followers:</p>
                             <div className="flex gap-2">
-                              <div className="flex-1 bg-muted rounded px-3 py-2 text-xs font-mono truncate">
+                              <div className="flex-1 min-w-0 bg-muted rounded px-3 py-2 text-xs font-mono truncate">
                                 {getCampaignUrl(campaign.id)}
                               </div>
                               <Button
                                 size="sm"
                                 variant="outline"
+                                className="shrink-0 px-3"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleCopyUrl(campaign.id);
@@ -265,6 +266,7 @@ export default function InfluencerDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline"
+                                  className="shrink-0 px-3"
                                   onClick={(e) => e.stopPropagation()}
                                   data-testid={`button-view-${campaign.id}`}
                                 >
@@ -276,7 +278,7 @@ export default function InfluencerDashboard() {
                           <Button
                             size="sm"
                             variant={isSelected ? "default" : "outline"}
-                            className="w-full"
+                            className="w-full min-h-10"
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedCampaignId(campaign.id);
@@ -344,6 +346,7 @@ export default function InfluencerDashboard() {
                               <Button
                                 size="sm"
                                 variant="outline"
+                                className="whitespace-nowrap"
                                 onClick={() => handleWhatsAppInvite(redeemer.name, redeemer.whatsapp)}
                                 data-testid={`button-whatsapp-${index}`}
                               >
@@ -386,7 +389,7 @@ export default function InfluencerDashboard() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="w-full"
+                          className="w-full min-h-10 text-xs sm:text-sm"
                           onClick={() => handleWhatsAppInvite(redeemer.name, redeemer.whatsapp)}
                           data-testid={`button-whatsapp-${index}`}
                         >
