@@ -155,13 +155,13 @@ export default function InfluencerDashboard() {
                       <p className="text-sm text-muted-foreground mb-4">
                         Set up your profile and create your first campaign to get started
                       </p>
-                      <div className="flex gap-2">
-                        <Link href="/influencer/profile">
-                          <Button variant="outline">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Link href="/influencer/profile" className="w-full sm:w-auto">
+                          <Button variant="outline" className="w-full sm:w-auto">
                             Set Up Profile
                           </Button>
                         </Link>
-                        <Button onClick={() => setShowCreateDialog(true)}>
+                        <Button onClick={() => setShowCreateDialog(true)} className="w-full sm:w-auto">
                           <Plus className="w-4 h-4 mr-2" />
                           Create Campaign
                         </Button>
