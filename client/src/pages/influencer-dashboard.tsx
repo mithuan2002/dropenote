@@ -88,18 +88,18 @@ export default function InfluencerDashboard() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="flex h-14 items-center justify-between gap-4">
+          <div className="flex h-14 items-center justify-between gap-2">
             <div className="flex-1 min-w-0">
-              <h1 className="text-base font-semibold truncate" data-testid="text-dashboard-title">
+              <h1 className="text-sm sm:text-base font-semibold truncate" data-testid="text-dashboard-title">
                 Dashboard
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Button
                 variant="ghost"
                 size="sm"
                 asChild
-                className="hidden sm:flex h-8 text-sm"
+                className="h-8 text-xs sm:text-sm px-2 sm:px-3"
                 data-testid="button-profile"
               >
                 <Link href="/influencer/profile">
@@ -110,7 +110,7 @@ export default function InfluencerDashboard() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8"
+                className="h-8 px-2 sm:px-3"
                 onClick={async () => {
                   await fetch('/api/auth/logout', { method: 'POST' });
                   window.location.href = '/';
@@ -118,6 +118,7 @@ export default function InfluencerDashboard() {
                 data-testid="button-logout"
               >
                 <LogOut className="w-4 h-4" />
+                <span className="sr-only">Logout</span>
               </Button>
             </div>
           </div>
@@ -301,13 +302,15 @@ export default function InfluencerDashboard() {
               <div className="mt-8">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-semibold">Top Redeemers</h2>
-                    <p className="text-sm text-muted-foreground">
+                    <h2 className="text-base sm:text-lg font-semibold">Top Redeemers</h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Your most loyal followers - add them to your WhatsApp/Telegram community
                     </p>
                   </div>
                 </div>
-                <Card className="overflow-hidden">
+                
+                {/* Desktop Table View */}
+                <Card className="overflow-hidden hidden md:block">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-muted/50">
@@ -353,6 +356,47 @@ export default function InfluencerDashboard() {
                     </table>
                   </div>
                 </Card>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-3">
+                  {topRedeemers.map((redeemer, index) => (
+                    <Card key={redeemer.whatsapp} className="p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-2">
+                            {index < 3 && <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 flex-shrink-0" />}
+                            <div>
+                              <p className="font-medium text-sm">{redeemer.name}</p>
+                              <p className="text-xs text-muted-foreground font-mono mt-0.5">{redeemer.whatsapp}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">Redemptions</p>
+                            <span className="inline-flex items-center justify-center px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                              {redeemer.redemptionCount}x
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-muted-foreground mb-1">Total Spent</p>
+                            <p className="font-semibold">₹{redeemer.totalSpent.toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => handleWhatsAppInvite(redeemer.name, redeemer.whatsapp)}
+                          data-testid={`button-whatsapp-${index}`}
+                        >
+                          Invite to Group
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+
                 <p className="text-xs text-muted-foreground mt-2 text-center">
                   💡 Tip: Click "Invite to Group" to send a personalized WhatsApp message with your community link
                   {!profile?.whatsappGroupLink && " (Set up your WhatsApp group link in your profile first)"}

@@ -153,39 +153,44 @@ export default function StaffPortal() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-semibold" data-testid="text-portal-title">
-                Store Staff Portal
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                {profile?.storeName || "Verify and redeem coupon codes"}
-              </p>
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+              <Link href="/">
+                <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0" data-testid="button-back">
+                  <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                </Button>
+              </Link>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-xl md:text-2xl font-semibold truncate" data-testid="text-portal-title">
+                  Staff Portal
+                </h1>
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                  {profile?.storeName || "Verify coupons"}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/staff/profile">
-              <Button variant="outline" data-testid="button-edit-profile">
-                <Store className="w-4 h-4 mr-2" />
-                Edit Profile
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <Link href="/staff/profile">
+                <Button variant="outline" size="sm" className="h-8 text-xs sm:text-sm px-2 sm:px-3" data-testid="button-edit-profile">
+                  <Store className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Edit Profile</span>
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs sm:text-sm px-2 sm:px-3"
+                onClick={async () => {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                  window.location.href = '/';
+                }}
+                data-testid="button-logout"
+              >
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </Button>
-            </Link>
-            <Button
-              variant="outline"
-              onClick={async () => {
-                await fetch('/api/auth/logout', { method: 'POST' });
-                window.location.href = '/';
-              }}
-              data-testid="button-logout"
-            >
-              Logout
-            </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -213,25 +218,25 @@ export default function StaffPortal() {
         )}
 
         <Tabs defaultValue="verify" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
-            <TabsTrigger value="guide" data-testid="tab-guide">
+          <TabsList className="grid w-full grid-cols-4 mb-6 h-auto">
+            <TabsTrigger value="guide" className="text-xs sm:text-sm px-2 sm:px-3 py-2" data-testid="tab-guide">
               Guide
             </TabsTrigger>
-            <TabsTrigger value="verify" data-testid="tab-verify">
-              <Search className="w-4 h-4 mr-2" />
-              Verify
+            <TabsTrigger value="verify" className="text-xs sm:text-sm px-2 sm:px-3 py-2" data-testid="tab-verify">
+              <Search className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Verify</span>
             </TabsTrigger>
-            <TabsTrigger value="analytics" data-testid="tab-analytics">
-              <TrendingUp className="w-4 h-4 mr-2" />
+            <TabsTrigger value="analytics" className="text-xs sm:text-sm px-2 sm:px-3 py-2" data-testid="tab-analytics">
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
               Analytics
             </TabsTrigger>
-            <TabsTrigger value="history" data-testid="tab-history">
-              <History className="w-4 h-4 mr-2" />
-              History
+            <TabsTrigger value="history" className="text-xs sm:text-sm px-2 sm:px-3 py-2" data-testid="tab-history">
+              <History className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">History</span>
             </TabsTrigger>
-            <TabsTrigger value="influencers" data-testid="tab-influencers">
-              <Award className="w-4 h-4 mr-2" />
-              Influencers
+            <TabsTrigger value="influencers" className="text-xs sm:text-sm px-2 sm:px-3 py-2" data-testid="tab-influencers">
+              <Award className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Influencers</span>
             </TabsTrigger>
           </TabsList>
 

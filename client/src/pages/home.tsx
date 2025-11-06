@@ -37,31 +37,31 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-16 sm:py-24">
-        <div className="text-center space-y-8 animate-fade-in">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20">
-              <ArrowRight className="h-4 w-4" />
-              <span className="text-sm font-medium">For Creators</span>
+      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
+        <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs sm:text-sm">
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="font-medium">For Creators</span>
             </div>
             
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight px-2">
               Reward your followers with{" "}
               <span className="text-primary">trackable coupons</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
               Give your followers exclusive coupon codes and giveaways they can claim in-store. Build a powerful sales engine through your followers and keep repeating sales.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild size="lg" className="h-12 px-8 text-base font-semibold" data-testid="button-get-started">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center px-2">
+            <Button asChild size="lg" className="w-full sm:w-auto h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base font-semibold" data-testid="button-get-started">
               <Link href="/login">
-                Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                Get Started <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base" data-testid="button-learn-more">
+            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base" data-testid="button-learn-more">
               <a href="https://wa.me/919600267509" target="_blank" rel="noopener noreferrer">
                 Have doubts? Let's chat
               </a>
@@ -192,7 +192,7 @@ export default function Home() {
             <p className="text-sm text-muted-foreground mb-6">
               Join creators using data-driven insights to strengthen brand partnerships
             </p>
-            <Button asChild className="h-10" data-testid="button-cta-signup">
+            <Button asChild className="w-full sm:w-auto h-10" data-testid="button-cta-signup">
               <Link href="/login">
                 Create account <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

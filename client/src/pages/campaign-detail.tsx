@@ -113,17 +113,17 @@ export default function CampaignDetail() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-4">
+        <div className="max-w-md mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-4">
           <Link href="/campaigns">
-            <Button variant="ghost" size="icon" data-testid="button-back">
-              <ArrowLeft className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0" data-testid="button-back">
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </Link>
-          <div>
-            <h1 className="text-xl font-semibold" data-testid="text-campaign-name">
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-xl font-semibold truncate" data-testid="text-campaign-name">
               {campaign.name}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               {campaign.discountPercentage}% discount
             </p>
           </div>
@@ -167,9 +167,9 @@ export default function CampaignDetail() {
               Show this code at checkout to get {campaign.discountPercentage}% off
             </p>
 
-            <div className="bg-muted rounded-lg p-8 mb-6">
+            <div className="bg-muted rounded-lg p-4 sm:p-8 mb-6">
               <div
-                className="text-5xl font-mono font-bold tracking-wider mb-4"
+                className="text-3xl sm:text-4xl md:text-5xl font-mono font-bold tracking-wider mb-4 break-all"
                 data-testid="text-coupon-code"
               >
                 {generatedCoupon.code}
@@ -177,7 +177,7 @@ export default function CampaignDetail() {
               <Button
                 variant="outline"
                 onClick={handleCopy}
-                className="w-full"
+                className="w-full h-11"
                 data-testid="button-copy-code"
               >
                 {copied ? (
