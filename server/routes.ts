@@ -295,6 +295,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         whatsappGroupLink: brandProfile?.whatsappGroupLink || null,
       });
     } catch (error) {
+      console.error("Error fetching campaign by slug:", error);
       res.status(500).json({ message: "Failed to fetch campaign" });
     }
   });
