@@ -4,9 +4,9 @@ import { ArrowRight, Users2, Store, BarChart3, Check } from "lucide-react";
 import { useEffect } from "react";
 
 // Import images for the "See it in Action" section
-import brandDashboardImg from "/attached_assets/generated_images/campaign_management_dashboard.png";
-import campaignAnalyticsImg from "/attached_assets/generated_images/campaign_analytics_view.png";
-import customerViewImg from "/attached_assets/generated_images/customer_campaign_page.png";
+import brandDashboardImg from "@assets/generated_images/campaign_management_dashboard.png";
+import campaignAnalyticsImg from "@assets/generated_images/campaign_analytics_view.png";
+import customerViewImg from "@assets/generated_images/customer_campaign_page.png";
 
 export default function Home() {
   const [, setLocation] = useLocation();
