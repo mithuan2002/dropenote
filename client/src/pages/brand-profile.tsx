@@ -77,73 +77,74 @@ export default function BrandProfile() {
 
       <main className="mx-auto max-w-2xl px-4 sm:px-6 py-8">
         <div className="max-w-2xl mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-6">Brand Profile</h1>
+          <h1 className="text-2xl font-bold mb-6">Brand Profile</h1>
 
-        <div className="mb-6">
-          <UserGuide
-            title="Profile Settings Guide"
-            steps={[
-              "Add your WhatsApp group link to engage with customers",
-              "Terms and conditions will be shown to customers during checkout",
-              "Update your information anytime and click Save Changes"
-            ]}
-            tips={[
-              "WhatsApp group link: Share your community or support group",
-              "Terms: Include refund policy, usage restrictions, etc.",
-              "All changes are saved immediately when you click the button"
-            ]}
-            defaultExpanded={false}
-          />
+          <div className="mb-6">
+            <UserGuide
+              title="Profile Settings Guide"
+              steps={[
+                "Add your WhatsApp group link to engage with customers",
+                "Terms and conditions will be shown to customers during checkout",
+                "Update your information anytime and click Save Changes"
+              ]}
+              tips={[
+                "WhatsApp group link: Share your community or support group",
+                "Terms: Include refund policy, usage restrictions, etc.",
+                "All changes are saved immediately when you click the button"
+              ]}
+              defaultExpanded={false}
+            />
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Brand Profile</CardTitle>
+              <CardDescription>
+                Update your brand information
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <Label htmlFor="brandName">Brand Name</Label>
+                  <Input
+                    id="brandName"
+                    value={formData.brandName}
+                    onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
+                    placeholder="Your Brand Name"
+                    required
+                    data-testid="input-brand-name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    type="url"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                    placeholder="https://yourbrand.com"
+                    data-testid="input-website"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="contactEmail">Contact Email</Label>
+                  <Input
+                    id="contactEmail"
+                    type="email"
+                    value={formData.contactEmail}
+                    onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                    placeholder="contact@yourbrand.com"
+                    data-testid="input-email"
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={saveMutation.isPending} data-testid="button-save">
+                  {saveMutation.isPending ? "Saving..." : "Save Profile"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Brand Profile</CardTitle>
-            <CardDescription>
-              Update your brand information
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="brandName">Brand Name</Label>
-                <Input
-                  id="brandName"
-                  value={formData.brandName}
-                  onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
-                  placeholder="Your Brand Name"
-                  required
-                  data-testid="input-brand-name"
-                />
-              </div>
-              <div>
-                <Label htmlFor="website">Website</Label>
-                <Input
-                  id="website"
-                  type="url"
-                  value={formData.website}
-                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                  placeholder="https://yourbrand.com"
-                  data-testid="input-website"
-                />
-              </div>
-              <div>
-                <Label htmlFor="contactEmail">Contact Email</Label>
-                <Input
-                  id="contactEmail"
-                  type="email"
-                  value={formData.contactEmail}
-                  onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                  placeholder="contact@yourbrand.com"
-                  data-testid="input-email"
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={saveMutation.isPending} data-testid="button-save">
-                {saveMutation.isPending ? "Saving..." : "Save Profile"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
       </main>
     </div>
   );
