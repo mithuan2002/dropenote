@@ -27,6 +27,11 @@ type SubmissionResult = {
   message: string;
 };
 
+// Define BrandProfile type, assuming it has a brandName property
+type BrandProfile = {
+  brandName?: string;
+};
+
 export default function CampaignPage() {
   const { slug } = useParams<{ slug: string }>();
   const [promoCode, setPromoCode] = useState("");
@@ -34,7 +39,7 @@ export default function CampaignPage() {
   const [customerWhatsApp, setCustomerWhatsApp] = useState("");
   const [result, setResult] = useState<SubmissionResult | null>(null);
 
-  const { data: campaign, isLoading, error } = useQuery<Campaign>({
+  const { data: campaign, isLoading, error } = useQuery<Campaign & { brandProfile?: BrandProfile }>({
     queryKey: ["/api/c", slug],
     queryFn: async () => {
       const res = await fetch(`/api/c/${slug}`);
@@ -42,6 +47,8 @@ export default function CampaignPage() {
       return res.json();
     },
   });
+
+  const brandName = campaign?.brandProfile?.brandName || "Brand";
 
   const submitMutation = useMutation({
     mutationFn: async (data: { promoCode: string; customerName: string; customerWhatsApp: string }) => {
@@ -115,7 +122,7 @@ export default function CampaignPage() {
           <CardContent>
             <Alert>
               <AlertDescription>
-                {isExpired 
+                {isExpired
                   ? "This campaign has expired and is no longer accepting submissions."
                   : "This campaign has been paused by the brand."}
               </AlertDescription>
@@ -157,9 +164,9 @@ export default function CampaignPage() {
               </div>
             )}
 
-            <Button 
-              asChild 
-              className="w-full" 
+            <Button
+              asChild
+              className="w-full"
               size="lg"
               data-testid="button-checkout"
             >
@@ -180,123 +187,144 @@ export default function CampaignPage() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="max-w-md w-full">
-        <CardHeader>
-          <CardTitle>{campaign.name}</CardTitle>
-          <CardDescription>
-            Get {campaign.discountPercentage}% off • Expires {new Date(campaign.expirationDate).toLocaleDateString()}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-4">
-            <UserGuide
-              title="How to Redeem Your Discount"
-              steps={[
-                "Enter your name and WhatsApp number",
-                "Enter the promo code exactly as provided (case-sensitive)",
-                "Click 'Verify & Get Checkout Link'",
-                "You'll receive a checkout link with your discount applied",
-                "Click the checkout button to complete your purchase"
-              ]}
-              tips={[
-                "Make sure your promo code is entered correctly",
-                "Your WhatsApp number is used for order verification only",
-                "Each promo code can only be used once",
-                "The discount is automatically applied in the checkout link"
-              ]}
-              defaultExpanded={false}
-            />
+      <main className="flex-1 px-4 sm:px-6 py-6 sm:py-8">
+        <div className="mx-auto max-w-md">
+          <div className="text-center mb-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-foreground">
+              {brandName}
+            </h2>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" data-testid="label-customer-name">Your Name</Label>
-              <Input
-                id="name"
-                data-testid="input-customer-name"
-                placeholder="Enter your name"
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                required
-              />
-            </div>
+          <Card className="border-2">
+            <CardHeader className="space-y-3">
+              <CardTitle>{campaign.name}</CardTitle>
+              <CardDescription>
+                Get {campaign.discountPercentage}% off • Expires {new Date(campaign.expirationDate).toLocaleDateString()}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <UserGuide
+                  title="How to Redeem Your Discount"
+                  steps={[
+                    "Enter your name and WhatsApp number",
+                    "Enter the promo code exactly as provided (case-sensitive)",
+                    "Click 'Verify & Get Checkout Link'",
+                    "You'll receive a checkout link with your discount applied",
+                    "Click the checkout button to complete your purchase"
+                  ]}
+                  tips={[
+                    "Make sure your promo code is entered correctly",
+                    "Your WhatsApp number is used for order verification only",
+                    "Each promo code can only be used once",
+                    "The discount is automatically applied in the checkout link"
+                  ]}
+                  defaultExpanded={false}
+                />
+              </div>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" data-testid="label-customer-name">Your Name</Label>
+                  <Input
+                    id="name"
+                    data-testid="input-customer-name"
+                    placeholder="Enter your name"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    required
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="whatsapp" data-testid="label-customer-whatsapp">WhatsApp Number</Label>
-              <Input
-                id="whatsapp"
-                data-testid="input-customer-whatsapp"
-                type="tel"
-                placeholder="+91 XXXXX XXXXX"
-                value={customerWhatsApp}
-                onChange={(e) => setCustomerWhatsApp(e.target.value)}
-                required
-              />
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="whatsapp" data-testid="label-customer-whatsapp">WhatsApp Number</Label>
+                  <Input
+                    id="whatsapp"
+                    data-testid="input-customer-whatsapp"
+                    type="tel"
+                    placeholder="+91 XXXXX XXXXX"
+                    value={customerWhatsApp}
+                    onChange={(e) => setCustomerWhatsApp(e.target.value)}
+                    required
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="promoCode" data-testid="label-promo-code">Promo Code</Label>
-              <Input
-                id="promoCode"
-                data-testid="input-promo-code"
-                placeholder="Enter promo code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                required
-              />
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="promoCode" data-testid="label-promo-code">Promo Code</Label>
+                  <Input
+                    id="promoCode"
+                    data-testid="input-promo-code"
+                    placeholder="Enter promo code"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    required
+                  />
+                </div>
 
-            {campaign.whatsappGroupLink && (
-              <Alert className="border-primary/50 bg-primary/5">
-                <MessageCircle className="h-4 w-4" />
-                <AlertDescription className="flex flex-col gap-2">
-                  <span className="font-medium">Join our WhatsApp group to get promo codes and exclusive offers!</span>
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    data-testid="button-whatsapp-group"
-                  >
-                    <a 
-                      href={campaign.whatsappGroupLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      Join WhatsApp Group
-                      <ExternalLink className="ml-2 h-3 w-3" />
-                    </a>
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            )}
+                {campaign.whatsappGroupLink && (
+                  <Alert className="border-primary/50 bg-primary/5">
+                    <MessageCircle className="h-4 w-4" />
+                    <AlertDescription className="flex flex-col gap-2">
+                      <span className="font-medium">Join our WhatsApp group to get promo codes and exclusive offers!</span>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        data-testid="button-whatsapp-group"
+                      >
+                        <a
+                          href={campaign.whatsappGroupLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <MessageCircle className="h-4 w-4 mr-2" />
+                          Join WhatsApp Group
+                          <ExternalLink className="ml-2 h-3 w-3" />
+                        </a>
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+                )}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={submitMutation.isPending}
-              data-testid="button-submit-promo"
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={submitMutation.isPending}
+                  data-testid="button-submit-promo"
+                >
+                  {submitMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    "Verify & Get Checkout Link"
+                  )}
+                </Button>
+
+                {submitMutation.isError && (
+                  <Alert variant="destructive">
+                    <AlertDescription>
+                      Failed to verify promo code. Please try again.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+
+          <div className="text-center mt-6 text-sm text-muted-foreground">
+            Powered by{" "}
+            <a
+              href="/"
+              className="font-medium text-foreground hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              {submitMutation.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                "Verify & Get Checkout Link"
-              )}
-            </Button>
-
-            {submitMutation.isError && (
-              <Alert variant="destructive">
-                <AlertDescription>
-                  Failed to verify promo code. Please try again.
-                </AlertDescription>
-              </Alert>
-            )}
-          </form>
-        </CardContent>
-      </Card>
+              Dropnote
+            </a>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
