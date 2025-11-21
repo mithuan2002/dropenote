@@ -73,32 +73,10 @@ export default function Home() {
       <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Stop guessing which coupons actually work</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              You post discount codes everywhere. But you can't see who's using them or where sales come from.
+            <h2 className="text-2xl sm:text-3xl font-bold">The Problem</h2>
+            <p className="text-muted-foreground mt-2">
+              You share discount codes everywhere but can't track who uses them or which channels drive sales.
             </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="bg-red-50 dark:bg-red-950/20 border-2 border-red-200 dark:border-red-900 rounded-xl p-6">
-              <div className="text-4xl mb-3">❌</div>
-              <h3 className="font-semibold text-lg mb-2">Without Dropnote</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p>Coupons shared on Instagram, WhatsApp groups — no idea who converts</p>
-                <p>Paying influencers blindly without knowing actual sales</p>
-                <p>Same code reused by random people, losing profit</p>
-              </div>
-            </div>
-
-            <div className="bg-green-50 dark:bg-green-950/20 border-2 border-green-200 dark:border-green-900 rounded-xl p-6">
-              <div className="text-4xl mb-3">✅</div>
-              <h3 className="font-semibold text-lg mb-2">With Dropnote</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p>See exactly who claimed each coupon before checkout</p>
-                <p>Track which campaigns drive actual revenue</p>
-                <p>One-time codes prevent sharing and protect margins</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -107,50 +85,47 @@ export default function Home() {
       <section className="border-t py-12 sm:py-16 bg-foreground/[0.02]">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Know your customers before they buy</h2>
-            <p className="text-muted-foreground">
-              Turn every discount into a growth opportunity
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold">What You Get</h2>
           </div>
 
           <div className="grid gap-6">
-            <div className="bg-background border rounded-xl p-6 sm:p-8">
+            <div className="bg-background border rounded-xl p-6">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <Users2 className="h-6 w-6 text-blue-500" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Build your customer list automatically</h3>
-                  <p className="text-muted-foreground">
-                    Every coupon claim captures contact details. No surveys, no extra steps — just willing buyers giving you their info.
+                  <h3 className="font-semibold text-lg mb-1">Customer data from every coupon</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Build your contact list automatically
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-background border rounded-xl p-6 sm:p-8">
+            <div className="bg-background border rounded-xl p-6">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center">
                   <BarChart3 className="h-6 w-6 text-green-500" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Stop wasting budget on bad campaigns</h3>
-                  <p className="text-muted-foreground">
-                    See which influencers, ads, or posts actually convert. Double down on what works, cut what doesn't.
+                  <h3 className="font-semibold text-lg mb-1">See which campaigns convert</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Stop wasting money on campaigns that don't work
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-background border rounded-xl p-6 sm:p-8">
+            <div className="bg-background border rounded-xl p-6">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
                   <Check className="h-6 w-6 text-purple-500" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Protect margins from code abuse</h3>
-                  <p className="text-muted-foreground">
-                    One-time verification at checkout ensures codes aren't shared in deal forums or WhatsApp groups.
+                  <h3 className="font-semibold text-lg mb-1">Prevent code sharing</h3>
+                  <p className="text-sm text-muted-foreground">
+                    One-time codes protect your profit margins
                   </p>
                 </div>
               </div>
@@ -162,31 +137,10 @@ export default function Home() {
       {/* ROI Impact */}
       <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Turns coupons into long-term growth</h2>
-          </div>
-
-          <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-2xl p-8 sm:p-10">
-            <div className="grid sm:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">₹15-25</div>
-                <p className="text-sm text-muted-foreground">Value of each customer contact for retargeting</p>
-              </div>
-              <div>
-                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">3-5x</div>
-                <p className="text-sm text-muted-foreground">Higher repeat purchase from engaged coupon users</p>
-              </div>
-              <div>
-                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">100%</div>
-                <p className="text-sm text-muted-foreground">Clear view of which campaigns drive revenue</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center text-sm text-muted-foreground max-w-2xl mx-auto">
-            <p>
-              Every discount you run builds your customer database. Track real conversions. Retarget buyers with precision. 
-              That's how you turn one-time sales into repeat customers.
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">The Result</h2>
+            <p className="text-muted-foreground mb-8">
+              Turn one-time discounts into repeat customers
             </p>
           </div>
         </div>
