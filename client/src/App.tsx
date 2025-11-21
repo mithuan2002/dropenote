@@ -6,10 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
-import InfluencerDashboard from "@/pages/influencer-dashboard";
-import InfluencerProfile from "@/pages/influencer-profile";
-import CampaignList from "@/pages/campaign-list";
-import CampaignDetail from "@/pages/campaign-detail";
+import BrandDashboard from "@/pages/brand-dashboard";
+import BrandProfile from "@/pages/brand-profile";
+import CampaignPage from "@/pages/campaign-page";
 import StaffPortal from "@/pages/staff-portal";
 import StaffProfile from "@/pages/staff-profile";
 import NotFound from "@/pages/not-found";
@@ -48,17 +47,12 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
-      <Route path="/campaigns">
-        {() => <ProtectedRoute component={CampaignList} />}
+      <Route path="/c/:slug" component={CampaignPage} />
+      <Route path="/brand">
+        {() => <ProtectedRoute component={BrandDashboard} requiredRole="brand" />}
       </Route>
-      <Route path="/campaigns/:id">
-        {() => <ProtectedRoute component={CampaignDetail} />}
-      </Route>
-      <Route path="/influencer">
-        {() => <ProtectedRoute component={InfluencerDashboard} requiredRole="influencer" />}
-      </Route>
-      <Route path="/influencer/profile">
-        {() => <ProtectedRoute component={InfluencerProfile} requiredRole="influencer" />}
+      <Route path="/brand/profile">
+        {() => <ProtectedRoute component={BrandProfile} requiredRole="brand" />}
       </Route>
       <Route path="/staff">
         {() => <ProtectedRoute component={StaffPortal} requiredRole="staff" />}

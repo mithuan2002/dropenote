@@ -11,8 +11,8 @@ export default function Home() {
       .then(res => res.json())
       .then(data => {
         if (data.authenticated) {
-          if (data.role === 'influencer') {
-            setLocation('/influencer');
+          if (data.role === 'brand') {
+            setLocation('/brand');
           } else if (data.role === 'staff') {
             setLocation('/staff');
           }
@@ -42,16 +42,16 @@ export default function Home() {
           <div className="space-y-4 sm:space-y-6">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs sm:text-sm">
               <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="font-medium">For Creators</span>
+              <span className="font-medium">For E-commerce Brands</span>
             </div>
             
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight px-2">
-              Reward your followers with{" "}
-              <span className="text-primary">trackable coupons</span>
+              Run promo campaigns{" "}
+              <span className="text-primary">without website integration</span>
             </h1>
             
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-              Give your followers exclusive coupon codes and giveaways they can claim in-store. Build a powerful sales engine through your followers and keep repeating sales.
+              Create hosted campaign pages with promo codes. Customers enter their details and code to unlock your discounted checkout link. No developer needed.
             </p>
           </div>
 
@@ -78,19 +78,19 @@ export default function Home() {
           </div>
 
           <div className="grid gap-4">
-            {/* Influencer Card */}
+            {/* Brand Card */}
             <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
               <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
                   <Users2 className="h-5 w-5 text-foreground" />
                 </div>
                 <div className="flex-1 space-y-1.5">
-                  <h3 className="text-sm font-semibold">Creator Dashboard</h3>
+                  <h3 className="text-sm font-semibold">Brand Dashboard</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Create campaigns, distribute unique codes, and track redemptions. Real conversion data to prove your influence.
+                    Create campaigns with promo codes, get hosted landing pages, and track customer submissions with real-time analytics.
                   </p>
-                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-creator-signup">
-                    <Link href="/login?role=influencer">
+                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-brand-signup">
+                    <Link href="/login?role=brand">
                       Get started <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                   </Button>
@@ -152,7 +152,7 @@ export default function Home() {
               <div>
                 <h3 className="text-sm font-semibold mb-0.5">Create campaign</h3>
                 <p className="text-sm text-muted-foreground">
-                  Set discount percentage, expiration date, and generate shareable link
+                  Set promo code, discount, checkout URLs, and get a hosted campaign page (dropnote.com/c/your-slug)
                 </p>
               </div>
             </div>
@@ -162,9 +162,9 @@ export default function Home() {
                 2
               </div>
               <div>
-                <h3 className="text-sm font-semibold mb-0.5">Distribute to followers</h3>
+                <h3 className="text-sm font-semibold mb-0.5">Share campaign link</h3>
                 <p className="text-sm text-muted-foreground">
-                  Share campaign URL via social media, stories, or direct messages
+                  Promote your campaign URL on social media, ads, or email. No website integration needed.
                 </p>
               </div>
             </div>
@@ -174,9 +174,9 @@ export default function Home() {
                 3
               </div>
               <div>
-                <h3 className="text-sm font-semibold mb-0.5">Monitor results</h3>
+                <h3 className="text-sm font-semibold mb-0.5">Collect leads and track</h3>
                 <p className="text-sm text-muted-foreground">
-                  Real-time analytics on redemptions, revenue, and conversion rates
+                  Customers enter promo code and contact info. Track valid submissions and conversion rates.
                 </p>
               </div>
             </div>
@@ -188,9 +188,9 @@ export default function Home() {
       <section className="border-y bg-foreground/[0.02] py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
           <div className="max-w-lg">
-            <h2 className="mb-2">Start tracking campaigns</h2>
+            <h2 className="mb-2">Launch your first campaign</h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Join creators using data-driven insights to strengthen brand partnerships
+              Join e-commerce brands running promo campaigns without technical complexity
             </p>
             <Button asChild className="w-full sm:w-auto h-10" data-testid="button-cta-signup">
               <Link href="/login">

@@ -1,19 +1,17 @@
 import {
   type Campaign,
   type InsertCampaign,
-  type Coupon,
-  type InsertCoupon,
-  type Redemption,
-  type InsertRedemption,
+  type CustomerSubmission,
+  type InsertCustomerSubmission,
   type User,
   type InsertUser,
-  type InfluencerProfile,
-  type InsertInfluencerProfile,
+  type BrandProfile,
+  type InsertBrandProfile,
+  type StaffProfile,
   campaigns,
-  coupons,
-  redemptions,
+  customerSubmissions,
   users,
-  influencerProfiles,
+  brandProfiles,
   staffProfiles,
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/neon-serverless";
@@ -31,20 +29,18 @@ interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserById(id: string): Promise<User | undefined>;
   getCampaigns(): Promise<Campaign[]>;
+  getCampaignsByUserId(userId: string): Promise<Campaign[]>;
   getCampaign(id: string): Promise<Campaign | undefined>;
-  createCampaign(campaign: InsertCampaign): Promise<Campaign>;
-  getCoupon(id: string): Promise<Coupon | undefined>;
-  getCouponsByWCampaign(campaignId: string): Promise<Coupon[]>;
-  getCouponByCode(code: string): Promise<Coupon | undefined>;
-  createCoupon(coupon: InsertCoupon & { code: string }): Promise<Coupon>;
-  getRedemption(couponId: string): Promise<Redemption | undefined>;
-  createRedemption(redemption: InsertRedemption): Promise<Redemption>;
-  getAllRedemptions(): Promise<Redemption[]>;
-  getInfluencerProfile(userId: string): Promise<InfluencerProfile | undefined>;
-  saveInfluencerProfile(userId: string, profileData: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile>;
-  updateInfluencerProfile(userId: string, data: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile>;
-  getStaffProfile(userId: string): Promise<any>;
-  saveStaffProfile(userId: string, profileData: any): Promise<any>;
+  getCampaignBySlug(slug: string): Promise<Campaign | undefined>;
+  createCampaign(campaign: InsertCampaign & { userId: string }): Promise<Campaign>;
+  updateCampaign(id: string, campaign: Partial<InsertCampaign>): Promise<Campaign>;
+  getCustomerSubmissions(campaignId: string): Promise<CustomerSubmission[]>;
+  createCustomerSubmission(submission: InsertCustomerSubmission): Promise<CustomerSubmission>;
+  getBrandProfile(userId: string): Promise<BrandProfile | undefined>;
+  saveBrandProfile(userId: string, profileData: Partial<InsertBrandProfile>): Promise<BrandProfile>;
+  updateBrandProfile(userId: string, data: Partial<InsertBrandProfile>): Promise<BrandProfile>;
+  getStaffProfile(userId: string): Promise<StaffProfile | null>;
+  saveStaffProfile(userId: string, profileData: any): Promise<StaffProfile>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -71,99 +67,82 @@ class DatabaseStorage implements IStorage {
     return db.select().from(campaigns);
   }
 
+  async getCampaignsByUserId(userId: string): Promise<Campaign[]> {
+    return db.select().from(campaigns).where(eq(campaigns.userId, userId));
+  }
+
   async getCampaign(id: string): Promise<Campaign | undefined> {
     const [campaign] = await db.select().from(campaigns).where(eq(campaigns.id, id));
     return campaign;
   }
 
-  async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
+  async getCampaignBySlug(slug: string): Promise<Campaign | undefined> {
+    const [campaign] = await db.select().from(campaigns).where(eq(campaigns.slug, slug));
+    return campaign;
+  }
+
+  async createCampaign(campaign: InsertCampaign & { userId: string }): Promise<Campaign> {
     const [newCampaign] = await db.insert(campaigns).values(campaign).returning();
     return newCampaign;
   }
 
-  async getCoupon(id: string): Promise<Coupon | undefined> {
-    const [coupon] = await db.select().from(coupons).where(eq(coupons.id, id));
-    return coupon;
+  async updateCampaign(id: string, data: Partial<InsertCampaign>): Promise<Campaign> {
+    const [updated] = await db.update(campaigns)
+      .set(data)
+      .where(eq(campaigns.id, id))
+      .returning();
+    return updated;
   }
 
-  async getCouponsByWCampaign(campaignId: string): Promise<Coupon[]> {
-    return db.select().from(coupons).where(eq(coupons.campaignId, campaignId));
+  async getCustomerSubmissions(campaignId: string): Promise<CustomerSubmission[]> {
+    return db.select().from(customerSubmissions).where(eq(customerSubmissions.campaignId, campaignId));
   }
 
-  async getCouponByCode(code: string): Promise<Coupon | undefined> {
-    const [coupon] = await db.select().from(coupons).where(eq(coupons.code, code));
-    return coupon;
+  async createCustomerSubmission(submission: InsertCustomerSubmission): Promise<CustomerSubmission> {
+    const [newSubmission] = await db.insert(customerSubmissions).values(submission).returning();
+    return newSubmission;
   }
 
-  async createCoupon(coupon: InsertCoupon & { code: string }): Promise<Coupon> {
-    const [newCoupon] = await db.insert(coupons).values(coupon).returning();
-    return newCoupon;
-  }
-
-  async getRedemption(couponId: string): Promise<Redemption | undefined> {
-    const [redemption] = await db.select().from(redemptions).where(eq(redemptions.couponId, couponId));
-    return redemption;
-  }
-
-  async createRedemption(redemption: InsertRedemption): Promise<Redemption> {
-    const [newRedemption] = await db.insert(redemptions).values(redemption).returning();
-    return newRedemption;
-  }
-
-  async getAllRedemptions(): Promise<Redemption[]> {
-    return db.select().from(redemptions);
-  }
-
-  async getInfluencerProfile(userId: string): Promise<InfluencerProfile | undefined> {
-    const [profile] = await db.select().from(influencerProfiles).where(eq(influencerProfiles.userId, userId));
+  async getBrandProfile(userId: string): Promise<BrandProfile | undefined> {
+    const [profile] = await db.select().from(brandProfiles).where(eq(brandProfiles.userId, userId));
     return profile;
   }
 
-  async saveInfluencerProfile(userId: string, profileData: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile> {
-    const existing = await this.getInfluencerProfile(userId);
+  async saveBrandProfile(userId: string, profileData: Partial<InsertBrandProfile>): Promise<BrandProfile> {
+    const existing = await this.getBrandProfile(userId);
     if (existing) {
-      const [updated] = await db.update(influencerProfiles)
+      const [updated] = await db.update(brandProfiles)
         .set({
-          name: profileData.name,
-          bio: profileData.bio,
-          whatsappNumber: profileData.whatsappNumber,
-          whatsappGroupLink: profileData.whatsappGroupLink,
+          brandName: profileData.brandName,
+          website: profileData.website,
+          contactEmail: profileData.contactEmail,
         })
-        .where(eq(influencerProfiles.userId, userId))
+        .where(eq(brandProfiles.userId, userId))
         .returning();
       return updated;
     } else {
-      const [created] = await db.insert(influencerProfiles)
+      const [created] = await db.insert(brandProfiles)
         .values({ 
           userId,
-          name: profileData.name || '',
-          bio: profileData.bio,
-          whatsappNumber: profileData.whatsappNumber,
-          whatsappGroupLink: profileData.whatsappGroupLink,
+          brandName: profileData.brandName || '',
+          website: profileData.website,
+          contactEmail: profileData.contactEmail,
         })
         .returning();
       return created;
     }
   }
 
-  async updateInfluencerProfile(userId: string, data: Partial<InsertInfluencerProfile>): Promise<InfluencerProfile> {
-    return this.saveInfluencerProfile(userId, data);
+  async updateBrandProfile(userId: string, data: Partial<InsertBrandProfile>): Promise<BrandProfile> {
+    return this.saveBrandProfile(userId, data);
   }
 
-  async getStaffProfile(userId: string): Promise<any> {
+  async getStaffProfile(userId: string): Promise<StaffProfile | null> {
     const [profile] = await db.select().from(staffProfiles).where(eq(staffProfiles.userId, userId));
-    if (!profile) return null;
-    
-    // Map database columns to camelCase for API
-    return {
-      name: profile.name || '',
-      storeName: profile.storeName || '',
-      storeAddress: profile.storeAddress || '',
-      phone: profile.phone || '',
-    };
+    return profile || null;
   }
 
-  async saveStaffProfile(userId: string, profileData: any): Promise<any> {
+  async saveStaffProfile(userId: string, profileData: any): Promise<StaffProfile> {
     const existing = await this.getStaffProfile(userId);
     if (existing) {
       const [updated] = await db.update(staffProfiles)
