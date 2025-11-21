@@ -10,6 +10,7 @@ import { Link, useLocation } from "wouter";
 import { Plus, ExternalLink, User, BarChart3, Users, Calendar, Copy, Check } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Campaign } from "@shared/schema";
+import { Badge } from "@/components/ui/badge";
 
 export default function BrandDashboard() {
   const [, setLocation] = useLocation();
@@ -95,21 +96,30 @@ export default function BrandDashboard() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {campaigns.map((campaign) => (
-              <Card key={campaign.id} className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">{campaign.name}</CardTitle>
-                  <CardDescription>
-                    {campaign.discountPercentage}% off • Code: {campaign.promoCode}
-                  </CardDescription>
+              <Card key={campaign.id} className="overflow-hidden cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setLocation(`/brand/campaigns/${campaign.id}`)}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg" data-testid={`text-campaign-name-${campaign.slug}`}>
+                        {campaign.name}
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {campaign.discountPercentage}% off • Expires {new Date(campaign.expirationDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <Badge variant={campaign.isActive ? "default" : "secondary"} data-testid={`badge-status-${campaign.slug}`}>
+                      {campaign.isActive ? "Active" : "Inactive"}
+                    </Badge>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      Expires {new Date(campaign.expirationDate).toLocaleDateString()}
-                    </span>
+                  <div className="space-y-1">
+                    <div className="text-xs text-muted-foreground">Promo Code</div>
+                    <code className="text-sm font-mono bg-muted px-2 py-1 rounded" data-testid={`text-promo-code-${campaign.slug}`}>
+                      {campaign.promoCode}
+                    </code>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <Button
                       variant="outline"
                       size="sm"

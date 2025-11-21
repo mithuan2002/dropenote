@@ -8,9 +8,10 @@ import Home from "@/pages/home";
 import Login from "@/pages/login";
 import BrandDashboard from "@/pages/brand-dashboard";
 import BrandProfile from "@/pages/brand-profile";
-import CampaignPage from "@/pages/campaign-page";
+import CampaignDetail from "@/pages/campaign-detail";
 import StaffPortal from "@/pages/staff-portal";
 import StaffProfile from "@/pages/staff-profile";
+import CampaignPage from "@/pages/campaign-page";
 import NotFound from "@/pages/not-found";
 import type { User } from "@shared/schema";
 
@@ -54,6 +55,7 @@ function Router() {
       <Route path="/brand/profile">
         {() => <ProtectedRoute component={BrandProfile} requiredRole="brand" />}
       </Route>
+      <Route path="/brand/campaigns/:id" component={CampaignDetail} />
       <Route path="/staff">
         {() => <ProtectedRoute component={StaffPortal} requiredRole="staff" />}
       </Route>
