@@ -134,18 +134,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features in Action - Will add real screenshots */}
-      <section className="border-t py-12 sm:py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">See How It Works</h2>
-            <p className="text-muted-foreground">
-              Real screenshots from the platform (coming soon)
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* ROI Impact */}
       <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
