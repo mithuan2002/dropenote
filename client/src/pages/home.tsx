@@ -2,6 +2,10 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users2, Store, BarChart3, Check } from "lucide-react";
 import { useEffect } from "react";
+import brandDashboardImg from "@assets/generated_images/brand_dashboard_campaign_overview.png";
+import campaignAnalyticsImg from "@assets/generated_images/campaign_analytics_and_submissions.png";
+import customerLandingImg from "@assets/generated_images/customer_campaign_landing_page.png";
+import staffPortalImg from "@assets/generated_images/staff_verification_portal.png";
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -128,6 +132,92 @@ export default function Home() {
                     Custom campaign pages that match your brand
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features in Action */}
+      <section className="border-t py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">See How It Works</h2>
+            <p className="text-muted-foreground">
+              Real screenshots from the platform
+            </p>
+          </div>
+
+          <div className="space-y-16">
+            {/* Feature 1: Brand Dashboard */}
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-sm">
+                  <Store className="h-4 w-4" />
+                  <span className="font-medium">For Brands</span>
+                </div>
+                <h3 className="text-2xl font-bold">Manage All Campaigns in One Place</h3>
+                <p className="text-muted-foreground">
+                  Create unlimited promo campaigns, set discount percentages, and control activation status. 
+                  View all your campaigns at a glance with real-time status indicators.
+                </p>
+              </div>
+              <div className="rounded-lg border overflow-hidden shadow-lg">
+                <img src={brandDashboardImg} alt="Brand dashboard showing campaign management interface" className="w-full h-auto" data-testid="img-brand-dashboard" />
+              </div>
+            </div>
+
+            {/* Feature 2: Analytics */}
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="rounded-lg border overflow-hidden shadow-lg md:order-1">
+                <img src={campaignAnalyticsImg} alt="Campaign analytics showing conversion metrics and customer data" className="w-full h-auto" data-testid="img-campaign-analytics" />
+              </div>
+              <div className="space-y-4 md:order-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 text-sm">
+                  <BarChart3 className="h-4 w-4" />
+                  <span className="font-medium">Analytics</span>
+                </div>
+                <h3 className="text-2xl font-bold">Track Every Customer Interaction</h3>
+                <p className="text-muted-foreground">
+                  See exactly who used your coupons, when they used them, and whether the codes were valid. 
+                  Build your customer database automatically with every submission.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3: Customer Landing Page */}
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20 text-sm">
+                  <Users2 className="h-4 w-4" />
+                  <span className="font-medium">Customer Experience</span>
+                </div>
+                <h3 className="text-2xl font-bold">Beautiful Branded Landing Pages</h3>
+                <p className="text-muted-foreground">
+                  Each campaign gets its own custom URL. Customers enter their details and promo code, 
+                  then get automatically redirected to your checkout with the discount applied.
+                </p>
+              </div>
+              <div className="rounded-lg border overflow-hidden shadow-lg mx-auto" style={{maxWidth: '360px'}}>
+                <img src={customerLandingImg} alt="Customer-facing campaign landing page with promo code entry form" className="w-full h-auto" data-testid="img-customer-landing" />
+              </div>
+            </div>
+
+            {/* Feature 4: Staff Portal */}
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="rounded-lg border overflow-hidden shadow-lg mx-auto md:order-1" style={{maxWidth: '360px'}}>
+                <img src={staffPortalImg} alt="Staff verification portal for in-store redemption tracking" className="w-full h-auto" data-testid="img-staff-portal" />
+              </div>
+              <div className="space-y-4 md:order-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/20 text-sm">
+                  <Check className="h-4 w-4" />
+                  <span className="font-medium">Staff Tools</span>
+                </div>
+                <h3 className="text-2xl font-bold">Verify Codes at Point of Sale</h3>
+                <p className="text-muted-foreground">
+                  Your staff can instantly verify promo codes and record actual purchase amounts. 
+                  Track which coupons convert to real sales, not just clicks.
+                </p>
               </div>
             </div>
           </div>
