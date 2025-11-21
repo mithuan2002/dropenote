@@ -40,18 +40,13 @@ export default function Home() {
       <section className="mx-auto max-w-4xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
           <div className="space-y-4 sm:space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs sm:text-sm">
-              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="font-medium">For E-commerce Brands</span>
-            </div>
-            
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight px-2">
-              Run promo campaigns{" "}
-              <span className="text-primary">without website integration</span>
+              Make more sales from{" "}
+              <span className="text-primary">every coupon you run</span>
             </h1>
             
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-              Create hosted campaign pages with promo codes. Customers enter their details and code to unlock your discounted checkout link. No developer needed.
+              Launch coupons, engage customers, and track real conversions for your online store.
             </p>
           </div>
 
