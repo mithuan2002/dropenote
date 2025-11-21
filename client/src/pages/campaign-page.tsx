@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, ExternalLink, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { apiRequest } from "@/lib/queryClient";
 import { UserGuide } from "@/components/user-guide";
@@ -17,6 +17,7 @@ type Campaign = {
   discountPercentage: number;
   expirationDate: string;
   isActive: boolean;
+  whatsappGroupLink: string | null;
 };
 
 type SubmissionResult = {
@@ -243,6 +244,32 @@ export default function CampaignPage() {
                 required
               />
             </div>
+
+            {campaign.whatsappGroupLink && (
+              <Alert className="border-primary/50 bg-primary/5">
+                <MessageCircle className="h-4 w-4" />
+                <AlertDescription className="flex flex-col gap-2">
+                  <span className="font-medium">Join our WhatsApp group to get promo codes and exclusive offers!</span>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    data-testid="button-whatsapp-group"
+                  >
+                    <a 
+                      href={campaign.whatsappGroupLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Join WhatsApp Group
+                      <ExternalLink className="ml-2 h-3 w-3" />
+                    </a>
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
 
             <Button 
               type="submit" 
