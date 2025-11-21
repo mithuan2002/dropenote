@@ -69,64 +69,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="border-t py-12 sm:py-16">
+      {/* Problem Section */}
+      <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="mb-8">
-            <h2 className="mb-2">Platform Features</h2>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Stop guessing which coupons actually work</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              You post discount codes everywhere. But you can't see who's using them or where sales come from.
+            </p>
           </div>
 
-          <div className="grid gap-4">
-            {/* Brand Card */}
-            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
-                  <Users2 className="h-5 w-5 text-foreground" />
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="bg-red-50 dark:bg-red-950/20 border-2 border-red-200 dark:border-red-900 rounded-xl p-6">
+              <div className="text-4xl mb-3">❌</div>
+              <h3 className="font-semibold text-lg mb-2">Without Dropnote</h3>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>Coupons shared on Instagram, WhatsApp groups — no idea who converts</p>
+                <p>Paying influencers blindly without knowing actual sales</p>
+                <p>Same code reused by random people, losing profit</p>
+              </div>
+            </div>
+
+            <div className="bg-green-50 dark:bg-green-950/20 border-2 border-green-200 dark:border-green-900 rounded-xl p-6">
+              <div className="text-4xl mb-3">✅</div>
+              <h3 className="font-semibold text-lg mb-2">With Dropnote</h3>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>See exactly who claimed each coupon before checkout</p>
+                <p>Track which campaigns drive actual revenue</p>
+                <p>One-time codes prevent sharing and protect margins</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition */}
+      <section className="border-t py-12 sm:py-16 bg-foreground/[0.02]">
+        <div className="mx-auto max-w-screen-md px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Know your customers before they buy</h2>
+            <p className="text-muted-foreground">
+              Turn every discount into a growth opportunity
+            </p>
+          </div>
+
+          <div className="grid gap-6">
+            <div className="bg-background border rounded-xl p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                  <Users2 className="h-6 w-6 text-blue-500" />
                 </div>
-                <div className="flex-1 space-y-1.5">
-                  <h3 className="text-sm font-semibold">Brand Dashboard</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Create campaigns with promo codes, get hosted landing pages, and track customer submissions with real-time analytics.
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">Build your customer list automatically</h3>
+                  <p className="text-muted-foreground">
+                    Every coupon claim captures contact details. No surveys, no extra steps — just willing buyers giving you their info.
                   </p>
-                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-brand-signup">
-                    <Link href="/login?role=brand">
-                      Get started <ArrowRight className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </div>
 
-            {/* Staff Card */}
-            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
-                  <Store className="h-5 w-5 text-foreground" />
+            <div className="bg-background border rounded-xl p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center">
+                  <BarChart3 className="h-6 w-6 text-green-500" />
                 </div>
-                <div className="flex-1 space-y-1.5">
-                  <h3 className="text-sm font-semibold">Staff Portal</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Instant code verification at checkout. Mobile-optimized for quick validation. One-time use fraud prevention.
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">Stop wasting budget on bad campaigns</h3>
+                  <p className="text-muted-foreground">
+                    See which influencers, ads, or posts actually convert. Double down on what works, cut what doesn't.
                   </p>
-                  <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-sm hover:bg-transparent" data-testid="link-staff-signup">
-                    <Link href="/login?role=staff">
-                      Access portal <ArrowRight className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </div>
 
-            {/* Analytics Card */}
-            <div className="bg-card border border-border rounded-lg p-5 transition-colors hover:border-foreground/20">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-foreground/5 rounded-md flex items-center justify-center">
-                  <BarChart3 className="h-5 w-5 text-foreground" />
+            <div className="bg-background border rounded-xl p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  <Check className="h-6 w-6 text-purple-500" />
                 </div>
-                <div className="flex-1 space-y-1.5">
-                  <h3 className="text-sm font-semibold">Real-time Analytics</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Monitor performance in real-time. Track follower conversions, revenue impact, and campaign ROI.
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">Protect margins from code abuse</h3>
+                  <p className="text-muted-foreground">
+                    One-time verification at checkout ensures codes aren't shared in deal forums or WhatsApp groups.
                   </p>
                 </div>
               </div>
@@ -135,50 +159,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* ROI Impact */}
       <section className="border-t py-12 sm:py-16">
         <div className="mx-auto max-w-screen-md px-4 sm:px-6">
-          <div className="mb-6">
-            <h2 className="mb-1">How it works</h2>
-            <p className="text-sm text-muted-foreground">Three steps to start tracking</p>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Turns coupons into long-term growth</h2>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex gap-3 items-start">
-              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
-                1
+          <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-2xl p-8 sm:p-10">
+            <div className="grid sm:grid-cols-3 gap-8 text-center">
+              <div>
+                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">₹15-25</div>
+                <p className="text-sm text-muted-foreground">Value of each customer contact for retargeting</p>
               </div>
               <div>
-                <h3 className="text-sm font-semibold mb-0.5">Create campaign</h3>
-                <p className="text-sm text-muted-foreground">
-                  Set promo code, discount, checkout URLs, and get a hosted campaign page (dropnote.com/c/your-slug)
-                </p>
+                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">3-5x</div>
+                <p className="text-sm text-muted-foreground">Higher repeat purchase from engaged coupon users</p>
+              </div>
+              <div>
+                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">100%</div>
+                <p className="text-sm text-muted-foreground">Clear view of which campaigns drive revenue</p>
               </div>
             </div>
+          </div>
 
-            <div className="flex gap-3 items-start">
-              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
-                2
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold mb-0.5">Share campaign link</h3>
-                <p className="text-sm text-muted-foreground">
-                  Promote your campaign URL on social media, ads, or email. No website integration needed.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <div className="flex-shrink-0 w-7 h-7 rounded-md bg-foreground/5 flex items-center justify-center text-xs font-medium">
-                3
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold mb-0.5">Collect leads and track</h3>
-                <p className="text-sm text-muted-foreground">
-                  Customers enter promo code and contact info. Track valid submissions and conversion rates.
-                </p>
-              </div>
-            </div>
+          <div className="mt-8 text-center text-sm text-muted-foreground max-w-2xl mx-auto">
+            <p>
+              Every discount you run builds your customer database. Track real conversions. Retarget buyers with precision. 
+              That's how you turn one-time sales into repeat customers.
+            </p>
           </div>
         </div>
       </section>
