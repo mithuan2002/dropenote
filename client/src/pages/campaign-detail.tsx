@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, CheckCircle2, XCircle, Copy, ExternalLink, BarChart3, Users, TrendingUp, Percent } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
+import React from "react";
 
 // Define a UserGuide component for displaying instructions
 function UserGuide({ title, steps, tips, defaultExpanded = true }: { title: string; steps?: string[]; tips?: string[]; defaultExpanded?: boolean }) {
