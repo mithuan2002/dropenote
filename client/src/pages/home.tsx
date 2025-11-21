@@ -40,6 +40,10 @@ export default function Home() {
       <section className="mx-auto max-w-4xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
           <div className="space-y-4 sm:space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs sm:text-sm">
+              <span className="font-medium">For E-commerce Stores</span>
+            </div>
+            
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight px-2">
               Make more sales from{" "}
               <span className="text-primary">every coupon you run</span>
