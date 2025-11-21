@@ -123,9 +123,9 @@ export default function Home() {
                   <Check className="h-6 w-6 text-purple-500" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">Prevent code sharing</h3>
+                  <h3 className="font-semibold text-lg mb-1">Customer loyalty</h3>
                   <p className="text-sm text-muted-foreground">
-                    One-time codes protect your profit margins
+                    Turn one-time buyers into repeat customers
                   </p>
                 </div>
               </div>
