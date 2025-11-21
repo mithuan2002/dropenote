@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users2, Store, BarChart3, Check } from "lucide-react";
 import { useEffect } from "react";
 
+// Import images for the "See it in Action" section
+import brandDashboardImg from "/attached_assets/generated_images/campaign_management_dashboard.png";
+import campaignAnalyticsImg from "/attached_assets/generated_images/campaign_analytics_view.png";
+import customerViewImg from "/attached_assets/generated_images/customer_campaign_page.png";
+
 export default function Home() {
   const [, setLocation] = useLocation();
 
@@ -43,12 +48,12 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs sm:text-sm">
               <span className="font-medium">For E-commerce Stores</span>
             </div>
-            
+
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight px-2">
               Make more sales from{" "}
               <span className="text-primary">every coupon you run</span>
             </h1>
-            
+
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
               Launch coupons, engage customers, and track real conversions for your online store.
             </p>
@@ -84,9 +89,9 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
               <div className="order-2 md:order-1">
                 <div className="rounded-lg overflow-hidden border shadow-lg bg-background">
-                  <img 
-                    src="/attached_assets/generated_images/campaign_management_dashboard.png" 
-                    alt="Campaign management dashboard showing active promotions" 
+                  <img
+                    src={brandDashboardImg}
+                    alt="Campaign management dashboard showing active promotions"
                     className="w-full h-auto"
                     data-testid="img-dashboard-screenshot"
                   />
@@ -115,9 +120,9 @@ export default function Home() {
                 </p>
               </div>
               <div className="rounded-lg overflow-hidden border shadow-lg bg-background">
-                <img 
-                  src="/attached_assets/generated_images/campaign_analytics_view.png" 
-                  alt="Analytics dashboard with conversion metrics and customer data" 
+                <img
+                  src={campaignAnalyticsImg}
+                  alt="Analytics dashboard with conversion metrics and customer data"
                   className="w-full h-auto"
                   data-testid="img-analytics-screenshot"
                 />
@@ -128,9 +133,9 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
               <div className="order-2 md:order-1 flex justify-center">
                 <div className="rounded-lg overflow-hidden border shadow-lg bg-background max-w-xs w-full">
-                  <img 
-                    src="/attached_assets/generated_images/customer_campaign_page.png" 
-                    alt="Mobile-friendly customer campaign redemption page" 
+                  <img
+                    src={customerViewImg}
+                    alt="Mobile-friendly customer campaign redemption page"
                     className="w-full h-auto"
                     data-testid="img-customer-page-screenshot"
                   />
