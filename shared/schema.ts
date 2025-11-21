@@ -94,7 +94,10 @@ export const insertBrandProfileSchema = z.object({
   whatsappGroupLink: z.string().url().optional().or(z.literal("")),
 });
 
+export const updateBrandProfileSchema = insertBrandProfileSchema.partial();
+
 export type InsertBrandProfile = z.infer<typeof insertBrandProfileSchema>;
+export type UpdateBrandProfile = z.infer<typeof updateBrandProfileSchema>;
 export type BrandProfile = typeof brandProfiles.$inferSelect;
 
 // Keep staff profile schema as is

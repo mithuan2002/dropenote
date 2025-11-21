@@ -111,21 +111,25 @@ class DatabaseStorage implements IStorage {
   async saveBrandProfile(userId: string, profileData: Partial<InsertBrandProfile>): Promise<BrandProfile> {
     const existing = await this.getBrandProfile(userId);
     if (existing) {
+      const updateData: Partial<InsertBrandProfile> = {};
+      if (profileData.brandName !== undefined) updateData.brandName = profileData.brandName;
+      if (profileData.website !== undefined) updateData.website = profileData.website;
+      if (profileData.contactEmail !== undefined) updateData.contactEmail = profileData.contactEmail;
+      if (profileData.whatsappGroupLink !== undefined) updateData.whatsappGroupLink = profileData.whatsappGroupLink;
+      
       const [updated] = await db.update(brandProfiles)
-        .set({
-          brandName: profileData.brandName,
-          website: profileData.website,
-          contactEmail: profileData.contactEmail,
-          whatsappGroupLink: profileData.whatsappGroupLink,
-        })
+        .set(updateData)
         .where(eq(brandProfiles.userId, userId))
         .returning();
       return updated;
     } else {
+      if (!profileData.brandName) {
+        throw new Error('Brand name is required when creating a new profile');
+      }
       const [created] = await db.insert(brandProfiles)
         .values({ 
           userId,
-          brandName: profileData.brandName || '',
+          brandName: profileData.brandName,
           website: profileData.website,
           contactEmail: profileData.contactEmail,
           whatsappGroupLink: profileData.whatsappGroupLink,

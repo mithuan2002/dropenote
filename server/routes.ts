@@ -5,6 +5,8 @@ import {
   insertCampaignSchema,
   insertCustomerSubmissionSchema,
   insertUserSchema,
+  insertBrandProfileSchema,
+  updateBrandProfileSchema,
 } from "@shared/schema";
 import bcrypt from "bcryptjs";
 
@@ -158,17 +160,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/brand/profile", requireAuth, requireRole("brand"), async (req, res) => {
     try {
-      const { brandName, website, contactEmail, whatsappGroupLink } = req.body;
+      const validatedData = updateBrandProfileSchema.parse(req.body);
 
-      await storage.updateBrandProfile(req.session.userId!, {
-        brandName,
-        website,
-        contactEmail,
-        whatsappGroupLink
-      });
+      await storage.updateBrandProfile(req.session.userId!, validatedData);
       res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to save profile" });
+      if (error instanceof Error) {
+        res.status(400).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: "Failed to save profile" });
+      }
     }
   });
 
