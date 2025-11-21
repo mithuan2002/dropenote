@@ -3,11 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users2, Store, BarChart3, Check } from "lucide-react";
 import { useEffect } from "react";
 
-// Import images for the "See it in Action" section
-import brandDashboardImg from "@assets/generated_images/campaign_management_dashboard.png";
-import campaignAnalyticsImg from "@assets/generated_images/campaign_analytics_view.png";
-import customerViewImg from "@assets/generated_images/customer_campaign_page.png";
-
 export default function Home() {
   const [, setLocation] = useLocation();
 
@@ -70,87 +65,6 @@ export default function Home() {
                 Have doubts? Let's chat
               </a>
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Screenshots Section */}
-      <section className="border-t py-12 sm:py-16 md:py-20 bg-foreground/[0.02]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">See it in action</h2>
-            <p className="text-muted-foreground text-sm sm:text-base">
-              Real screenshots from our platform showing how easy it is to launch and track campaigns
-            </p>
-          </div>
-
-          <div className="space-y-12 sm:space-y-16">
-            {/* Campaign Dashboard */}
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-              <div className="order-2 md:order-1">
-                <div className="rounded-lg overflow-hidden border shadow-lg bg-background">
-                  <img
-                    src={brandDashboardImg}
-                    alt="Campaign management dashboard showing active promotions"
-                    className="w-full h-auto"
-                    data-testid="img-dashboard-screenshot"
-                  />
-                </div>
-              </div>
-              <div className="order-1 md:order-2 space-y-3 sm:space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-medium">
-                  For Brands
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold">Manage all your campaigns in one place</h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                  Create, activate, and monitor multiple promotional campaigns. See at a glance which campaigns are driving results and which ones need optimization.
-                </p>
-              </div>
-            </div>
-
-            {/* Analytics Dashboard */}
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-              <div className="space-y-3 sm:space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 text-xs font-medium">
-                  Analytics
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold">Track real conversions, not just clicks</h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                  Know exactly how many customers used your promo code successfully. Get detailed submission history with customer contact information for follow-ups.
-                </p>
-              </div>
-              <div className="rounded-lg overflow-hidden border shadow-lg bg-background">
-                <img
-                  src={campaignAnalyticsImg}
-                  alt="Analytics dashboard with conversion metrics and customer data"
-                  className="w-full h-auto"
-                  data-testid="img-analytics-screenshot"
-                />
-              </div>
-            </div>
-
-            {/* Customer Experience */}
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-              <div className="order-2 md:order-1 flex justify-center">
-                <div className="rounded-lg overflow-hidden border shadow-lg bg-background max-w-xs w-full">
-                  <img
-                    src={customerViewImg}
-                    alt="Mobile-friendly customer campaign redemption page"
-                    className="w-full h-auto"
-                    data-testid="img-customer-page-screenshot"
-                  />
-                </div>
-              </div>
-              <div className="order-1 md:order-2 space-y-3 sm:space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-xs font-medium">
-                  Customer View
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold">Simple redemption experience for customers</h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                  Share a branded campaign link with your customers. They enter the promo code and their contact details to unlock the discount. No app downloads or complex setup required.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
