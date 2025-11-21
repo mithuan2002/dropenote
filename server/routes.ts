@@ -158,12 +158,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/brand/profile", requireAuth, requireRole("brand"), async (req, res) => {
     try {
-      const { brandName, website, contactEmail } = req.body;
+      const { brandName, website, contactEmail, whatsappGroupLink } = req.body;
 
       await storage.updateBrandProfile(req.session.userId!, {
         brandName,
         website,
-        contactEmail
+        contactEmail,
+        whatsappGroupLink
       });
       res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
@@ -283,9 +284,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Campaign not found" });
       }
       
+      // Fetch brand profile to get WhatsApp group link
+      const brandProfile = await storage.getBrandProfile(campaign.userId);
+      
       // Don't expose userId in public response
       const { userId, ...publicCampaign } = campaign;
-      res.json(publicCampaign);
+      res.json({
+        ...publicCampaign,
+        whatsappGroupLink: brandProfile?.whatsappGroupLink || null,
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch campaign" });
     }

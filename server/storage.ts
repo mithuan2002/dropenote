@@ -116,6 +116,7 @@ class DatabaseStorage implements IStorage {
           brandName: profileData.brandName,
           website: profileData.website,
           contactEmail: profileData.contactEmail,
+          whatsappGroupLink: profileData.whatsappGroupLink,
         })
         .where(eq(brandProfiles.userId, userId))
         .returning();
@@ -127,6 +128,7 @@ class DatabaseStorage implements IStorage {
           brandName: profileData.brandName || '',
           website: profileData.website,
           contactEmail: profileData.contactEmail,
+          whatsappGroupLink: profileData.whatsappGroupLink,
         })
         .returning();
       return created;

@@ -73,6 +73,7 @@ export const brandProfiles = pgTable("brand_profiles", {
   brandName: text("brand_name").notNull(),
   website: text("website"),
   contactEmail: text("contact_email"),
+  whatsappGroupLink: text("whatsapp_group_link"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -90,6 +91,7 @@ export const insertBrandProfileSchema = z.object({
   brandName: z.string().min(1, "Brand name is required"),
   website: z.string().url().optional().or(z.literal("")),
   contactEmail: z.string().email().optional().or(z.literal("")),
+  whatsappGroupLink: z.string().url().optional().or(z.literal("")),
 });
 
 export type InsertBrandProfile = z.infer<typeof insertBrandProfileSchema>;
