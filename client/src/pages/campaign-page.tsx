@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { apiRequest } from "@/lib/queryClient";
+import { UserGuide } from "@/components/user-guide";
 
 type Campaign = {
   id: string;
@@ -186,6 +187,25 @@ export default function CampaignPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="mb-4">
+            <UserGuide
+              title="How to Redeem Your Discount"
+              steps={[
+                "Enter your name and WhatsApp number",
+                "Enter the promo code exactly as provided (case-sensitive)",
+                "Click 'Verify & Get Checkout Link'",
+                "You'll receive a checkout link with your discount applied",
+                "Click the checkout button to complete your purchase"
+              ]}
+              tips={[
+                "Make sure your promo code is entered correctly",
+                "Your WhatsApp number is used for order verification only",
+                "Each promo code can only be used once",
+                "The discount is automatically applied in the checkout link"
+              ]}
+              defaultExpanded={false}
+            />
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name" data-testid="label-customer-name">Your Name</Label>

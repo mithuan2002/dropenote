@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { UserGuide } from "@/components/user-guide";
 
 type BrandProfile = {
   brandName: string;
@@ -75,6 +76,26 @@ export default function BrandProfile() {
       </header>
 
       <main className="mx-auto max-w-2xl px-4 sm:px-6 py-8">
+        <div className="max-w-2xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Brand Profile</h1>
+
+        <div className="mb-6">
+          <UserGuide
+            title="Profile Settings Guide"
+            steps={[
+              "Add your WhatsApp group link to engage with customers",
+              "Terms and conditions will be shown to customers during checkout",
+              "Update your information anytime and click Save Changes"
+            ]}
+            tips={[
+              "WhatsApp group link: Share your community or support group",
+              "Terms: Include refund policy, usage restrictions, etc.",
+              "All changes are saved immediately when you click the button"
+            ]}
+            defaultExpanded={false}
+          />
+        </div>
+
         <Card>
           <CardHeader>
             <CardTitle>Brand Profile</CardTitle>

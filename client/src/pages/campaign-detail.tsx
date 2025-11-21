@@ -1,4 +1,3 @@
-
 import { useParams, useLocation, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +7,46 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, CheckCircle2, XCircle, Copy, ExternalLink, BarChart3, Users, TrendingUp, Percent } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
+
+// Define a UserGuide component for displaying instructions
+function UserGuide({ title, steps, tips, defaultExpanded = true }: { title: string; steps?: string[]; tips?: string[]; defaultExpanded?: boolean }) {
+  const [expanded, setExpanded] = React.useState(defaultExpanded);
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-lg font-medium">{title}</CardTitle>
+        <Button variant="ghost" size="sm" onClick={() => setExpanded(!expanded)}>
+          {expanded ? <Percent className="h-4 w-4" /> : <TrendingUp className="h-4 w-4" />}
+        </Button>
+      </CardHeader>
+      {expanded && (
+        <CardContent>
+          {steps && (
+            <div className="mb-4">
+              <h3 className="text-md font-semibold mb-2">Key Steps:</h3>
+              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                {steps.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {tips && (
+            <div>
+              <h3 className="text-md font-semibold mb-2">Tips:</h3>
+              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                {tips.map((tip, index) => (
+                  <li key={index}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </CardContent>
+      )}
+    </Card>
+  );
+}
 
 interface Campaign {
   id: string;
@@ -145,6 +184,28 @@ export default function CampaignDetail() {
       </div>
 
       <div className="max-w-6xl mx-auto p-6 space-y-6">
+        {/* User Guide for the page */}
+        <div className="mb-6">
+          <UserGuide
+            title="Campaign Details & Management Guide"
+            steps={[
+              "View campaign performance metrics (submissions, success rate) in the Analytics tab.",
+              "Review all customer interactions and promo code usage in the Submissions tab.",
+              "Share the unique Campaign URL (displayed at the top) with your target audience.",
+              "Monitor the 'Expires' date to ensure timely campaign management.",
+              "Use the 'Copy URL' button for easy sharing.",
+              "Click 'View Page' to see the live campaign landing page.",
+            ]}
+            tips={[
+              "Active campaigns are highlighted with a 'default' badge.",
+              "Inactive campaigns are shown with a 'secondary' badge.",
+              "The Promo Code and Discount Percentage are key details for customer awareness.",
+              "The Success Rate is a crucial indicator for campaign effectiveness.",
+            ]}
+            defaultExpanded={true}
+          />
+        </div>
+
         {/* Analytics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="p-6">
@@ -204,6 +265,25 @@ export default function CampaignDetail() {
                 <p className="font-semibold">{campaign.isActive ? "Active" : "Inactive"}</p>
               </div>
             </div>
+            {/* Crucial Payout URLs */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <span className="text-sm text-muted-foreground">Normal Payout URL</span>
+                <p className="font-mono text-sm break-all">
+                  <a href={campaign.normalCheckoutUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    {campaign.normalCheckoutUrl} <ExternalLink className="inline-block h-3 w-3 ml-1" />
+                  </a>
+                </p>
+              </div>
+              <div>
+                <span className="text-sm text-muted-foreground">Discount Payout URL</span>
+                <p className="font-mono text-sm break-all">
+                  <a href={campaign.discountedCheckoutUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    {campaign.discountedCheckoutUrl} <ExternalLink className="inline-block h-3 w-3 ml-1" />
+                  </a>
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -242,11 +322,11 @@ export default function CampaignDetail() {
   );
 }
 
-function SubmissionsTable({ 
-  submissions, 
-  onCopyWhatsApp 
-}: { 
-  submissions: Submission[]; 
+function SubmissionsTable({
+  submissions,
+  onCopyWhatsApp
+}: {
+  submissions: Submission[];
   onCopyWhatsApp: (whatsapp: string) => void;
 }) {
   if (submissions.length === 0) {

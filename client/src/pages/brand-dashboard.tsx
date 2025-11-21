@@ -11,12 +11,14 @@ import { Plus, ExternalLink, User, BarChart3, Users, Calendar, Copy, Check } fro
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Campaign } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
+import { CampaignCreationGuide } from "@/components/campaign-creation-guide";
 
 export default function BrandDashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+  const [showGuide, setShowGuide] = useState(true);
 
   const { data: campaigns = [], isLoading } = useQuery<Campaign[]>({
     queryKey: ["/api/campaigns"],
@@ -57,6 +59,31 @@ export default function BrandDashboard() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+        {showGuide && (
+          <div className="mb-6">
+            <UserGuide
+              title="Campaign Dashboard Guide"
+              steps={[
+                "Click 'Create Campaign' to start a new promotional campaign",
+                "Fill in all campaign details carefully (see tips below)",
+                "After creation, copy the campaign URL to share with customers",
+                "Monitor campaign performance by clicking on any campaign card",
+                "Toggle campaigns active/inactive using the switch on each card"
+              ]}
+              tips={[
+                "Campaign Name: Choose a clear, descriptive name (e.g., 'Summer Sale 2025')",
+                "URL Slug: This creates your campaign link - use lowercase letters, numbers, and hyphens only",
+                "Promo Code: The unique code customers will enter (e.g., 'SUMMER25')",
+                "Discount %: The percentage discount customers receive (1-100)",
+                "Discounted Checkout URL: Your store's checkout page WITH the discount already applied",
+                "Normal Checkout URL: Your store's regular checkout page WITHOUT any discount",
+                "Share the campaign URL with customers - they'll enter the promo code to get the discount link"
+              ]}
+              defaultExpanded={true}
+            />
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold">Your Campaigns</h2>
@@ -69,14 +96,14 @@ export default function BrandDashboard() {
                 New Campaign
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Create Campaign</DialogTitle>
-                <DialogDescription>
-                  Set up a new promo campaign with a hosted page
-                </DialogDescription>
+                <DialogTitle>Create New Campaign</DialogTitle>
               </DialogHeader>
-              <CreateCampaignForm onSuccess={() => setIsCreateOpen(false)} />
+              <div className="space-y-6">
+                <CampaignCreationGuide />
+                <CreateCampaignForm onSuccess={() => setIsCreateOpen(false)} />
+              </div>
             </DialogContent>
           </Dialog>
         </div>
@@ -308,5 +335,48 @@ function CampaignAnalytics({ campaignId }: { campaignId: string }) {
         <div className="font-semibold">{analytics.successRate}%</div>
       </div>
     </div>
+  );
+}
+
+// Placeholder for UserGuide component, assuming it exists in "@/components/ui/user-guide"
+// This is a basic representation and would need to be implemented separately.
+// For the purpose of this merge, we'll define a simple version here.
+interface UserGuideProps {
+  title: string;
+  steps: string[];
+  tips: string[];
+  defaultExpanded?: boolean;
+}
+
+function UserGuide({ title, steps, tips, defaultExpanded = false }: UserGuideProps) {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+        <CardTitle className="text-base">{title}</CardTitle>
+        {isExpanded ? <Users className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
+      </CardHeader>
+      {isExpanded && (
+        <CardContent className="pt-4 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold mb-2">Key Steps:</h3>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+              {steps.map((step, index) => (
+                <li key={index}>{step}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold mb-2">Important Tips:</h3>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+              {tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          </div>
+        </CardContent>
+      )}
+    </Card>
   );
 }
