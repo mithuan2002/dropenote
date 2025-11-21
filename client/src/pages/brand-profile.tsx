@@ -39,10 +39,7 @@ export default function BrandProfile() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: BrandProfile) => {
-      return await apiRequest("/api/brand/profile", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      return await apiRequest("POST", "/api/brand/profile", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/brand/profile"] });

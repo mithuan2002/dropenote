@@ -43,10 +43,7 @@ export default function CampaignPage() {
 
   const submitMutation = useMutation({
     mutationFn: async (data: { promoCode: string; customerName: string; customerWhatsApp: string }) => {
-      const response = await apiRequest(`/api/c/${slug}/submit`, {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const response = await apiRequest("POST", `/api/c/${slug}/submit`, data);
       return response as SubmissionResult;
     },
     onSuccess: (data) => {

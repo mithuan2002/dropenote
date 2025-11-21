@@ -1,8 +1,17 @@
-# Coupon Campaign Tracker
+# Dropnote - E-commerce Campaign Platform
 
 ## Overview
 
-A Progressive Web Application (PWA) for managing influencer-driven coupon campaigns. The system enables influencers to create discount campaigns, distribute unique coupon codes to their followers, and track redemptions at retail locations. Built as a mobile-first application with offline capabilities, it serves three distinct user types: influencers who manage campaigns, followers who receive coupons, and store staff who verify and redeem codes.
+A Progressive Web Application (PWA) for managing e-commerce promo campaigns without website integration. The system enables e-commerce brands to create hosted campaign pages with promo codes, allowing customers to enter their details and unlock discounted checkout links. Built as a mobile-first application, it serves two distinct user types: brands who manage campaigns and customers who submit promo codes for discounts.
+
+## Recent Changes (November 21, 2025)
+
+**Platform Pivot Complete:**
+- Migrated from influencer-focused coupon distribution to e-commerce brand campaign platform
+- Changed from unique-code-per-customer to single-promo-code-per-campaign model
+- Campaigns now have hosted public pages at `/c/:slug` requiring no authentication
+- Customer submissions tracked with promo code validation
+- Fixed critical bug: corrected `apiRequest()` function calls to use proper signature `apiRequest(method, url, data)` instead of object pattern
 
 ## User Preferences
 
@@ -51,8 +60,9 @@ Preferred communication style: Simple, everyday language.
 - Schema defined in `shared/schema.ts` with Zod validation integration
 
 **Database Schema:**
-- `campaigns` table: Campaign metadata (name, discount percentage, expiration date)
-- `coupons` table: Unique coupon codes linked to campaigns and followers
+- `campaigns` table: Campaign metadata including name, slug, promoCode, discount percentage, checkout URLs (discounted and normal), expiration date
+- `customer_submissions` table: Customer entries with name, WhatsApp number, promo code entered, and validation status
+- `users` table: Brand accounts with role-based access (role: 'brand')
 - `redemptions` table: Redemption events tracking purchase amounts
 - UUID primary keys with PostgreSQL's gen_random_uuid()
 
