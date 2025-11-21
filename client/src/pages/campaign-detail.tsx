@@ -76,6 +76,10 @@ interface Submission {
   submittedAt: string;
 }
 
+interface BrandProfile {
+  whatsappGroupLink?: string | null;
+}
+
 export default function CampaignDetail() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
@@ -91,6 +95,10 @@ export default function CampaignDetail() {
 
   const { data: submissions, isLoading: submissionsLoading } = useQuery<Submission[]>({
     queryKey: [`/api/campaigns/${id}/submissions`],
+  });
+
+  const { data: brandProfile } = useQuery<BrandProfile>({
+    queryKey: ["/api/brand/profile"],
   });
 
   const handleCopyUrl = async () => {
@@ -305,15 +313,15 @@ export default function CampaignDetail() {
             </div>
 
             <TabsContent value="all" className="p-6 pt-4">
-              <SubmissionsTable submissions={submissions} onCopyWhatsApp={handleCopyWhatsApp} />
+              <SubmissionsTable submissions={submissions} onCopyWhatsApp={handleCopyWhatsApp} whatsappGroupLink={brandProfile?.whatsappGroupLink} />
             </TabsContent>
 
             <TabsContent value="valid" className="p-6 pt-4">
-              <SubmissionsTable submissions={validSubmissions} onCopyWhatsApp={handleCopyWhatsApp} />
+              <SubmissionsTable submissions={validSubmissions} onCopyWhatsApp={handleCopyWhatsApp} whatsappGroupLink={brandProfile?.whatsappGroupLink} />
             </TabsContent>
 
             <TabsContent value="invalid" className="p-6 pt-4">
-              <SubmissionsTable submissions={invalidSubmissions} onCopyWhatsApp={handleCopyWhatsApp} />
+              <SubmissionsTable submissions={invalidSubmissions} onCopyWhatsApp={handleCopyWhatsApp} whatsappGroupLink={brandProfile?.whatsappGroupLink} />
             </TabsContent>
           </Tabs>
         </Card>
@@ -324,11 +332,25 @@ export default function CampaignDetail() {
 
 function SubmissionsTable({
   submissions,
-  onCopyWhatsApp
+  onCopyWhatsApp,
+  whatsappGroupLink
 }: {
   submissions: Submission[];
   onCopyWhatsApp: (whatsapp: string) => void;
+  whatsappGroupLink?: string | null;
 }) {
+  const handleAddToGroup = (whatsapp: string) => {
+    if (!whatsappGroupLink) {
+      return;
+    }
+    // Format WhatsApp number (remove + and spaces)
+    const formattedNumber = whatsapp.replace(/[\s+]/g, '');
+    // Create WhatsApp message link to invite them to the group
+    const message = encodeURIComponent(`Hi! Here's the link to join our exclusive WhatsApp group: ${whatsappGroupLink}`);
+    const whatsappUrl = `https://wa.me/${formattedNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   if (submissions.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
@@ -347,6 +369,9 @@ function SubmissionsTable({
             <th className="text-left px-4 py-3 text-sm font-medium">Code Entered</th>
             <th className="text-left px-4 py-3 text-sm font-medium">Status</th>
             <th className="text-left px-4 py-3 text-sm font-medium">Submitted</th>
+            {whatsappGroupLink && (
+              <th className="text-left px-4 py-3 text-sm font-medium">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -389,6 +414,18 @@ function SubmissionsTable({
               <td className="px-4 py-3 text-sm text-muted-foreground">
                 {formatDistanceToNow(new Date(submission.submittedAt), { addSuffix: true })}
               </td>
+              {whatsappGroupLink && (
+                <td className="px-4 py-3">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleAddToGroup(submission.customerWhatsApp)}
+                    className="h-8"
+                  >
+                    Add to Group
+                  </Button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
