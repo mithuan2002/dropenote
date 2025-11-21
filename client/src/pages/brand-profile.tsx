@@ -14,6 +14,7 @@ type BrandProfile = {
   brandName: string;
   website: string;
   contactEmail: string;
+  whatsappGroupLink: string;
 };
 
 export default function BrandProfile() {
@@ -22,6 +23,7 @@ export default function BrandProfile() {
     brandName: "",
     website: "",
     contactEmail: "",
+    whatsappGroupLink: "",
   });
 
   const { data: profile, isLoading } = useQuery<BrandProfile>({
@@ -34,6 +36,7 @@ export default function BrandProfile() {
         brandName: profile.brandName || "",
         website: profile.website || "",
         contactEmail: profile.contactEmail || "",
+        whatsappGroupLink: profile.whatsappGroupLink || "",
       });
     }
   }, [profile]);
@@ -137,6 +140,20 @@ export default function BrandProfile() {
                     placeholder="contact@yourbrand.com"
                     data-testid="input-email"
                   />
+                </div>
+                <div>
+                  <Label htmlFor="whatsappGroupLink">WhatsApp Group Link</Label>
+                  <Input
+                    id="whatsappGroupLink"
+                    type="url"
+                    value={formData.whatsappGroupLink}
+                    onChange={(e) => setFormData({ ...formData, whatsappGroupLink: e.target.value })}
+                    placeholder="https://chat.whatsapp.com/..."
+                    data-testid="input-whatsapp-group-link"
+                  />
+                  <p className="text-sm text-muted-foreground mt-1">
+                    This link will be shown to customers on your campaign pages
+                  </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={saveMutation.isPending} data-testid="button-save">
                   {saveMutation.isPending ? "Saving..." : "Save Profile"}
