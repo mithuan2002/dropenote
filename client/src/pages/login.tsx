@@ -15,7 +15,6 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"brand" | "staff">("brand");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const isLoading = loading;
@@ -29,7 +28,7 @@ export default function Login() {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
       const body = isLogin 
         ? { username, password }
-        : { username, password, role };
+        : { username, password, role: "brand" };
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -50,11 +49,7 @@ export default function Login() {
       });
 
       // Use full page redirect to ensure auth state is fresh
-      if (data.role === "brand") {
-        window.location.href = "/brand";
-      } else {
-        window.location.href = "/staff";
-      }
+      window.location.href = "/brand";
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Authentication failed";
       setError(errorMessage);
@@ -102,14 +97,13 @@ export default function Login() {
             <UserGuide
               title="Account Setup Guide"
               steps={[
-                "Choose your account type (E-commerce Brand or Store Staff)",
                 "Create a username (min. 3 characters)",
                 "Set a strong password (min. 6 characters)",
                 "Click 'Create account' to get started"
               ]}
               tips={[
-                "Brands: Create campaigns with promo codes and track customer submissions",
-                "Store Staff: Verify customer coupons and track performance"
+                "Create campaigns with promo codes and track customer submissions",
+                "Engage customers and track real conversions"
               ]}
             />
           )}
@@ -117,25 +111,6 @@ export default function Login() {
           <Card className="border-border/50">
             <CardContent className="pt-6">
               <form onSubmit={handleSubmit} className="space-y-4">
-                {!isLogin && (
-                  <div className="space-y-2">
-                    <Label htmlFor="role" className="text-sm font-medium">
-                      Account Type
-                    </Label>
-                    <select
-                      id="role"
-                      value={role}
-                      onChange={(e) => setRole(e.target.value as "brand" | "staff")}
-                      className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm focus:ring-2 focus:ring-ring focus:border-input transition-colors"
-                      required
-                      data-testid="select-role"
-                    >
-                      <option value="brand">E-commerce Brand</option>
-                      <option value="staff">Store Staff</option>
-                    </select>
-                  </div>
-                )}
-
                 <div className="space-y-2">
                   <Label htmlFor="username" className="text-sm font-medium">
                     Username
